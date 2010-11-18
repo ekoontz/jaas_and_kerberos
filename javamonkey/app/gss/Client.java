@@ -93,6 +93,7 @@ public class Client {
   // Begin the initiation of a security context with the target service.
   private void initiateSecurityContext( String servicePrincipalName)
       throws GSSException {
+    System.out.println("initiateSecurityContext("+servicePrincipalName+")");
     GSSManager manager = GSSManager.getInstance();
     GSSName serverName = manager.createName( servicePrincipalName,
         GSSName.NT_HOSTBASED_SERVICE);
