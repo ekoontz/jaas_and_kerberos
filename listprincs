@@ -1,0 +1,21 @@
+kadmin.local:  listprincs
+K/M@FOOFERS.ORG
+ekoontz@FOOFERS.ORG
+host/debian64-3.foofers.org@FOOFERS.ORG
+host/debian64-3@FOOFERS.ORG
+host/localhost@FOOFERS.ORG
+host/monarch.spinlock.hr@FOOFERS.ORG
+kadmin/admin@FOOFERS.ORG
+kadmin/changepw@FOOFERS.ORG
+kadmin/debian64-3.foofers.org@FOOFERS.ORG
+kadmin/history@FOOFERS.ORG
+krbtgt/FOOFERS.ORG@FOOFERS.ORG
+root/admin@FOOFERS.ORG
+zk/63.251.171.81@FOOFERS.ORG
+zk/66.150.161.141@FOOFERS.ORG
+zk/69.25.27.170@FOOFERS.ORG
+zk/ekoontz.foofers.org@FOOFERS.ORG
+zk/ekoontz@FOOFERS.ORG
+zk@FOOFERS.ORG
+zkclient@FOOFERS.ORG
+kadmin.local:  
