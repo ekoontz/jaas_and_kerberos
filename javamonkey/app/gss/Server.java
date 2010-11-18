@@ -52,7 +52,7 @@ public class Server {
       server.login( password);
       byte serviceTicket[] = loadTokenFromDisk();
       // Request the service ticket.
-      String clientName = server.acceptSecurityContext( serviceTicket);
+      String clientName = server.acceptSecurityContext(serviceTicket);
       System.out.println( "\nSecurity context successfully initialised!");
       System.out.println( "\nHello World " + clientName + "!");
     }
