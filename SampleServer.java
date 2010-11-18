@@ -67,6 +67,9 @@ public class SampleServer  {
     public static void main(String[] args) 
 	throws IOException, GSSException {
 
+      System.setProperty( "sun.security.krb5.debug", "true");
+
+
 	// Obtain the command-line arguments and parse the port number
 
 	if (args.length != 1) {
