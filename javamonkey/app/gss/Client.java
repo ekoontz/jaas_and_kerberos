@@ -96,6 +96,9 @@ public class Client {
     GSSManager manager = GSSManager.getInstance();
     GSSName serverName = manager.createName( servicePrincipalName,
         GSSName.NT_HOSTBASED_SERVICE);
+
+    System.out.println("Initiate security context with serverName " + serverName);
+
     final GSSContext context = manager.createContext( serverName, krb5Oid, null,
         GSSContext.DEFAULT_LIFETIME);
     // The GSS context initiation has to be performed as a privileged action.
