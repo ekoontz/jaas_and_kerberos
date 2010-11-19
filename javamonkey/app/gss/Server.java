@@ -48,9 +48,16 @@ public class Server {
       Server server = new Server();
       // Login to the KDC.
       server.login( password);
-      byte serviceTicket[] = loadTokenFromDisk();
-      // Request the service ticket.
+
+      byte serviceTicket[];
+      if (true) {
+        serviceTicket = loadTokenFromDisk();
+      }
+      else {
+        serviceTicket = getTokenFromClient();
+      }
       String clientName = server.acceptSecurityContext(serviceTicket);
+      
       System.out.println( "\nSecurity context successfully initialised!");
       System.out.println( "\nHello World " + clientName + "!");
     }
@@ -85,6 +92,13 @@ public class Server {
     BASE64Decoder decoder = new BASE64Decoder();
     return decoder.decodeBuffer( buffer.toString());
   }
+
+  private static byte[] getTokenFromClient() {
+    byte[] retval = new byte[0];
+    return retval;
+  }
+
+
  
   private static Oid krb5Oid;
  
