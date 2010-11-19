@@ -3,6 +3,7 @@ import java.io.*;
 import java.net.Socket;
 import java.net.ServerSocket;
 import java.util.Properties;
+import java.security.PrivilegedAction;
 import javax.security.auth.Subject;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
@@ -25,11 +26,12 @@ public class SampleServer  {
       // Login to the KDC.
       LoginContext loginCtx = null;
       // "Client" references the JAAS configuration in the jaas.conf file.
+      Subject subject = null;
       try {
         loginCtx = new LoginContext( "SampleServer",
                                      new LoginCallbackHandler( password));
         loginCtx.login();
-        Subject subject = loginCtx.getSubject();
+        subject = loginCtx.getSubject();
       }
       catch (LoginException e) {
         System.err.println("Login failure : " + e);
@@ -53,31 +55,45 @@ public class SampleServer  {
 	    System.out.println("SampleServer::main() Waiting for incoming connection...");
 
 	    Socket socket = ss.accept();
-	    DataInputStream inStream =
+	    final DataInputStream inStream =
 		new DataInputStream(socket.getInputStream());
-	    DataOutputStream outStream = 
+	    final DataOutputStream outStream = 
 		new DataOutputStream(socket.getOutputStream());
 
 	    System.out.println("SampleServer::main() Got connection from client "
 			       + socket.getInetAddress());
 
 	    GSSContext context = manager.createContext((GSSCredential)null);
-            context.requestMutualAuth(true);  // Mutual authentication
-            context.requestConf(true);  // Will use confidentiality later
-            context.requestInteg(true); // Will use integrity later
 
 	    // Do the context establishment loop.
 	    byte[] token = null;
 	    
-	    while (!context.isEstablished()) {
-              System.out.println("SampleServer::main() context not yet established: accepting from client @ " + socket.getInetAddress());
-              
-              context.acceptSecContext(inStream,outStream);
-	    }
+            Subject.doAs( subject, new PrivilegedAction<String>() {
+                public String run() {
+                  try {
+                    // Identify the server that communications are being made to.
+                    GSSManager manager = GSSManager.getInstance();
+                    GSSContext context = manager.createContext( (GSSCredential) null);
+
+                    while (!context.isEstablished()) {
+                      System.out.println("SampleServer::main() context not yet established: accepting from client.");
+
+                      context.acceptSecContext(inStream,outStream);
+                    }
+
+                    System.out.print("Context Established! ");
+                    System.out.println("Client is " + context.getSrcName());
+                    System.out.println("Server is " + context.getTargName());
+                    return "GOTHERE";
+                  }
+                  catch ( Exception e) {
+                    e.printStackTrace();
+                    return null;
+                  }
+                }
+              }
+              );
 	    
-	    System.out.print("Context Established! ");
-	    System.out.println("Client is " + context.getSrcName());
-	    System.out.println("Server is " + context.getTargName());
 	
 	    System.out.println("SampleServer::main() Closing connection with client " 
 			       + socket.getInetAddress());
