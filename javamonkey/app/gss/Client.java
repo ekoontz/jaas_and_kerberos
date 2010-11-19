@@ -51,8 +51,9 @@ public class Client {
       client.login( username, password);
 
       // Request the service ticket.
-      GSSContext context = client.initiateSecurityContext( props.getProperty( "service.principal.name"));
-      GSSContext context2 = client.initiateSecurityContext( props.getProperty( "service.principal.name"));
+      //      GSSContext context = client.initiateSecurityContext( props.getProperty( "service.principal.name"));
+      GSSContext context2;
+      context2 = client.initiateSecurityContext( props.getProperty( "service.principal.name"));
       
 
       // send serviceTicket to server.
@@ -70,15 +71,15 @@ public class Client {
       encodeAndWriteTicketToDisk( client.serviceTicket, "./security.token");
       System.out.println( "Service ticket encoded to disk successfully");
 
-      System.out.println( "Sending service ticket to service @ outStream...");
+      System.out.println( "Establishing context2 to service @ outStream...");
 
-      client.sendTicketToService(client.serviceTicket,inStream,outStream,context2);
 
       // Do the context establishment loop
+      if (false) {
       while (!context2.isEstablished()) {
+        
 
-
-        System.out.println("Context not yet established...");
+        System.out.println("Client: Context not yet established...");
 
         int retval;
         // token is ignored on the first call
@@ -88,6 +89,7 @@ public class Client {
         outStream.flush();
       }
 
+    }
     }
     catch ( LoginException e) {
       e.printStackTrace();
@@ -169,31 +171,6 @@ public class Client {
     writer.write( encodedToken);
     writer.close();
   }
-
-  private static void sendTicketToService(byte[] ticket, DataInputStream inStream, DataOutputStream outStream, GSSContext context) 
-      throws IOException {
-    System.out.println("sendTicketToService(): starting.");
-
-    System.out.println("############sendTicketToService(): sending ticket of length : " + ticket.length);
-
-    //send service ticket token to service, which is listening on outStream.
-    int retval;
-    try {
-      retval = context.initSecContext(inStream,outStream);
-    }
-    catch (GSSException e) {
-      //...
-      System.err.println("Client: error in initSecContext() to server: see stack trace immediately below:");
-      e.printStackTrace();
-
-    }
-
-    System.out.println("############sendTicketToService(): outstream writing finished.");
-
-
-  }
-
-
 
 
 }
