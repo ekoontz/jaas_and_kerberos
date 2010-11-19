@@ -21,7 +21,7 @@ test_client: javamonkey/app/gss/Client.class SampleServer.class
 	echo "make test_client: begin.."
 	java SampleServer 9000 &
 	echo "let sample server come up..."
-	sleep 2
+	sleep 1
 	java javamonkey.app.gss.Client zookeeperserver localhost 9000
 	echo "make test_client: done."
 
