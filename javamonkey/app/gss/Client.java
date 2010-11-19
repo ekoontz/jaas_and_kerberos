@@ -46,15 +46,19 @@ public class Client {
       String password = props.getProperty( "client.password");
       // Oid mechanism = use Kerberos V5 as the security mechanism.
       krb5Oid = new Oid( "1.2.840.113554.1.2.2");
-      Client client = new Client();
-      // Login to the KDC.
-      client.login( username, password);
 
-      // Request the service ticket.
-      //      GSSContext context = client.initiateSecurityContext( props.getProperty( "service.principal.name"));
-      GSSContext context2;
-      context2 = client.initiateSecurityContext( props.getProperty( "service.principal.name"));
-      
+      Client client_fs = new Client();
+      // 1. Login to the KDC.
+      client_fs.login( username, password);
+
+      // 2. Request the service ticket.
+      client_fs.initiateSecurityContext( props.getProperty( "service.principal.name"));
+
+      // 3. Write to file.
+      encodeAndWriteTicketToDisk( client_fs.serviceTicket, "./security.token");
+      System.out.println( "Service ticket encoded to disk successfully");
+
+      if (false) {
 
       // send serviceTicket to server.
       String server = args[0];
@@ -67,29 +71,22 @@ public class Client {
       DataOutputStream outStream = 
         new DataOutputStream(socket.getOutputStream());
 
-      // Write the ticket to disk for the server to read.
-      encodeAndWriteTicketToDisk( client.serviceTicket, "./security.token");
-      System.out.println( "Service ticket encoded to disk successfully");
-
-      System.out.println( "Establishing context2 to service @ outStream...");
-
-
+      /*      System.out.println( "Client: before while(not established) to service @ outStream...");
       // Do the context establishment loop
-      if (false) {
       while (!context2.isEstablished()) {
-        
-
         System.out.println("Client: Context not yet established...");
-
+        
         int retval;
         // token is ignored on the first call
         retval = context2.initSecContext(inStream,outStream);
         
         System.out.println("received retval " + retval);
-        outStream.flush();
+      }
+      System.out.println("Client: done with while(not established) loop.");
+      */
+
       }
 
-    }
     }
     catch ( LoginException e) {
       e.printStackTrace();
@@ -124,14 +121,14 @@ public class Client {
   }
  
   // Begin the initiation of a security context with the target service.
-  private GSSContext initiateSecurityContext(String servicePrincipalName)
+  private void initiateSecurityContext(String servicePrincipalName)
       throws GSSException {
     System.out.println("initiateSecurityContext("+servicePrincipalName+")");
     GSSManager manager = GSSManager.getInstance();
     GSSName serverName = manager.createName( servicePrincipalName,
         GSSName.NT_HOSTBASED_SERVICE);
 
-    System.out.println("Initiate security context with serverName " + serverName);
+    System.out.println("Client.initiateSecurityContext() Initiate security context with serverName " + serverName);
 
     final GSSContext context = manager.createContext( serverName, 
                                                       krb5Oid, 
@@ -143,14 +140,16 @@ public class Client {
     context.requestInteg(true); // Will use integrity later
 
     // The GSS context initiation has to be performed as a privileged action.
-    this.serviceTicket = Subject.doAs( subject, new PrivilegedAction<byte[]>() {
+    this.serviceTicket = Subject.doAs( this.subject, new PrivilegedAction<byte[]>() {
       public byte[] run() {
         try {
           byte[] token = new byte[0];
           // This is a one pass context initialisation.
           context.requestMutualAuth( false);
           context.requestCredDeleg( false);
-          return context.initSecContext( token, 0, token.length);
+          byte[] retval;
+          retval = context.initSecContext( token, 0, token.length);
+          return retval;
         }
         catch ( GSSException e) {
           e.printStackTrace();
@@ -159,7 +158,7 @@ public class Client {
       }
     });
 
-    return context; 
+    return;
   }
  
   // Base64 encode the raw ticket and write it to the given file.
