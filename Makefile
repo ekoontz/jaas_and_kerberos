@@ -1,16 +1,18 @@
-.PHONY: all clean test compile
+.PHONY: all clean test compile killserver
 all: compile
 
 compile: javamonkey/app/gss/Server.class javamonkey/app/gss/Client.class SampleServer.class
 
-clean:
+clean: killserver
 	-rm javamonkey/app/gss/*.class *.class rm security.token
+
+killserver:
 	-kill `ps -Ao pid,command | grep java | sed "s/^[ ]*//" | cut -d\  -f1,3 | grep SampleServer | cut -d\  -f1`
 
 %.class: %.java
 	javac $< 
 
-test: clean test_client test_server
+test: clean test_client test_server killserver
 
 test_client: javamonkey/app/gss/Client.class SampleServer.class
 	echo "make test_client: begin.."
