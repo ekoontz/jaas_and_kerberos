@@ -39,7 +39,7 @@ public class Client {
       // Setup up the Kerberos properties.
       Properties props = new Properties();
       props.load( new FileInputStream( "client.properties"));
-      System.setProperty( "sun.security.krb5.debug", "true");
+      System.setProperty( "sun.security.krb5.debug", "false");
       System.setProperty( "java.security.auth.login.config", "./jaas.conf");
       System.setProperty( "javax.security.auth.useSubjectCredsOnly", "true");
       String username = props.getProperty( "client.principal.name");
