@@ -104,7 +104,7 @@ public class Client {
       catch (GSSException e) {
         e.printStackTrace();
         System.err.println("There was an error in creating a name for the host-based service that we want to connect to.");
-        System.exit( -1);
+        System.exit(-1);
       }
       
       System.out.println("Client.initiateSecurityContextNet() Initiate security context with serverName " + serverName);
@@ -114,9 +114,7 @@ public class Client {
                                                           krb5Oid, 
                                                           null,
                                                           GSSContext.DEFAULT_LIFETIME);
-      
-        context.requestMutualAuth(true);  // Mutual authentication
-      
+
         // The GSS context initiation has to be performed as a privileged action.
         byte[] serviceTicket = Subject.doAs( subject, new PrivilegedAction<byte[]>() {
             public byte[] run() {
@@ -137,7 +135,14 @@ public class Client {
               }
             }
           });
-        System.out.println("Authenticated with service successfully and received service ticket.");
+
+        if (serviceTicket != null) {
+          System.out.println("Authenticated with service : " + servicePrincipalName + " successfully and received service ticket.");
+        }
+        else {
+          System.out.println("Failed to obtain service ticket from service " + servicePrincipalName);
+          System.exit(-1);
+        }
       }
       catch (GSSException e) {
         e.printStackTrace();
