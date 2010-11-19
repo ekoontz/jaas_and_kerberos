@@ -1,4 +1,4 @@
-.PHONY: all clean test compile killserver waitforkill
+.PHONY: all clean test compile killserver waitforkill sampleserver
 all: compile
 
 compile: javamonkey/app/gss/Server.class javamonkey/app/gss/Client.class SampleServer.class
@@ -18,11 +18,13 @@ waitforkill:
 
 test: killserver waitforkill test_client test_server killserver
 
-test_client: javamonkey/app/gss/Client.class SampleServer.class
-	echo "make test_client: begin.."
+sampleserver: SampleServer.class
 	java SampleServer 9000 &
 	echo "let sample server come up..."
 	sleep 1
+
+test_client: javamonkey/app/gss/Client.class sampleserver
+	echo "make test_client: begin.."
 	java javamonkey.app.gss.Client zookeeperserver localhost 9000
 	echo "make test_client: done."
 
