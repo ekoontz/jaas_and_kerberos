@@ -8,7 +8,7 @@ import javax.security.auth.Subject;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
-public class SampleServer  {
+public class Server  {
     
     public static void main(String[] args) 
 	throws IOException, GSSException {
