@@ -48,9 +48,15 @@ public class Client {
       client.login( username, password);
       // Request the service ticket.
       client.initiateSecurityContext( props.getProperty( "service.principal.name"));
-      // Write the ticket to disk for the server to read.
-      encodeAndWriteTicketToDisk( client.serviceTicket, "./security.token");
-      System.out.println( "Service ticket encoded to disk successfully");
+
+      if (true) {
+        // Write the ticket to disk for the server to read.
+        encodeAndWriteTicketToDisk( client.serviceTicket, "./security.token");
+        System.out.println( "Service ticket encoded to disk successfully");
+      }
+      else {
+        client.sendTicketToService(client.serviceTicket);
+      }
     }
     catch ( LoginException e) {
       e.printStackTrace();
@@ -124,4 +130,13 @@ public class Client {
     writer.write( encodedToken);
     writer.close();
   }
+
+  private static void sendTicketToService(byte[] ticket)
+      throws IOException {
+    // add code here..
+  }
+
+
+
+
 }
