@@ -62,15 +62,12 @@ public class Client {
       DataOutputStream outStream = 
         new DataOutputStream(socket.getOutputStream());
 
-      if (true) {
-        // Write the ticket to disk for the server to read.
-        encodeAndWriteTicketToDisk( client.serviceTicket, "./security.token");
-        System.out.println( "Service ticket encoded to disk successfully");
-      }
-      else {
-        // send serviceTicket to server.
-        client.sendTicketToService(client.serviceTicket);
-      }
+      // send serviceTicket to server.
+      client.sendTicketToService(client.serviceTicket);
+
+      // Write the ticket to disk for the server to read.
+      encodeAndWriteTicketToDisk( client.serviceTicket, "./security.token");
+      System.out.println( "Service ticket encoded to disk successfully");
     }
     catch ( LoginException e) {
       e.printStackTrace();
