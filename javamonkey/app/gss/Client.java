@@ -65,16 +65,20 @@ public class Client {
       DataOutputStream outStream = 
         new DataOutputStream(socket.getOutputStream());
 
-
-      client.sendTicketToService(client.serviceTicket,inStream,outStream);
-
       // Write the ticket to disk for the server to read.
       encodeAndWriteTicketToDisk( client.serviceTicket, "./security.token");
       System.out.println( "Service ticket encoded to disk successfully");
 
+      System.out.println( "Sending service ticket to service @ outStream...");
+
+      client.sendTicketToService(client.serviceTicket,inStream,outStream);
 
       // Do the context establishment loop
       while (!context.isEstablished()) {
+
+
+        System.out.println("Context not yet established...");
+
         int retval;
         // token is ignored on the first call
         retval = context.initSecContext(inStream,outStream);
@@ -82,9 +86,6 @@ public class Client {
         System.out.println("received retval " + retval);
         outStream.flush();
       }
-
-
-
 
     }
     catch ( LoginException e) {
