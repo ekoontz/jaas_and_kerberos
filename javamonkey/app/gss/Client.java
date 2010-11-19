@@ -51,10 +51,46 @@ public class Client {
       String hostName = args[1];
       int port = Integer.parseInt(args[2]);
       Socket socket = new Socket(hostName,port);
-      DataInputStream inStream   = new DataInputStream(socket.getInputStream());
-      DataOutputStream outStream = new DataOutputStream(socket.getOutputStream());
+      final DataInputStream inStream   = new DataInputStream(socket.getInputStream());
+      final DataOutputStream outStream = new DataOutputStream(socket.getOutputStream());
+      String servicePrincipalName = props.getProperty( "service.principal.name");
 
-      initiateSecurityContextNet(props.getProperty( "service.principal.name"), inStream, outStream, subject);
+      GSSManager manager = GSSManager.getInstance();
+      GSSName serverName = manager.createName( servicePrincipalName, GSSName.NT_HOSTBASED_SERVICE);
+
+      System.out.println("Client.initiateSecurityContextNet() Initiate security context with serverName " + serverName);
+
+      final GSSContext context = manager.createContext( serverName, 
+                                                        krb5Oid, 
+                                                        null,
+                                                        GSSContext.DEFAULT_LIFETIME);
+      
+      context.requestMutualAuth(true);  // Mutual authentication
+      
+      // The GSS context initiation has to be performed as a privileged action.
+      byte[] serviceTicket = Subject.doAs( subject, new PrivilegedAction<byte[]>() {
+          public byte[] run() {
+            try {
+              byte[] token = new byte[0];
+              context.requestMutualAuth( false);
+              context.requestCredDeleg( false);
+              
+              int retval;
+              while(!context.isEstablished()) {
+                retval = context.initSecContext(inStream,outStream);
+              }
+              return token;
+            }
+            catch ( GSSException e) {
+              e.printStackTrace();
+              return null;
+            }
+          }
+        });
+
+      System.out.println("Authenticated with service successfully.");
+
+
     }
     catch ( LoginException e) {
       e.printStackTrace();
@@ -71,50 +107,6 @@ public class Client {
       System.err.println( "There was an IO error");
       System.exit( -1);
     }
-  }
-
-  private static void initiateSecurityContextNet(String servicePrincipalName, 
-                                          final DataInputStream inStream, final DataOutputStream outStream,
-                                          Subject subject)
-      throws GSSException {
-    System.out.println("initiateSecurityContextNet("+servicePrincipalName+")");
-    GSSManager manager = GSSManager.getInstance();
-    GSSName serverName = manager.createName( servicePrincipalName, GSSName.NT_HOSTBASED_SERVICE);
-
-    System.out.println("Client.initiateSecurityContextNet() Initiate security context with serverName " + serverName);
-
-    final GSSContext context = manager.createContext( serverName, 
-                                                      krb5Oid, 
-                                                      null,
-                                                      GSSContext.DEFAULT_LIFETIME);
-
-    context.requestMutualAuth(true);  // Mutual authentication
-
-    // The GSS context initiation has to be performed as a privileged action.
-    byte[] serviceTicket = Subject.doAs( subject, new PrivilegedAction<byte[]>() {
-      public byte[] run() {
-        try {
-          byte[] token = new byte[0];
-          context.requestMutualAuth( false);
-          context.requestCredDeleg( false);
-
-          int retval;
-          while(!context.isEstablished()) {
-            System.out.println("Client.initiateSecurityContextNet(): doing initSecContext() (in while loop)");
-            retval = context.initSecContext(inStream,outStream);
-            System.out.println("Client.initiateSecurityContextNet(): did initSecContext() (in while loop)");
-          }
-          return token;
-        }
-        catch ( GSSException e) {
-          e.printStackTrace();
-          return null;
-        }
-      }
-    });
-
-    System.out.println("Client.initiateSecurityContextNet(): returning.");
-    return;
   }
 
 }
