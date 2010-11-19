@@ -51,7 +51,7 @@ public class KerberizedServer  {
 
 	while (true) {
 
-	    System.out.println("SampleServer::main() Waiting for incoming connection...");
+	    System.out.println("SampleServer::main() Waiting for client connection...");
 
 	    Socket socket = ss.accept();
 	    final DataInputStream inStream =
