@@ -47,45 +47,40 @@ public class Client {
       // Oid mechanism = use Kerberos V5 as the security mechanism.
       krb5Oid = new Oid( "1.2.840.113554.1.2.2");
 
+
+      System.out.println("===begin client auth(1)===");
+      // 1. Initialize client object.
       Client client_fs = new Client();
-      // 1. Login to the KDC.
-      client_fs.login( username, password);
 
-      // 2. Request the service ticket.
-      client_fs.initiateSecurityContext( props.getProperty( "service.principal.name"));
+      // 2. Login to the KDC.
+      client_fs.login(username, password);
 
-      // 3. Write to file.
+      // 3. Request the service ticket.
+      client_fs.initiateSecurityContext(props.getProperty( "service.principal.name"));
+
+      // 4. Write to file.
       encodeAndWriteTicketToDisk( client_fs.serviceTicket, "./security.token");
-      System.out.println( "Service ticket encoded to disk successfully");
+      System.out.println( "Service ticket encoded to disk successfully(1)");
+      System.out.println("===end client auth(1)===");
+      System.out.println("");
 
-      if (false) {
 
-      // send serviceTicket to server.
+      System.out.println("===begin client auth(2)===");
+      // 1. Initialize client object.
+      Client client_net = new Client();
+
+      // 2. Login to the KDC.
+      client_net.login( username, password);
+
+      // 3. Request the service ticket.
       String server = args[0];
       String hostName = args[1];
       int port = Integer.parseInt(args[2]);
-
-      Socket socket = new Socket(hostName, port);
-      DataInputStream inStream = 
-        new DataInputStream(socket.getInputStream());
-      DataOutputStream outStream = 
-        new DataOutputStream(socket.getOutputStream());
-
-      /*      System.out.println( "Client: before while(not established) to service @ outStream...");
-      // Do the context establishment loop
-      while (!context2.isEstablished()) {
-        System.out.println("Client: Context not yet established...");
-        
-        int retval;
-        // token is ignored on the first call
-        retval = context2.initSecContext(inStream,outStream);
-        
-        System.out.println("received retval " + retval);
-      }
-      System.out.println("Client: done with while(not established) loop.");
-      */
-
-      }
+      Socket socket = new Socket(hostName,port);
+      DataInputStream inStream   = new DataInputStream(socket.getInputStream());
+      DataOutputStream outStream = new DataOutputStream(socket.getOutputStream());
+      client_net.initiateSecurityContextNet(props.getProperty( "service.principal.name"), inStream,outStream);
+      System.out.println("===end client auth(2)===");
 
     }
     catch ( LoginException e) {
@@ -124,6 +119,46 @@ public class Client {
   private void initiateSecurityContext(String servicePrincipalName)
       throws GSSException {
     System.out.println("initiateSecurityContext("+servicePrincipalName+")");
+    GSSManager manager = GSSManager.getInstance();
+    GSSName serverName = manager.createName( servicePrincipalName,
+        GSSName.NT_HOSTBASED_SERVICE);
+
+    System.out.println("Client.initiateSecurityContext() Initiate security context with serverName " + serverName);
+
+    final GSSContext context = manager.createContext( serverName, 
+                                                      krb5Oid, 
+                                                      null,
+                                                      GSSContext.DEFAULT_LIFETIME);
+
+    context.requestMutualAuth(true);  // Mutual authentication
+    context.requestConf(true);  // Will use confidentiality later
+    context.requestInteg(true); // Will use integrity later
+
+    // The GSS context initiation has to be performed as a privileged action.
+    this.serviceTicket = Subject.doAs( this.subject, new PrivilegedAction<byte[]>() {
+      public byte[] run() {
+        try {
+          byte[] token = new byte[0];
+          // This is a one pass context initialisation.
+          context.requestMutualAuth( false);
+          context.requestCredDeleg( false);
+          byte[] retval;
+          retval = context.initSecContext( token, 0, token.length);
+          return retval;
+        }
+        catch ( GSSException e) {
+          e.printStackTrace();
+          return null;
+        }
+      }
+    });
+
+    return;
+  }
+
+  private void initiateSecurityContextNet(String servicePrincipalName, DataInputStream inStream, DataOutputStream outStream)
+      throws GSSException {
+    System.out.println("initiateSecurityContextNet("+servicePrincipalName+")");
     GSSManager manager = GSSManager.getInstance();
     GSSName serverName = manager.createName( servicePrincipalName,
         GSSName.NT_HOSTBASED_SERVICE);
