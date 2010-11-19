@@ -99,7 +99,7 @@ public class SampleServer  {
             // do stuff...
 	    GSSContext context = manager.createContext((GSSCredential)null);
 
-	    // Do the context eastablishment loop
+	    // Do the context establishment loop.
 	    
 	    byte[] token = null;
 	    
