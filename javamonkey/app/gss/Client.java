@@ -65,7 +65,6 @@ public class Client {
       DataInputStream inStream   = new DataInputStream(socket.getInputStream());
       DataOutputStream outStream = new DataOutputStream(socket.getOutputStream());
       client_net.initiateSecurityContextNet(props.getProperty( "service.principal.name"), inStream,outStream);
-      System.out.println("===end client auth(2)===");
 
     }
     catch ( LoginException e) {
@@ -94,47 +93,6 @@ public class Client {
     loginCtx.login();
     this.subject = loginCtx.getSubject();
   }
- 
-  // Begin the initiation of a security context with the target service.
-  private void initiateSecurityContext(String servicePrincipalName)
-      throws GSSException {
-    System.out.println("initiateSecurityContext("+servicePrincipalName+")");
-    GSSManager manager = GSSManager.getInstance();
-    GSSName serverName = manager.createName( servicePrincipalName,
-        GSSName.NT_HOSTBASED_SERVICE);
-
-    System.out.println("Client.initiateSecurityContext() Initiate security context with serverName " + serverName);
-
-    final GSSContext context = manager.createContext( serverName, 
-                                                      krb5Oid, 
-                                                      null,
-                                                      GSSContext.DEFAULT_LIFETIME);
-
-    context.requestMutualAuth(true);  // Mutual authentication
-    context.requestConf(true);  // Will use confidentiality later
-    context.requestInteg(true); // Will use integrity later
-
-    // The GSS context initiation has to be performed as a privileged action.
-    this.serviceTicket = Subject.doAs( this.subject, new PrivilegedAction<byte[]>() {
-      public byte[] run() {
-        try {
-          byte[] token = new byte[0];
-          // This is a one pass context initialisation.
-          context.requestMutualAuth( false);
-          context.requestCredDeleg( false);
-          byte[] retval;
-          retval = context.initSecContext( token, 0, token.length);
-          return retval;
-        }
-        catch ( GSSException e) {
-          e.printStackTrace();
-          return null;
-        }
-      }
-    });
-
-    return;
-  }
 
   private void initiateSecurityContextNet(String servicePrincipalName, final DataInputStream inStream, final DataOutputStream outStream)
       throws GSSException {
@@ -150,8 +108,6 @@ public class Client {
                                                       GSSContext.DEFAULT_LIFETIME);
 
     context.requestMutualAuth(true);  // Mutual authentication
-    context.requestConf(true);  // Will use confidentiality later
-    context.requestInteg(true); // Will use integrity later
 
     // The GSS context initiation has to be performed as a privileged action.
     this.serviceTicket = Subject.doAs( this.subject, new PrivilegedAction<byte[]>() {
@@ -179,16 +135,5 @@ public class Client {
     System.out.println("Client.initiateSecurityContextNet(): returning.");
     return;
   }
- 
-  // Base64 encode the raw ticket and write it to the given file.
-  private static void encodeAndWriteTicketToDisk( byte[] ticket, String filepath)
-      throws IOException {
-    BASE64Encoder encoder = new BASE64Encoder();    
-    FileWriter writer = new FileWriter( new File( filepath));
-    String encodedToken = encoder.encode( ticket);
-    writer.write( encodedToken);
-    writer.close();
-  }
-
 
 }
