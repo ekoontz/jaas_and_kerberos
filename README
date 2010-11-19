@@ -1,15 +1,44 @@
 h1. This is a guide to using Kerberos through the JAAS (Java Auth..etc) API
 
-h2. Setup Kerberos
+  h2. Prerequisites
 
-h2. Configuration
+    h3. Kerberos server and client tools
 
-h3. Choose principals
-h3. Add principals to Kerberos
-h3. Edit jaas.conf set (KerberizedServer.principal)
-h3. Edit server.properties: (FIXME: use keytabs rather than password in file).
-h3. Edit client.properties (FIXME: prompt for password when client starts rather than password in file).
+    h3. JDK
 
-h2. Getting started
+    h3. make
 
-Run 'make test' will start up the example 
+h1. Setup Kerberos Server Infrastructure
+
+  h2. Choose realm name
+
+  h2. Edit /etc/krb5.conf
+
+  h2. Choose principals
+
+  h2. Add principals using kadmin.local 
+
+h1. Test Kerberos Server Infrastructure
+
+  h2. test with kinit.
+
+h1. Compile Java example code
+
+Run 'make compile'
+
+h1. Runtime configuration of Java example code
+
+ h2. Generate keytab for service principal
+
+ h2. Edit jaas.conf: set KerberizedServer.principal
+
+ h2. Edit server.properties: (FIXME: use keytabs rather than password in file).
+
+ h2. Edit client.properties: (FIXME: prompt for password when client starts rather than password in file).
+
+h1. Test
+
+Run 'make test' will start up the example server and run the client
+against it. You may run the client against the same server afterwards
+by doing 'make test_client'. You can kill an existing server process
+by doing 'make killserver'.
