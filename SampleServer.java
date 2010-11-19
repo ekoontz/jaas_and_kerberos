@@ -95,9 +95,24 @@ public class SampleServer  {
 
 	    System.out.println("SampleServer::main() Got connection from client "
 			       + socket.getInetAddress());
-	
-            // do stuff...
 
+            // do stuff...
+	    GSSContext context = manager.createContext((GSSCredential)null);
+
+	    // Do the context eastablishment loop
+	    
+	    byte[] token = null;
+	    
+	    while (!context.isEstablished()) {
+              System.out.println("SampleServer::main() context not yet established: accepting from client @ " + socket.getInetAddress());
+              
+              context.acceptSecContext(inStream,outStream);
+	    }
+	    
+	    System.out.print("Context Established! ");
+	    System.out.println("Client is " + context.getSrcName());
+	    System.out.println("Server is " + context.getTargName());
+	
 	    System.out.println("SampleServer::main() Closing connection with client " 
 			       + socket.getInetAddress());
 	    socket.close();

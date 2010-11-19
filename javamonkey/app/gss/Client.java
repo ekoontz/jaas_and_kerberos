@@ -71,7 +71,7 @@ public class Client {
 
       System.out.println( "Sending service ticket to service @ outStream...");
 
-      client.sendTicketToService(client.serviceTicket,inStream,outStream);
+      client.sendTicketToService(client.serviceTicket,inStream,outStream,context);
 
       // Do the context establishment loop
       while (!context.isEstablished()) {
@@ -169,14 +169,23 @@ public class Client {
     writer.close();
   }
 
-  private static void sendTicketToService(byte[] ticket, DataInputStream inStream, DataOutputStream outStream) 
+  private static void sendTicketToService(byte[] ticket, DataInputStream inStream, DataOutputStream outStream, GSSContext context) 
       throws IOException {
     System.out.println("sendTicketToService(): starting.");
 
     System.out.println("############sendTicketToService(): sending ticket of length : " + ticket.length);
 
     //send service ticket token to service, which is listening on outStream.
-    //    retval = context.initSecContext(inStream,outStream);
+    int retval;
+    try {
+      retval = context.initSecContext(inStream,outStream);
+    }
+    catch (GSSException e) {
+      //...
+      System.err.println("Client: error in initSecContext() to server: see stack trace immediately below:");
+      e.printStackTrace();
+
+    }
 
     System.out.println("############sendTicketToService(): outstream writing finished.");
 
