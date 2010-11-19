@@ -47,6 +47,8 @@ public class KerberizedServer  {
         System.exit(-1);
       }
       
+      // 3. Service clients.
+      // 3.1. Startup service network connection.
       int localPort = Integer.parseInt(args[0]);
       ServerSocket ss = new ServerSocket(localPort);
       
@@ -54,6 +56,8 @@ public class KerberizedServer  {
         
         System.out.println("SampleServer::main() Waiting for client connection...");
         
+
+        // 3.2 Receive a client connection.
         Socket socket = ss.accept();
         final DataInputStream inStream =
           new DataInputStream(socket.getInputStream());
@@ -62,14 +66,11 @@ public class KerberizedServer  {
 
         System.out.println("SampleServer::main() Got connection from client "
                            + socket.getInetAddress());
-        
-        // Do the context establishment loop.
-        byte[] token = null;
 	
         Subject.doAs( subject, new PrivilegedAction<String>() {
             public String run() {
               try {
-                // Identify the server that communications are being made to.
+                // Authenticate the client; return principal name
 
                 GSSManager manager = GSSManager.getInstance();
                 GSSContext context = manager.createContext( (GSSCredential) null);
@@ -80,10 +81,8 @@ public class KerberizedServer  {
                   context.acceptSecContext(inStream,outStream);
                 }
                 
-                System.out.print("Context Established! ");
-                System.out.println("Client is " + context.getSrcName());
-                System.out.println("Server is " + context.getTargName());
-                return "GOTHERE";
+                System.out.println("Client authenticated: (principal: " + context.getSrcName() + ")");
+                return context.getSrcName().toString();
               }
               catch ( Exception e) {
                 e.printStackTrace();
@@ -92,7 +91,8 @@ public class KerberizedServer  {
             }
           }
           );
-        
+
+        // ..conduct business with client since it's authenticated and optionally encrypted too.
 	
         System.out.println("SampleServer::main() Closing connection with client " 
                            + socket.getInetAddress());
