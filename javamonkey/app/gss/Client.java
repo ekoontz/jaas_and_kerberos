@@ -160,8 +160,7 @@ public class Client {
       throws GSSException {
     System.out.println("initiateSecurityContextNet("+servicePrincipalName+")");
     GSSManager manager = GSSManager.getInstance();
-    GSSName serverName = manager.createName( servicePrincipalName,
-        GSSName.NT_HOSTBASED_SERVICE);
+    GSSName serverName = manager.createName( servicePrincipalName, GSSName.NT_HOSTBASED_SERVICE);
 
     System.out.println("Client.initiateSecurityContextNet() Initiate security context with serverName " + serverName);
 
@@ -186,6 +185,7 @@ public class Client {
           while(!context.isEstablished()) {
             System.out.println("Client.initiateSecurityContextNet(): doing initSecContext() (in while loop)");
             retval = context.initSecContext(inStream,outStream);
+            System.out.println("Client.initiateSecurityContextNet(): did initSecContext() (in while loop)");
           }
           return token;
         }
