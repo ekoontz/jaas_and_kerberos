@@ -111,8 +111,11 @@ public class Client {
 
     System.out.println("Initiate security context with serverName " + serverName);
 
-    final GSSContext context = manager.createContext( serverName, krb5Oid, null,
-        GSSContext.DEFAULT_LIFETIME);
+    final GSSContext context = manager.createContext( serverName, 
+                                                      krb5Oid, 
+                                                      null,
+                                                      GSSContext.DEFAULT_LIFETIME);
+
     // The GSS context initiation has to be performed as a privileged action.
     this.serviceTicket = Subject.doAs( subject, new PrivilegedAction<byte[]>() {
       public byte[] run() {
