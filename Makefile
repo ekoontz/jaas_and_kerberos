@@ -1,14 +1,14 @@
-.PHONY: all clean test compile killserver waitforkill sampleserver
+.PHONY: all clean test compile killserver waitforkill server_start test_client
 all: compile
 
-compile: javamonkey/app/gss/Server.class javamonkey/app/gss/Client.class SampleServer.class
+compile: Server.class Client.class
 
 clean: killserver
-	-rm javamonkey/app/gss/*.class *.class rm security.token
+	-rm *.class
 
 killserver:
-	echo "killing SampleServer java processes.."
-	-kill `ps -Ao pid,command | grep java | sed "s/^[ ]*//" | cut -d\  -f1,3 | grep SampleServer | cut -d\  -f1`
+	echo "killing Server java processes.."
+	-kill `ps -Ao pid,command | grep java | sed "s/^[ ]*//" | cut -d\  -f1,3 | grep KerberizedServer | cut -d\  -f1`
 
 waitforkill:
 	sleep 1
@@ -18,17 +18,13 @@ waitforkill:
 
 test: killserver waitforkill test_client test_server killserver
 
-sampleserver: SampleServer.class
-	java SampleServer 9000 &
+server_start: KerberizedServer.class
+	java KerberizedServer 9000 &
 	echo "let sample server come up..."
 	sleep 1
 
-test_client: javamonkey/app/gss/Client.class sampleserver
+test_client: Client.class server_start
 	echo "make test_client: begin.."
-	java javamonkey.app.gss.Client zookeeperserver localhost 9000
+	java Client zookeeperserver localhost 9000
 	echo "make test_client: done."
 
-test_server: javamonkey/app/gss/Server.class
-	echo "make test_server: begin.."
-	java javamonkey.app.gss.Server
-	echo "make test_server: done."
