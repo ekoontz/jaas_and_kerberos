@@ -1,0 +1,15 @@
+h1. This is a guide to using Kerberos through the JAAS (Java Auth..etc) API
+
+h2. Setup Kerberos
+
+h2. Configuration
+
+h3. Choose principals
+h3. Add principals to Kerberos
+h3. Edit jaas.conf set (KerberizedServer.principal)
+h3. Edit server.properties: (FIXME: use keytabs rather than password in file).
+h3. Edit client.properties (FIXME: prompt for password when client starts rather than password in file).
+
+h2. Getting started
+
+Run 'make test' will start up the example 

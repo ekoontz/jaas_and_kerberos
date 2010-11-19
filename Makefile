@@ -3,7 +3,7 @@ all: compile
 
 compile: KerberizedServer.class Client.class
 
-clean: killserver
+clean: 
 	-rm *.class
 
 killserver:
