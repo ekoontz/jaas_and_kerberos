@@ -7,7 +7,6 @@ import java.security.PrivilegedAction;
 import javax.security.auth.Subject;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
-import javamonkey.app.gss.LoginCallbackHandler;
 
 public class SampleServer  {
     
