@@ -66,9 +66,8 @@ public class Client {
     Subject subject = loginCtx.getSubject();
 
     // 3. Connect to service.
-    String server = args[0];
-    String hostName = args[1];
-    int port = Integer.parseInt(args[2]);
+    String hostName = args[0];
+    int port = Integer.parseInt(args[1]);
     Socket socket = null;
     try {
       socket = new Socket(hostName,port);

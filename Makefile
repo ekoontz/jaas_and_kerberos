@@ -1,7 +1,7 @@
 .PHONY: all clean test compile killserver waitforkill server_start test_client
 all: compile
 
-compile: Server.class Client.class
+compile: KerberizedServer.class Client.class
 
 clean: killserver
 	-rm *.class
@@ -25,6 +25,6 @@ server_start: KerberizedServer.class
 
 test_client: Client.class
 	echo "make test_client: begin.."
-	java Client zookeeperserver localhost 9000
+	java Client localhost 9000
 	echo "make test_client: done."
 
