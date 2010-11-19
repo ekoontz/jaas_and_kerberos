@@ -116,6 +116,11 @@ public class Client {
                                                       null,
                                                       GSSContext.DEFAULT_LIFETIME);
 
+    context.requestMutualAuth(true);  // Mutual authentication
+    context.requestConf(true);  // Will use confidentiality later
+    context.requestInteg(true); // Will use integrity later
+
+
     // The GSS context initiation has to be performed as a privileged action.
     this.serviceTicket = Subject.doAs( subject, new PrivilegedAction<byte[]>() {
       public byte[] run() {
