@@ -85,7 +85,7 @@ public class SampleServer  {
 
 	while (true) {
 
-	    System.out.println("Waiting for incoming connection...");
+	    System.out.println("SampleServer::main() Waiting for incoming connection...");
 
 	    Socket socket = ss.accept();
 	    DataInputStream inStream =
@@ -93,12 +93,12 @@ public class SampleServer  {
 	    DataOutputStream outStream = 
 		new DataOutputStream(socket.getOutputStream());
 
-	    System.out.println("Got connection from client "
+	    System.out.println("SampleServer::main() Got connection from client "
 			       + socket.getInetAddress());
 	
             // do stuff...
 
-	    System.out.println("Closing connection with client " 
+	    System.out.println("SampleServer::main() Closing connection with client " 
 			       + socket.getInetAddress());
 	    socket.close();
 	}
