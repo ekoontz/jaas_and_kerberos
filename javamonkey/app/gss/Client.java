@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.Socket;
 import java.security.PrivilegedAction;
 import java.util.Properties;
 import javax.security.auth.Subject;
@@ -15,6 +16,8 @@ import org.ietf.jgss.GSSManager;
 import org.ietf.jgss.GSSName;
 import org.ietf.jgss.Oid;
 import sun.misc.BASE64Encoder;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
  
 /**
  * <p>Client logs in to a Key Distribution Center (KDC) using JAAS and then
@@ -48,6 +51,16 @@ public class Client {
       client.login( username, password);
       // Request the service ticket.
       client.initiateSecurityContext( props.getProperty( "service.principal.name"));
+      
+      String server = args[0];
+      String hostName = args[1];
+      int port = Integer.parseInt(args[2]);
+      
+      Socket socket = new Socket(hostName, port);
+      DataInputStream inStream = 
+        new DataInputStream(socket.getInputStream());
+      DataOutputStream outStream = 
+        new DataOutputStream(socket.getOutputStream());
 
       if (true) {
         // Write the ticket to disk for the server to read.
@@ -55,6 +68,7 @@ public class Client {
         System.out.println( "Service ticket encoded to disk successfully");
       }
       else {
+        // send serviceTicket to server.
         client.sendTicketToService(client.serviceTicket);
       }
     }
