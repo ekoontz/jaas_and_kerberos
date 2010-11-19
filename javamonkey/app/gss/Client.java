@@ -19,7 +19,7 @@ import sun.misc.BASE64Encoder;
 /**
  * <p>Client logs in to a Key Distribution Center (KDC) using JAAS and then
  * requests a service ticket for the server, base 64 encodes it and writes it
- * to the file <i>service-ticket.txt</i>.</p>
+ * to the file <i>security.token</i>.</p>
  * <p>This class, in combination with the <i>Server</i> class illustrates the
  * use of the JAAS and GSS APIs for initiating a security context using the
  * Kerberos protocol.</p>
