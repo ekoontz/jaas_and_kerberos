@@ -33,6 +33,10 @@ import java.io.DataOutputStream;
  * @author Ants
  */
 public class Client {
+
+  private static Oid krb5Oid;
+  private Subject subject;
+  private byte[] serviceTicket;
  
   public static void main( String[] args) {
     try {
@@ -47,25 +51,6 @@ public class Client {
       // Oid mechanism = use Kerberos V5 as the security mechanism.
       krb5Oid = new Oid( "1.2.840.113554.1.2.2");
 
-
-      System.out.println("===begin client auth(1)===");
-      // 1. Initialize client object.
-      Client client_fs = new Client();
-
-      // 2. Login to the KDC.
-      client_fs.login(username, password);
-
-      // 3. Request the service ticket.
-      client_fs.initiateSecurityContext(props.getProperty( "service.principal.name"));
-
-      // 4. Write to file.
-      encodeAndWriteTicketToDisk( client_fs.serviceTicket, "./security.token");
-      System.out.println( "Service ticket encoded to disk successfully(1)");
-      System.out.println("===end client auth(1)===");
-      System.out.println("");
-
-
-      System.out.println("===begin client auth(2)===");
       // 1. Initialize client object.
       Client client_net = new Client();
 
@@ -99,12 +84,7 @@ public class Client {
       System.exit( -1);
     }
   }
- 
-  private static Oid krb5Oid;
- 
-  private Subject subject;
-  private byte[] serviceTicket;
- 
+  
   // Authenticate against the KDC using JAAS.
   private void login( String username, String password) throws LoginException {
     LoginContext loginCtx = null;
