@@ -8,7 +8,7 @@ import javax.security.auth.Subject;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
-public class Server  {
+public class KerberizedServer  {
     
     public static void main(String[] args) 
 	throws IOException, GSSException {
