@@ -69,10 +69,6 @@ public class Client {
     }
   }
  
-  public Client() {
-    super();
-  }
- 
   private static Oid krb5Oid;
  
   private Subject subject;
