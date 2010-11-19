@@ -49,25 +49,43 @@ public class Client {
       Client client = new Client();
       // Login to the KDC.
       client.login( username, password);
+
       // Request the service ticket.
-      client.initiateSecurityContext( props.getProperty( "service.principal.name"));
+      GSSContext context = client.initiateSecurityContext( props.getProperty( "service.principal.name"));
       
+
+      // send serviceTicket to server.
       String server = args[0];
       String hostName = args[1];
       int port = Integer.parseInt(args[2]);
-      
+
       Socket socket = new Socket(hostName, port);
       DataInputStream inStream = 
         new DataInputStream(socket.getInputStream());
       DataOutputStream outStream = 
         new DataOutputStream(socket.getOutputStream());
 
-      // send serviceTicket to server.
+
       client.sendTicketToService(client.serviceTicket,inStream,outStream);
 
       // Write the ticket to disk for the server to read.
       encodeAndWriteTicketToDisk( client.serviceTicket, "./security.token");
       System.out.println( "Service ticket encoded to disk successfully");
+
+
+      // Do the context establishment loop
+      while (!context.isEstablished()) {
+        int retval;
+        // token is ignored on the first call
+        retval = context.initSecContext(inStream,outStream);
+        
+        System.out.println("received retval " + retval);
+        outStream.flush();
+      }
+
+
+
+
     }
     catch ( LoginException e) {
       e.printStackTrace();
@@ -102,7 +120,7 @@ public class Client {
   }
  
   // Begin the initiation of a security context with the target service.
-  private void initiateSecurityContext( String servicePrincipalName)
+  private GSSContext initiateSecurityContext(String servicePrincipalName)
       throws GSSException {
     System.out.println("initiateSecurityContext("+servicePrincipalName+")");
     GSSManager manager = GSSManager.getInstance();
@@ -120,7 +138,6 @@ public class Client {
     context.requestConf(true);  // Will use confidentiality later
     context.requestInteg(true); // Will use integrity later
 
-
     // The GSS context initiation has to be performed as a privileged action.
     this.serviceTicket = Subject.doAs( subject, new PrivilegedAction<byte[]>() {
       public byte[] run() {
@@ -137,7 +154,8 @@ public class Client {
         }
       }
     });
- 
+
+    return context; 
   }
  
   // Base64 encode the raw ticket and write it to the given file.
