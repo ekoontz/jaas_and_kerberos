@@ -27,7 +27,7 @@ public class KerberizedServer  {
       // "Client" references the JAAS configuration in the jaas.conf file.
       Subject subject = null;
       try {
-        loginCtx = new LoginContext( "SampleServer",
+        loginCtx = new LoginContext( "KerberizedServer",
                                      new LoginCallbackHandler( password));
         loginCtx.login();
         subject = loginCtx.getSubject();
