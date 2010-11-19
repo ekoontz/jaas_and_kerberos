@@ -37,8 +37,6 @@ public class Client {
       Properties props = new Properties();
       props.load( new FileInputStream( "client.properties"));
       System.setProperty( "sun.security.krb5.debug", "true");
-      System.setProperty( "java.security.krb5.realm", props.getProperty( "realm")); 
-      System.setProperty( "java.security.krb5.kdc", props.getProperty( "kdc"));
       System.setProperty( "java.security.auth.login.config", "./jaas.conf");
       System.setProperty( "javax.security.auth.useSubjectCredsOnly", "true");
       String username = props.getProperty( "client.principal.name");
