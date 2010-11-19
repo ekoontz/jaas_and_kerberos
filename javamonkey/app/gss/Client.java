@@ -52,6 +52,7 @@ public class Client {
 
       // Request the service ticket.
       GSSContext context = client.initiateSecurityContext( props.getProperty( "service.principal.name"));
+      GSSContext context2 = client.initiateSecurityContext( props.getProperty( "service.principal.name"));
       
 
       // send serviceTicket to server.
@@ -71,17 +72,17 @@ public class Client {
 
       System.out.println( "Sending service ticket to service @ outStream...");
 
-      client.sendTicketToService(client.serviceTicket,inStream,outStream,context);
+      client.sendTicketToService(client.serviceTicket,inStream,outStream,context2);
 
       // Do the context establishment loop
-      while (!context.isEstablished()) {
+      while (!context2.isEstablished()) {
 
 
         System.out.println("Context not yet established...");
 
         int retval;
         // token is ignored on the first call
-        retval = context.initSecContext(inStream,outStream);
+        retval = context2.initSecContext(inStream,outStream);
         
         System.out.println("received retval " + retval);
         outStream.flush();
