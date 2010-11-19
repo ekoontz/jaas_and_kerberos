@@ -20,7 +20,7 @@ test: killserver waitforkill server_start test_client killserver
 
 server_start: KerberizedServer.class
 	java KerberizedServer 9000 &
-	echo "let sample server come up..."
+	echo "let kerberized service come up..."
 	sleep 1
 
 test_client: Client.class
