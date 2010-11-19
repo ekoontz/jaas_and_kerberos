@@ -156,14 +156,14 @@ public class Client {
     return;
   }
 
-  private void initiateSecurityContextNet(String servicePrincipalName, DataInputStream inStream, DataOutputStream outStream)
+  private void initiateSecurityContextNet(String servicePrincipalName, final DataInputStream inStream, final DataOutputStream outStream)
       throws GSSException {
     System.out.println("initiateSecurityContextNet("+servicePrincipalName+")");
     GSSManager manager = GSSManager.getInstance();
     GSSName serverName = manager.createName( servicePrincipalName,
         GSSName.NT_HOSTBASED_SERVICE);
 
-    System.out.println("Client.initiateSecurityContext() Initiate security context with serverName " + serverName);
+    System.out.println("Client.initiateSecurityContextNet() Initiate security context with serverName " + serverName);
 
     final GSSContext context = manager.createContext( serverName, 
                                                       krb5Oid, 
@@ -179,12 +179,15 @@ public class Client {
       public byte[] run() {
         try {
           byte[] token = new byte[0];
-          // This is a one pass context initialisation.
           context.requestMutualAuth( false);
           context.requestCredDeleg( false);
-          byte[] retval;
-          retval = context.initSecContext( token, 0, token.length);
-          return retval;
+
+          int retval;
+          while(!context.isEstablished()) {
+            System.out.println("Client.initiateSecurityContextNet(): doing initSecContext() (in while loop)");
+            retval = context.initSecContext(inStream,outStream);
+          }
+          return token;
         }
         catch ( GSSException e) {
           e.printStackTrace();
@@ -193,6 +196,7 @@ public class Client {
       }
     });
 
+    System.out.println("Client.initiateSecurityContextNet(): returning.");
     return;
   }
  
