@@ -2,7 +2,6 @@ package javamonkey.app.gss;
  
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.Socket;
 import java.security.PrivilegedAction;
@@ -15,31 +14,18 @@ import org.ietf.jgss.GSSException;
 import org.ietf.jgss.GSSManager;
 import org.ietf.jgss.GSSName;
 import org.ietf.jgss.Oid;
-import sun.misc.BASE64Encoder;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
  
-/**
- * <p>Client logs in to a Key Distribution Center (KDC) using JAAS and then
- * requests a service ticket for the server, base 64 encodes it and writes it
- * to the file <i>security.token</i>.</p>
- * <p>This class, in combination with the <i>Server</i> class illustrates the
- * use of the JAAS and GSS APIs for initiating a security context using the
- * Kerberos protocol.</p>
- * <p>This requires a KDC/domain controller such as Active Directory or Apache
- * Directory. The KDC configuration details are stored in the
- * <i>client.properties</i> file, while the JAAS details are stored in the
- * file <i>jaas.conf</i>.</p>
- * @author Ants
- */
 public class Client {
 
-  private static Oid krb5Oid;
-  private Subject subject;
-  private byte[] serviceTicket;
+  static Oid krb5Oid;
  
   public static void main( String[] args) {
     try {
+      // Oid mechanism = use Kerberos V5 as the security mechanism.
+      krb5Oid = new Oid( "1.2.840.113554.1.2.2");
+
       // Setup up the Kerberos properties.
       Properties props = new Properties();
       props.load( new FileInputStream( "client.properties"));
@@ -48,24 +34,27 @@ public class Client {
       System.setProperty( "javax.security.auth.useSubjectCredsOnly", "true");
       String username = props.getProperty( "client.principal.name");
       String password = props.getProperty( "client.password");
-      // Oid mechanism = use Kerberos V5 as the security mechanism.
-      krb5Oid = new Oid( "1.2.840.113554.1.2.2");
 
       // 1. Initialize client object.
       Client client_net = new Client();
 
-      // 2. Login to the KDC.
-      client_net.login( username, password);
+      // 2. Authenticate against the KDC using JAAS and return the Subject.
+      LoginContext loginCtx = null;
+      // "Client" references the corresponding JAAS configuration section in the jaas.conf file.
+      loginCtx = new LoginContext( "Client",
+                                   new LoginCallbackHandler( username, password));
+      loginCtx.login();
+      Subject subject = loginCtx.getSubject();
 
-      // 3. Request the service ticket.
+      // 3. Connect to service and authenticate.
       String server = args[0];
       String hostName = args[1];
       int port = Integer.parseInt(args[2]);
       Socket socket = new Socket(hostName,port);
       DataInputStream inStream   = new DataInputStream(socket.getInputStream());
       DataOutputStream outStream = new DataOutputStream(socket.getOutputStream());
-      client_net.initiateSecurityContextNet(props.getProperty( "service.principal.name"), inStream,outStream);
 
+      initiateSecurityContextNet(props.getProperty( "service.principal.name"), inStream, outStream, subject);
     }
     catch ( LoginException e) {
       e.printStackTrace();
@@ -83,18 +72,10 @@ public class Client {
       System.exit( -1);
     }
   }
-  
-  // Authenticate against the KDC using JAAS.
-  private void login( String username, String password) throws LoginException {
-    LoginContext loginCtx = null;
-    // "Client" references the JAAS configuration in the jaas.conf file.
-    loginCtx = new LoginContext( "Client",
-        new LoginCallbackHandler( username, password));
-    loginCtx.login();
-    this.subject = loginCtx.getSubject();
-  }
 
-  private void initiateSecurityContextNet(String servicePrincipalName, final DataInputStream inStream, final DataOutputStream outStream)
+  private static void initiateSecurityContextNet(String servicePrincipalName, 
+                                          final DataInputStream inStream, final DataOutputStream outStream,
+                                          Subject subject)
       throws GSSException {
     System.out.println("initiateSecurityContextNet("+servicePrincipalName+")");
     GSSManager manager = GSSManager.getInstance();
@@ -110,7 +91,7 @@ public class Client {
     context.requestMutualAuth(true);  // Mutual authentication
 
     // The GSS context initiation has to be performed as a privileged action.
-    this.serviceTicket = Subject.doAs( this.subject, new PrivilegedAction<byte[]>() {
+    byte[] serviceTicket = Subject.doAs( subject, new PrivilegedAction<byte[]>() {
       public byte[] run() {
         try {
           byte[] token = new byte[0];
