@@ -7,6 +7,7 @@ clean: killserver
 	-rm javamonkey/app/gss/*.class *.class rm security.token
 
 killserver:
+	echo "killing SampleServer java processes.."
 	-kill `ps -Ao pid,command | grep java | sed "s/^[ ]*//" | cut -d\  -f1,3 | grep SampleServer | cut -d\  -f1`
 
 waitforkill:
