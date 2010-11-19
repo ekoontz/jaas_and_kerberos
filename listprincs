@@ -1,6 +1,5 @@
 kadmin.local:  listprincs
 K/M@FOOFERS.ORG
-ekoontz@FOOFERS.ORG
 host/localhost@FOOFERS.ORG
 kadmin/admin@FOOFERS.ORG
 kadmin/changepw@FOOFERS.ORG
@@ -8,6 +7,5 @@ kadmin/debian64-3.foofers.org@FOOFERS.ORG
 kadmin/history@FOOFERS.ORG
 krbtgt/FOOFERS.ORG@FOOFERS.ORG
 root/admin@FOOFERS.ORG
-zk/ekoontzhobart@FOOFERS.ORG
-zkclient@FOOFERS.ORG
-kadmin.local:  
+zookeeperclient@FOOFERS.ORG
+zookeeperserver/ekoontzhobart@FOOFERS.ORG
