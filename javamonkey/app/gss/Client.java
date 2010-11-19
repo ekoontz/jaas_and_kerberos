@@ -63,7 +63,7 @@ public class Client {
         new DataOutputStream(socket.getOutputStream());
 
       // send serviceTicket to server.
-      client.sendTicketToService(client.serviceTicket);
+      client.sendTicketToService(client.serviceTicket,inStream,outStream);
 
       // Write the ticket to disk for the server to read.
       encodeAndWriteTicketToDisk( client.serviceTicket, "./security.token");
@@ -142,9 +142,18 @@ public class Client {
     writer.close();
   }
 
-  private static void sendTicketToService(byte[] ticket)
+  private static void sendTicketToService(byte[] ticket, DataInputStream inStream, DataOutputStream outStream) 
       throws IOException {
-    // add code here..
+    System.out.println("sendTicketToService(): starting.");
+
+    System.out.println("############sendTicketToService(): sending ticket of length : " + ticket.length);
+
+    //send service ticket token to service, which is listening on outStream.
+    //    retval = context.initSecContext(inStream,outStream);
+
+    System.out.println("############sendTicketToService(): outstream writing finished.");
+
+
   }
 
 
