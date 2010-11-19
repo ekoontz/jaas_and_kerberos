@@ -5,6 +5,7 @@ compile: javamonkey/app/gss/Server.class javamonkey/app/gss/Client.class SampleS
 
 clean:
 	-rm javamonkey/app/gss/*.class *.class rm security.token
+	-kill `ps -Ao pid,command | grep java | sed "s/^[ ]*//" | cut -d\  -f1,3 | grep SampleServer | cut -d\  -f1`
 
 %.class: %.java
 	javac $< 
