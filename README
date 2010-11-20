@@ -1,12 +1,30 @@
-h1. This is a guide to using Kerberos through the JAAS (Java Auth..etc) API
+h1. This is a set of example code to explain how to use Kerberos with
+the JAAS (Java Authentication and Authorization Service) API.
 
-  h2. Prerequisites
+h1. Acknowledgements and Related Work
 
-    h3. Kerberos server and client tools
+h2. http://thejavamonkey.blogspot.com/2008/04/clientserver-hello-world-in-kerberos.html
 
-    h3. JDK
+This is a great guide, including documentation, that I used as a
+starting point. Java Monkey's code is composed of a client and a
+server. The client and server communicate by the filesystem;
+specifically, the client writes to a key file which the server reads.
 
-    h3. make
+However, I wanted to have the client and server communicate via a network, so 
+that's the scenario that my code uses here.
+
+h2. Sun official JAAS tutorial
+
+
+
+
+h1. Prerequisites
+
+    h2. Kerberos server and client tools
+
+    h2. JDK
+
+    h2. make
 
 h1. Setup Kerberos Server Infrastructure
 

@@ -1,3 +1,5 @@
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,8 +15,6 @@ import org.ietf.jgss.GSSException;
 import org.ietf.jgss.GSSManager;
 import org.ietf.jgss.GSSName;
 import org.ietf.jgss.Oid;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
  
 public class Client {
 
