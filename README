@@ -1,60 +1,84 @@
-h1. This is a set of example code to explain how to use Kerberos with
+# Introduction
+
+This is a set of example code to explain how to use Kerberos with
 the JAAS (Java Authentication and Authorization Service) API.
 
-h1. Acknowledgements and Related Work
+# Acknowledgements and Related Work
 
-h2. http://thejavamonkey.blogspot.com/2008/04/clientserver-hello-world-in-kerberos.html
+## [Client/Server Hello World in Kerberos, Java and GSS](http://thejavamonkey.blogspot.com/2008/04/clientserver-hello-world-in-kerberos.html)
 
-This is a great guide, including documentation, that I used as a
-starting point. Java Monkey's code is composed of a client and a
-server. The client and server communicate by the filesystem;
-specifically, the client writes to a key file which the server reads.
+This is a great guide, by a blogger who goes by the name Java
+Monkey. Java Monkey's approach here is exactly what I was looking for:
+a "Hello World" application, documented and commented clearly, that
+can be studied and understood quickly. 
 
-However, I wanted to have the client and server communicate via a network, so 
-that's the scenario that my code uses here.
+The only drawback, from my point of view, is that it uses the
+filesystem for client-server communication: specifically, the client
+logs into Kerberos and generates a ticket which it writes to a key
+file. The server then uses this file to authenticate the client.
 
-h2. Sun official JAAS tutorial
+However, I wanted to have a Kerberos "Hello World" where the client
+and server communicate via a network socket, so that's why I've
+created this github repository.
 
+## [Sun/Oracle official JAAS tutorials](http://java.sun.com/j2se/1.5.0/docs/guide/security/jgss/tutorials/index.html)
 
+I recommend you look at my example code and then only afterwards look
+at the Sun/Oracle materials. I found them too complex for tutorial
+purposes; they are better as a reference source.
 
+Commenting on these official JAAS documentation articles, Java Monkey writes:
 
-h1. Prerequisites
+> the code is a socket based client/server which is not useful at all,
+> as only a lunatic would be writing their own server communications
+> layer in these days of NIO and SOA.
 
-    h2. Kerberos server and client tools
+I partially agree with him here. The Sun Tutorial uses byte arrays as
+the network payload, which does indeed seem old-fashioned. I disagree
+however with the idea that network socket-based communication is
+outmoded. I elected to use Data{Input/Output}Streams, which provides
+an abstraction layer that avoids the low-level byte-array passing. 
 
-    h2. JDK
+# Prerequisites
 
-    h2. make
+## Kerberos server and client tools
 
-h1. Setup Kerberos Server Infrastructure
+## JDK
 
-  h2. Choose realm name
+## GNU Make
 
-  h2. Edit /etc/krb5.conf
+I used GNU Make for development and testing rather than Apache Ant for
+simplicity, but an Ant build.xml or a Mavel pom.xml would be good to have here.
 
-  h2. Choose principals
+# Setup Kerberos Server Infrastructure
 
-  h2. Add principals using kadmin.local 
+## Choose realm name
 
-h1. Test Kerberos Server Infrastructure
+## Edit /etc/krb5.conf
 
-  h2. test with kinit.
+## Choose principals
 
-h1. Compile Java example code
+## Add principals using kadmin.local 
+
+# Test Kerberos Server Infrastructure
+
+## test with kinit.
+
+# Compile Java example code
 
 Run 'make compile'
 
-h1. Runtime configuration of Java example code
+# Runtime configuration of Java example code
 
- h2. Generate keytab for service principal
+## Generate keytab for service principal
 
- h2. Edit jaas.conf: set KerberizedServer.principal
+## Edit jaas.conf: set KerberizedServer.principal
 
- h2. Edit server.properties: (FIXME: use keytabs rather than password in file).
+## Edit server.properties: (FIXME: use keytabs rather than password in file).
 
- h2. Edit client.properties: (FIXME: prompt for password when client starts rather than password in file).
+## Edit client.properties: (FIXME: prompt for password when client starts rather than password in file).
 
-h1. Test
+# Test
 
 Run 'make test' will start up the example server and run the client
 against it. You may run the client against the same server afterwards
