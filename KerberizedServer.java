@@ -124,7 +124,7 @@ public class KerberizedServer {
             readBuffer.clear();
             
             // Attempt to read off the channel
-            int numRead;
+            int numRead = 0;
             try {
               numRead = socketChannel.read(readBuffer);
               System.out.println("read: " + numRead + " bytes.");
@@ -133,7 +133,6 @@ public class KerberizedServer {
               // the selection key and close the channel.
               key.cancel();
               socketChannel.close();
-              return;
             }
             
             if (numRead == -1) {
@@ -141,7 +140,6 @@ public class KerberizedServer {
               // same from our end and cancel the channel.
               key.channel().close();
               key.cancel();
-              return;
             }
           }
           else {
