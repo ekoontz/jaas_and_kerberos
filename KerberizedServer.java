@@ -118,34 +118,67 @@ public class KerberizedServer {
         } else if (key.isReadable()) {
           System.out.println("key is readable.");
           SocketChannel socketChannel = (SocketChannel) key.channel();
-          Socket socket = socketChannel.socket();
-          final DataInputStream inStream = new DataInputStream(socket.getInputStream());          
-          final DataOutputStream outStream = new DataOutputStream(socket.getOutputStream());          
-          
-          // 3.3 get client's security context
-          GSSContext clientContext =
-            Subject.doAs( subject, new PrivilegedAction<GSSContext>() {
-                public GSSContext run() {
-                  try {
-                    GSSManager manager = GSSManager.getInstance();
-                    GSSContext context = manager.createContext( (GSSCredential) null);
-                    while (!context.isEstablished()) {
-                      System.out.println("KerberizedServer: context not yet established: accepting from client.");
-                      context.acceptSecContext(inStream,outStream);
-                    }
-                    
-                    return context;
-                  }
-                  catch ( Exception e) {
-                    e.printStackTrace();
-                    return null;
-                  }
-                }
-              });
 
-          if (clientContext != null) {
-            System.out.println("KerberizedServer: Client authenticated: (principal: " + clientContext.getSrcName() + ")");
-            // ..conduct business with client since it's authenticated and optionally encrypted too..
+          if (true) {
+            ByteBuffer readBuffer = ByteBuffer.allocate(8192);
+            readBuffer.clear();
+            
+            // Attempt to read off the channel
+            int numRead;
+            try {
+              numRead = socketChannel.read(readBuffer);
+              System.out.println("read: " + numRead + " bytes.");
+            } catch (IOException e) {
+              // The remote forcibly closed the connection, cancel
+              // the selection key and close the channel.
+              key.cancel();
+              socketChannel.close();
+              return;
+            }
+            
+            if (numRead == -1) {
+              // Remote entity shut the socket down cleanly. Do the
+              // same from our end and cancel the channel.
+              key.channel().close();
+              key.cancel();
+              return;
+            }
+          }
+          else {
+            // streams do not seem to work well with NIO, perhaps because:
+            // "If the mechanism token contains a definitive start and end [,]
+            // this method may block on the InputStream if only part of the token is available."
+            // http://www.exciton.cs.rice.edu/javadocs/docs/api/org/ietf/jgss/GSSContext.html#acceptSecContext%28java.io.InputStream,%20java.io.OutputStream%29
+            
+            Socket socket = socketChannel.socket();
+            final DataInputStream inStream = new DataInputStream(socket.getInputStream());          
+            final DataOutputStream outStream = new DataOutputStream(socket.getOutputStream());          
+            
+            // 3.3 get client's security context
+            GSSContext clientContext =
+              Subject.doAs( subject, new PrivilegedAction<GSSContext>() {
+                  public GSSContext run() {
+                    try {
+                      GSSManager manager = GSSManager.getInstance();
+                      GSSContext context = manager.createContext( (GSSCredential) null);
+                      while (!context.isEstablished()) {
+                        System.out.println("KerberizedServer: context not yet established: accepting from client.");
+                        context.acceptSecContext(inStream,outStream);
+                      }
+                      
+                      return context;
+                    }
+                    catch ( Exception e) {
+                      e.printStackTrace();
+                      return null;
+                    }
+                  }
+                });
+            
+            if (clientContext != null) {
+              System.out.println("KerberizedServer: Client authenticated: (principal: " + clientContext.getSrcName() + ")");
+              // ..conduct business with client since it's authenticated and optionally encrypted too..
+            }
           }
         } else if (key.isWritable()) {
           System.out.println("key is writeable.");
