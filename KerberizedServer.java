@@ -12,63 +12,77 @@ import javax.security.auth.Subject;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
-public class KerberizedServer  {
-  // Oid mechanism = use Kerberos V5 as the security mechanism.
-  static Oid krb5Oid;
-    
-    public static void main(String[] args) 
-	throws IOException, GSSException {
-      // 1. Set up Kerberos properties.
-      // 1.1. Oid mechanism = use Kerberos V5 as the security mechanism.
-      krb5Oid = new Oid( "1.2.840.113554.1.2.2");
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 
-      // 1.2 Properties
-      Properties props = new Properties();
-      props.load( new FileInputStream( "server.properties"));
-      System.setProperty( "sun.security.krb5.debug", "true");
-      System.setProperty( "java.security.auth.login.config", "./jaas.conf");
-      System.setProperty( "javax.security.auth.useSubjectCredsOnly", "true");
-      String password = props.getProperty( "service.password");
+import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
+import java.nio.channels.spi.SelectorProvider;
+import java.util.*;
 
-      // 2. Login to the KDC.
-      LoginContext loginCtx = null;
-      // "KerberizedServer" refers to a section of the JAAS configuration in the jaas.conf file.
-      Subject subject = null;
-      try {
-        loginCtx = new LoginContext( "KerberizedServer",
-                                     new LoginCallbackHandler( password));
-        loginCtx.login();
-        subject = loginCtx.getSubject();
-      }
-      catch (LoginException e) {
-        System.err.println("Login failure : " + e);
-        System.exit(-1);
-      }
-      // Obtain the command-line arguments and parse the port number
-      
-      if (args.length != 1) {
-        System.err.println("Usage: java <options> KerberizedServer <localPort>");
-        System.exit(-1);
-      }
-      
-      // 3. Service clients.
-      // 3.1. Startup service network connection.
-      int localPort = Integer.parseInt(args[0]);
-      ServerSocket ss = new ServerSocket(localPort);
-      
-      while (true) {
-        
-        System.out.println("KerberizedServer: Waiting for client connection...");
-        
+public class KerberizedServer {
+   // Oid mechanism = use Kerberos V5 as the security mechanism.
+   static Oid krb5Oid;
 
-        // 3.2 Receive a client connection.
-        Socket socket = ss.accept();
-        final DataInputStream inStream =
-          new DataInputStream(socket.getInputStream());
-        final DataOutputStream outStream = 
-          new DataOutputStream(socket.getOutputStream());
+     public static void main(String[] args) 
+         throws IOException, GSSException {
+       // 1. Prepare to authenticate with Kerberos.
 
-        System.out.println("KerberizedServer: Got connection from client "
+       // 1.1. Oid mechanism = use Kerberos V5 as the security mechanism.
+       krb5Oid = new Oid( "1.2.840.113554.1.2.2");
+
+       // 1.2 Set Kerberos Properties
+       Properties props = new Properties();
+       props.load( new FileInputStream( "server.properties"));
+       System.setProperty( "sun.security.krb5.debug", "true");
+       System.setProperty( "java.security.auth.login.config", "./jaas.conf");
+       System.setProperty( "javax.security.auth.useSubjectCredsOnly", "true");
+       String password = props.getProperty( "service.password");
+
+       // 2. Login to the KDC.
+       LoginContext loginCtx = null;
+       // "KerberizedServer" refers to a section of the JAAS configuration in the jaas.conf file.
+       Subject subject = null;
+       try {
+         loginCtx = new LoginContext( "KerberizedServer",
+                                      new LoginCallbackHandler( password));
+         loginCtx.login();
+         subject = loginCtx.getSubject();
+       }
+       catch (LoginException e) {
+         System.err.println("Login failure : " + e);
+         System.exit(-1);
+       }
+       // Obtain the command-line arguments and parse the port number
+
+       if (args.length != 1) {
+         System.err.println("Usage: java <options> KerberizedServer <localPort>");
+         System.exit(-1);
+       }
+
+       // 3. Service clients.
+       // 3.1. Startup service network connection.
+       int localPort = Integer.parseInt(args[0]);
+       ServerSocket ss = new ServerSocket(localPort);
+
+       while (true) {
+
+         System.out.println("KerberizedServer: Waiting for client connection...");
+
+
+         // 3.2 Receive a client connection.
+         Socket socket = ss.accept();
+         final DataInputStream inStream =
+           new DataInputStream(socket.getInputStream());
+         final DataOutputStream outStream = 
+           new DataOutputStream(socket.getOutputStream());
+
+         System.out.println("KerberizedServer: Got connection from client "
                            + socket.getInetAddress());
 	
         // 3.3 get client's security context
