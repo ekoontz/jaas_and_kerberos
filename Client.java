@@ -133,10 +133,10 @@ public class Client {
           });
 
         if (serviceTicket != null) {
-          System.out.println("Client: Authenticated with service : " + servicePrincipalName + " successfully and received service ticket.");
+          System.out.println("Client obtained service ticket for service : " + servicePrincipalName);
         }
         else {
-          System.out.println("Client: Failed to obtain service ticket from service " + servicePrincipalName);
+          System.out.println("Client obtained service ticket for service : " + servicePrincipalName);
           System.exit(-1);
         }
       }
