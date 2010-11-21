@@ -27,7 +27,7 @@ public class Client {
       krb5Oid = new Oid( "1.2.840.113554.1.2.2");
     }
     catch (GSSException e) {
-      System.err.println("Error obtaining Kerberos V5 OID: " + e);
+      System.err.println("Client: Error obtaining Kerberos V5 OID: " + e);
       e.printStackTrace();
       System.exit(-1);
     }
@@ -38,7 +38,7 @@ public class Client {
       props.load( new FileInputStream( "client.properties"));
     }
     catch (IOException e) {
-      System.err.println("Error opening properties file 'client.properties': " + e);
+      System.err.println("Client: Error opening properties file 'client.properties': " + e);
       e.printStackTrace();
       System.exit(-1);
     }
@@ -53,12 +53,12 @@ public class Client {
     LoginContext loginCtx = null;
     // "Client" references the corresponding JAAS configuration section in the jaas.conf file.
     try {
-      loginCtx = new LoginContext( "Client",
-                                   new LoginCallbackHandler( username, password));
+      loginCtx = new LoginContext("Client",
+                                  new LoginCallbackHandler( username, password));
       loginCtx.login();
     }
     catch ( LoginException e) {
-      System.err.println( "There was an error during the JAAS login: " + e);
+      System.err.println("Client: There was an error during the JAAS login: " + e);
       e.printStackTrace();
       System.exit( -1);
     }
@@ -74,12 +74,12 @@ public class Client {
     }
     catch (UnknownHostException e) {
         e.printStackTrace();
-        System.err.println("There was an error connecting to the server: hostname " + hostName + " not found.");
+        System.err.println("Client: There was an error connecting to the server: hostname " + hostName + " not found.");
         System.exit( -1);
     }
     catch (IOException e) {
         e.printStackTrace();
-        System.err.println("There was an error connecting to the server: " + e);
+        System.err.println("Client: There was an error connecting to the server: " + e);
         System.exit( -1);
     }
 
@@ -91,7 +91,7 @@ public class Client {
       outStream = new DataOutputStream(socket.getOutputStream());
 
       // 4. Authenticate with service.
-      String servicePrincipalName = props.getProperty( "service.principal.name");
+      String servicePrincipalName = props.getProperty("service.principal.name");
       GSSManager manager = GSSManager.getInstance();
       GSSName serverName = null;
 
@@ -100,11 +100,11 @@ public class Client {
       }
       catch (GSSException e) {
         e.printStackTrace();
-        System.err.println("There was an error in creating a name for the host-based service that we want to connect to.");
+        System.err.println("Client: There was an error in creating a name for the host-based service that we want to connect to.");
         System.exit(-1);
       }
       
-      System.out.println("Client.initiateSecurityContextNet() Initiate security context with serverName " + serverName);
+      System.out.println("Client: Initiating security context with serverName " + serverName);
       
       try {
         final GSSContext context = manager.createContext( serverName, 
@@ -113,18 +113,17 @@ public class Client {
                                                           GSSContext.DEFAULT_LIFETIME);
 
         // The GSS context initiation has to be performed as a privileged action.
-        byte[] serviceTicket = Subject.doAs( subject, new PrivilegedAction<byte[]>() {
-            public byte[] run() {
+        GSSContext serviceTicket = Subject.doAs( subject, new PrivilegedAction<GSSContext>() {
+            public GSSContext run() {
               try {
-                byte[] token = new byte[0];
                 context.requestMutualAuth( false);
                 context.requestCredDeleg( false);
                 
                 int retval;
                 while(!context.isEstablished()) {
-                  retval = context.initSecContext(inStream,outStream);
+                  context.initSecContext(inStream,outStream);
                 }
-                return token;
+                return context;
               }
               catch (GSSException e) {
                 e.printStackTrace();
@@ -134,10 +133,10 @@ public class Client {
           });
 
         if (serviceTicket != null) {
-          System.out.println("Authenticated with service : " + servicePrincipalName + " successfully and received service ticket.");
+          System.out.println("Client: Authenticated with service : " + servicePrincipalName + " successfully and received service ticket.");
         }
         else {
-          System.out.println("Failed to obtain service ticket from service " + servicePrincipalName);
+          System.out.println("Client: Failed to obtain service ticket from service " + servicePrincipalName);
           System.exit(-1);
         }
       }
@@ -148,7 +147,7 @@ public class Client {
     }
     catch ( IOException e) {
       e.printStackTrace();
-      System.err.println( "There was an IO error");
+      System.err.println( "Client: There was an IO error");
       System.exit( -1);
     }
   }

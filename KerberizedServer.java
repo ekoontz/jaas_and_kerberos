@@ -47,7 +47,7 @@ public class KerberizedServer  {
       // Obtain the command-line arguments and parse the port number
       
       if (args.length != 1) {
-        System.err.println("Usage: java <options> SampleServer <localPort>");
+        System.err.println("Usage: java <options> KerberizedServer <localPort>");
         System.exit(-1);
       }
       
@@ -58,7 +58,7 @@ public class KerberizedServer  {
       
       while (true) {
         
-        System.out.println("SampleServer::main() Waiting for client connection...");
+        System.out.println("KerberizedServer: Waiting for client connection...");
         
 
         // 3.2 Receive a client connection.
@@ -68,37 +68,36 @@ public class KerberizedServer  {
         final DataOutputStream outStream = 
           new DataOutputStream(socket.getOutputStream());
 
-        System.out.println("SampleServer::main() Got connection from client "
+        System.out.println("KerberizedServer: Got connection from client "
                            + socket.getInetAddress());
 	
-        Subject.doAs( subject, new PrivilegedAction<String>() {
-            public String run() {
-              try {
-                // Authenticate the client; return principal name
-
-                GSSManager manager = GSSManager.getInstance();
-                GSSContext context = manager.createContext( (GSSCredential) null);
-                
-                while (!context.isEstablished()) {
-                  System.out.println("SampleServer::main() context not yet established: accepting from client.");
+        // 3.3 get client's security context
+        GSSContext clientContext =
+          Subject.doAs( subject, new PrivilegedAction<GSSContext>() {
+              public GSSContext run() {
+                try {
+                  GSSManager manager = GSSManager.getInstance();
+                  GSSContext context = manager.createContext( (GSSCredential) null);
+                  while (!context.isEstablished()) {
+                    System.out.println("KerberizedServer: context not yet established: accepting from client.");
+                    context.acceptSecContext(inStream,outStream);
+                  }
                   
-                  context.acceptSecContext(inStream,outStream);
+                  return context;
                 }
-                
-                System.out.println("Client authenticated: (principal: " + context.getSrcName() + ")");
-                return context.getSrcName().toString();
-              }
-              catch ( Exception e) {
-                e.printStackTrace();
-                return null;
+                catch ( Exception e) {
+                  e.printStackTrace();
+                  return null;
+                }
               }
             }
-          }
-          );
+            );
+        if (clientContext != null) {
+          System.out.println("KerberizedServer: Client authenticated: (principal: " + clientContext.getSrcName() + ")");
+          // ..conduct business with client since it's authenticated and optionally encrypted too..
+        }
 
-        // ..conduct business with client since it's authenticated and optionally encrypted too.
-	
-        System.out.println("SampleServer::main() Closing connection with client " 
+        System.out.println("KerberizedServer: Closing connection with client "
                            + socket.getInetAddress());
         socket.close();
       }
