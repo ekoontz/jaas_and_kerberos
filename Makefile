@@ -18,10 +18,13 @@ waitforkill:
 
 test: killserver waitforkill server_start test_client killserver
 
-server_start: KerberizedServer.class
+server_start: killserver KerberizedServer.class
 	java KerberizedServer 9000 &
 	echo "let kerberized service come up..."
 	sleep 1
+
+runserver: killserver KerberizedServer.class
+	java KerberizedServer 9000
 
 test_client: Client.class
 	echo "make test_client: begin.."
