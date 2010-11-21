@@ -23,6 +23,8 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 import java.util.*;
 
 public class KerberizedServer {
@@ -84,52 +86,73 @@ public class KerberizedServer {
     serverChannel.register(selector, SelectionKey.OP_ACCEPT);
     // </1. NIO>
 
+    System.out.println("start main listen loop..");
+    while(true) {
 
-    // 2. 'old' IO
-    ServerSocket ss = new ServerSocket(localPort);
-    
-    while (true) {      
-      System.out.println("KerberizedServer: Waiting for client connection...");
+      selector.select();
+      Iterator selectedKeys = selector.selectedKeys().iterator();
+      while (selectedKeys.hasNext()) {
+        SelectionKey key = (SelectionKey) selectedKeys.next();
+        selectedKeys.remove();
 
-      // 3.2 Receive a client connection.
-      Socket socket = ss.accept();
-      final DataInputStream inStream =
-        new DataInputStream(socket.getInputStream());
-      final DataOutputStream outStream = 
-        new DataOutputStream(socket.getOutputStream());
-      
-      System.out.println("KerberizedServer: Got connection from client "
-                         + socket.getInetAddress());
-      
-      // 3.3 get client's security context
-      GSSContext clientContext =
-        Subject.doAs( subject, new PrivilegedAction<GSSContext>() {
-            public GSSContext run() {
-              try {
-                GSSManager manager = GSSManager.getInstance();
-                GSSContext context = manager.createContext( (GSSCredential) null);
-                while (!context.isEstablished()) {
-                  System.out.println("KerberizedServer: context not yet established: accepting from client.");
-                  context.acceptSecContext(inStream,outStream);
+        if (!key.isValid()) {
+          System.out.println("key is not valid; continuing.");
+          continue;
+        }
+        
+        // Check what event is available and deal with it
+        if (key.isAcceptable()) {
+          System.out.println("key is acceptable.");
+
+          // For an accept to be pending the channel must be a server socket channel.
+          ServerSocketChannel serverSocketChannel = (ServerSocketChannel) key.channel();
+          
+          // Accept the connection and make it non-blocking
+          SocketChannel socketChannel = serverSocketChannel.accept();
+          socketChannel.configureBlocking(false);
+          
+          // Register the new SocketChannel with our Selector, indicating
+          // we'd like to be notified when there's data waiting to be read
+          socketChannel.register(selector, SelectionKey.OP_READ);
+
+        } else if (key.isReadable()) {
+          System.out.println("key is readable.");
+          SocketChannel socketChannel = (SocketChannel) key.channel();
+          Socket socket = socketChannel.socket();
+          final DataInputStream inStream = new DataInputStream(socket.getInputStream());          
+          final DataOutputStream outStream = new DataOutputStream(socket.getOutputStream());          
+          
+          // 3.3 get client's security context
+          GSSContext clientContext =
+            Subject.doAs( subject, new PrivilegedAction<GSSContext>() {
+                public GSSContext run() {
+                  try {
+                    GSSManager manager = GSSManager.getInstance();
+                    GSSContext context = manager.createContext( (GSSCredential) null);
+                    while (!context.isEstablished()) {
+                      System.out.println("KerberizedServer: context not yet established: accepting from client.");
+                      context.acceptSecContext(inStream,outStream);
+                    }
+                    
+                    return context;
+                  }
+                  catch ( Exception e) {
+                    e.printStackTrace();
+                    return null;
+                  }
                 }
-                
-                return context;
-              }
-              catch ( Exception e) {
-                e.printStackTrace();
-                return null;
-              }
-            }
+              });
+
+          if (clientContext != null) {
+            System.out.println("KerberizedServer: Client authenticated: (principal: " + clientContext.getSrcName() + ")");
+            // ..conduct business with client since it's authenticated and optionally encrypted too..
           }
-          );
-      if (clientContext != null) {
-        System.out.println("KerberizedServer: Client authenticated: (principal: " + clientContext.getSrcName() + ")");
-        // ..conduct business with client since it's authenticated and optionally encrypted too..
+        } else if (key.isWritable()) {
+          System.out.println("key is writeable.");
+        }
       }
-      
-      System.out.println("KerberizedServer: Closing connection with client "
-                         + socket.getInetAddress());
-      socket.close();
     }
+
   }
+
 }
