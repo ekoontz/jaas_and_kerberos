@@ -1,21 +1,10 @@
-import org.ietf.jgss.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.net.Socket;
-import java.net.ServerSocket;
-import java.util.Properties;
-import java.security.PrivilegedAction;
-import javax.security.auth.Subject;
-import javax.security.auth.login.LoginContext;
-import javax.security.auth.login.LoginException;
-
 import java.io.IOException;
+
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.Socket;
 
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -23,9 +12,21 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.util.*;
+
+import java.security.PrivilegedAction;
+
+import java.util.Iterator;
+import java.util.Properties;
+
+import javax.security.auth.Subject;
+import javax.security.auth.login.LoginContext;
+import javax.security.auth.login.LoginException;
+
+import org.ietf.jgss.GSSContext;
+import org.ietf.jgss.GSSCredential;
+import org.ietf.jgss.GSSException;
+import org.ietf.jgss.GSSManager;
+import org.ietf.jgss.Oid;
 
 public class KerberizedServer {
   
