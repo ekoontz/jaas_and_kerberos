@@ -134,9 +134,10 @@ public class Client {
 
         if (serviceTicket != null) {
           System.out.println("Client obtained service ticket for service : " + servicePrincipalName);
-          if (false) {
+          if (true) {
           try {
             Thread.currentThread().sleep(5000);
+            socket.close();
           }
           catch (InterruptedException e) {
             //...
