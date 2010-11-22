@@ -23,10 +23,10 @@ start_server: KerberizedServer.class
 	echo "let kerberized service come up..."
 	sleep 1
 
-runserver: killserver KerberizedServer.class
+run_server: killserver KerberizedServer.class
 	java KerberizedServer 9000
 
 run_client: Client.class
-	java Client localhost 9000
+	java Client client.properties localhost 9000
 
 

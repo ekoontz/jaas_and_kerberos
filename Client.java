@@ -35,10 +35,10 @@ public class Client {
     // 1. Set up Kerberos properties.
     Properties props = new Properties();
     try {
-      props.load( new FileInputStream( "client.properties"));
+      props.load( new FileInputStream(args[0]));
     }
     catch (IOException e) {
-      System.err.println("Client: Error opening properties file 'client.properties': " + e);
+      System.err.println("Client: Error opening properties file '"+args[0]+"': " + e);
       e.printStackTrace();
       System.exit(-1);
     }
@@ -66,8 +66,8 @@ public class Client {
     Subject subject = loginCtx.getSubject();
 
     // 3. Connect to service.
-    String hostName = args[0];
-    int port = Integer.parseInt(args[1]);
+    String hostName = args[1];
+    int port = Integer.parseInt(args[2]);
     Socket socket = null;
     try {
       socket = new Socket(hostName,port);
@@ -134,15 +134,6 @@ public class Client {
 
         if (serviceTicket != null) {
           System.out.println("Client obtained service ticket for service : " + servicePrincipalName);
-          if (true) {
-          try {
-            Thread.currentThread().sleep(5000);
-            socket.close();
-          }
-          catch (InterruptedException e) {
-            //...
-          }
-          }
         }
         else {
           System.out.println("Client failed to obtain service ticket for service : " + servicePrincipalName);
