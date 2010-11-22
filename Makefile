@@ -1,7 +1,7 @@
 .PHONY: all clean test compile killserver waitforkill server_start test_client
 all: compile
 
-compile: KerberizedServer.class Client.class
+compile: KerberizedServer.class Client.class Hexdump.class
 
 clean: 
 	-rm *.class
