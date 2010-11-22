@@ -98,20 +98,20 @@ public class KerberizedServer {
       selector.select();
       Iterator selectedKeys = selector.selectedKeys().iterator();
       while (selectedKeys.hasNext()) {
-        final SelectionKey key = (SelectionKey) selectedKeys.next();
+        final SelectionKey sk = (SelectionKey) selectedKeys.next();
         selectedKeys.remove();
 
-        if (!key.isValid()) {
+        if (!sk.isValid()) {
           System.out.println("key is not valid; continuing.");
           continue;
         }
         
         // Check what event is available and deal with it
-        if (key.isAcceptable()) {
+        if (sk.isAcceptable()) {
           System.out.println("key is acceptable.");
 
           // For an accept to be pending the channel must be a server socket channel.
-          ServerSocketChannel serverSocketChannel = (ServerSocketChannel) key.channel();
+          ServerSocketChannel serverSocketChannel = (ServerSocketChannel) sk.channel();
           
           // Accept the connection and make it non-blocking
           SocketChannel socketChannel = serverSocketChannel.accept();
@@ -120,9 +120,9 @@ public class KerberizedServer {
           // Register the new SocketChannel with our Selector, indicating
           // we'd like to be notified when there's data waiting to be read
           socketChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
-        } else if (key.isReadable()) {
+        } else if (sk.isReadable()) {
           System.out.println("reading context from channel.");
-          final SocketChannel socketChannel = (SocketChannel) key.channel();
+          final SocketChannel socketChannel = (SocketChannel) sk.channel();
           
           clientContext =
             Subject.doAs( subject, new PrivilegedAction<GSSContext>() {
@@ -152,10 +152,10 @@ public class KerberizedServer {
                         System.err.println("IOEXCEPTION: GIVING UP ON THIS CLIENT.");
                         // The remote forcibly closed the connection, cancel
                         // the selection key and close the channel.
-                        clientToContext.remove(key);
-                        key.cancel();
+                        clientToContext.remove(sk);
+                        sk.cancel();
                         try {
-                          key.channel().close();
+                          sk.channel().close();
                         }
                         catch (IOException ioe) {
                           System.err.println("IoException trying to close socket.");
@@ -168,15 +168,15 @@ public class KerberizedServer {
                         // Remote entity shut the socket down cleanly. Do the
                         // same from our end and cancel the channel.
                         System.out.println("removing key from clientToContext.");
-                        clientToContext.remove(key);
+                        clientToContext.remove(sk);
                         try {
-                          key.channel().close();
+                          sk.channel().close();
                         }
                         catch (IOException ioe) {
                           System.err.println("IoException trying to close socket.");
                           ioe.printStackTrace();
                         }                            
-                        key.cancel();
+                        sk.cancel();
                         return null;
                       }
                     }
@@ -186,15 +186,15 @@ public class KerberizedServer {
                   catch (GSSException e) {
                     System.err.println("GSS EXCEPTION: GIVING UP ON THIS CLIENT.");
                     e.printStackTrace();
-                    clientToContext.remove(key);
+                    clientToContext.remove(sk);
                     try {
-                      key.channel().close();
+                      sk.channel().close();
                     }
                     catch (IOException ioe) {
                       System.err.println("IoException trying to close socket.");
                       ioe.printStackTrace();
                     }
-                    key.cancel();
+                    sk.cancel();
                     return null;
                   }
                 }
@@ -202,7 +202,7 @@ public class KerberizedServer {
               );
           System.out.println("done with client context-acceptance.");
           if (clientContext != null) {
-            clientToContext.put(key,clientContext);
+            clientToContext.put(sk,clientContext);
             System.out.println("KerberizedServer: Client authenticated: (principal: " + clientContext.getSrcName() + ")");
             // ..conduct business with client since it's authenticated and optionally encrypted too..
             
@@ -218,7 +218,7 @@ public class KerberizedServer {
             }
           }
           System.out.println("===</current clients>===");
-        } else if (key.isWritable()) {
+        } else if (sk.isWritable()) {
           //    .. write to client ..
         }
       }
