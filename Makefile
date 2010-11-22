@@ -1,4 +1,4 @@
-.PHONY: all clean test compile killserver waitforkill server_start test_client
+.PHONY: all clean test compile killserver waitforkill start_server run_client run_server
 all: compile
 
 compile: KerberizedServer.class Client.class Hexdump.class
@@ -14,11 +14,11 @@ waitforkill:
 	sleep 1
 
 %.class: %.java
-	javac $< 
+	javac -Xlint:unchecked $< 
 
-test: killserver waitforkill server_start test_client killserver
+test: killserver waitforkill start_server run_client killserver
 
-server_start: killserver KerberizedServer.class
+start_server: KerberizedServer.class
 	java KerberizedServer 9000 &
 	echo "let kerberized service come up..."
 	sleep 1
@@ -26,8 +26,7 @@ server_start: killserver KerberizedServer.class
 runserver: killserver KerberizedServer.class
 	java KerberizedServer 9000
 
-test_client: Client.class
-	echo "make test_client: begin.."
+run_client: Client.class
 	java Client localhost 9000
-	echo "make test_client: done."
+
 
