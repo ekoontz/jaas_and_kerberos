@@ -113,7 +113,7 @@ public class KerberizedServer {
           
           // Register the new SocketChannel with our Selector, indicating
           // we'd like to be notified when there's data waiting to be read
-          socketChannel.register(selector, SelectionKey.OP_READ);
+          socketChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
 
         } else if (key.isReadable()) {
           System.out.println("key is readable.");
@@ -127,7 +127,13 @@ public class KerberizedServer {
             int numRead = 0;
             try {
               numRead = socketChannel.read(readBuffer);
-              System.out.println("read: " + numRead + " bytes.");
+              if (numRead != -1) {
+                readBuffer.flip();
+                System.out.println("read: " + numRead + " bytes.");
+                byte[] bytes = new byte[8192];
+                readBuffer.get(bytes,0,numRead);
+                Hexdump.hexdump(System.out,bytes,0,numRead);
+              }
             } catch (IOException e) {
               // The remote forcibly closed the connection, cancel
               // the selection key and close the channel.
@@ -179,7 +185,7 @@ public class KerberizedServer {
             }
           }
         } else if (key.isWritable()) {
-          System.out.println("key is writeable.");
+          //          System.out.println("key is writeable.");
         }
       }
     }
