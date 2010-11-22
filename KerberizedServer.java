@@ -69,7 +69,6 @@ public class KerberizedServer {
     // 3.1. Startup service network connection.
     int localPort = Integer.parseInt(args[0]);
 
-
     // <1. NIO>
     Selector selector = SelectorProvider.provider().openSelector();
     
@@ -123,64 +122,69 @@ public class KerberizedServer {
           socketChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
 
         } else if (key.isReadable()) {
-          System.out.println("key is readable.");
-          final SocketChannel socketChannel = (SocketChannel) key.channel();
 
-          clientContext =
-            Subject.doAs( subject, new PrivilegedAction<GSSContext>() {
-                public GSSContext run() {
-                  try {
-                    GSSManager manager = GSSManager.getInstance();
-                    GSSContext context = manager.createContext( (GSSCredential) null);
-                    while (!context.isEstablished()) {
-                      System.out.println("KerberizedServer: context not yet established: accepting from client.");
-                      
-                      ByteBuffer readBuffer = ByteBuffer.allocate(8192);
-                      readBuffer.clear();
-                      
-                      // Attempt to read off the channel
-                      int numRead = 0;
-                      try {
-                        numRead = socketChannel.read(readBuffer);
-                        if (numRead != -1) {
-                          readBuffer.flip();
-                          System.out.println("read: " + numRead + " bytes.");
-                          byte[] bytes = new byte[8192];
-                          readBuffer.get(bytes,0,numRead);
-                          Hexdump.hexdump(System.out,bytes,0,numRead);
-                          context.acceptSecContext(bytes,0,numRead);
-                          System.out.println("called acceptSecContext.");
+          if (clientContext == null) {
+            System.out.println("reading context from channel.");
+            final SocketChannel socketChannel = (SocketChannel) key.channel();
+
+            clientContext =
+              Subject.doAs( subject, new PrivilegedAction<GSSContext>() {
+                  public GSSContext run() {
+                    try {
+                      GSSManager manager = GSSManager.getInstance();
+                      GSSContext context = manager.createContext( (GSSCredential) null);
+                      while (!context.isEstablished()) {
+                        System.out.println("KerberizedServer: context not yet established: accepting from client.");
+                        
+                        ByteBuffer readBuffer = ByteBuffer.allocate(8192);
+                        readBuffer.clear();
+                        
+                        // Attempt to read off the channel
+                        int numRead = 0;
+                        try {
+                          numRead = socketChannel.read(readBuffer);
+                          if (numRead != -1) {
+                            readBuffer.flip();
+                            System.out.println("read: " + numRead + " bytes.");
+                            byte[] bytes = new byte[8192];
+                            readBuffer.get(bytes,0,numRead);
+                            Hexdump.hexdump(System.out,bytes,0,numRead);
+                            context.acceptSecContext(bytes,0,numRead);
+                            System.out.println("called acceptSecContext.");
+                          }
+                        } catch (IOException e) {
+                          // The remote forcibly closed the connection, cancel
+                          // the selection key and close the channel.
+                          key.cancel();
+                          socketChannel.close();
                         }
-                      } catch (IOException e) {
-                        // The remote forcibly closed the connection, cancel
-                        // the selection key and close the channel.
-                        key.cancel();
-                        socketChannel.close();
+                        
+                        if (numRead == -1) {
+                          // Remote entity shut the socket down cleanly. Do the
+                          // same from our end and cancel the channel.
+                          key.channel().close();
+                          key.cancel();
+                        }
                       }
-                      
-                      if (numRead == -1) {
-                        // Remote entity shut the socket down cleanly. Do the
-                        // same from our end and cancel the channel.
-                        key.channel().close();
-                        key.cancel();
-                      }
+                      System.out.println("returning context now.");
+                      return context;
                     }
-                    System.out.println("returning context now.");
-                    return context;
+                    catch ( Exception e) {
+                      e.printStackTrace();
+                      return null;
+                    }
                   }
-                  catch ( Exception e) {
-                    e.printStackTrace();
-                    return null;
-                  }
-                }
-              });
+                });
+
+            System.out.println("done with client context-acceptance.");
+            if (clientContext != null) {
+              System.out.println("KerberizedServer: Client authenticated: (principal: " + clientContext.getSrcName() + ")");
+              // ..conduct business with client since it's authenticated and optionally encrypted too..
+            }
 
 
-          System.out.println("out of doAs() loop....");
-          if (clientContext != null) {
-            System.out.println("KerberizedServer: Client authenticated: (principal: " + clientContext.getSrcName() + ")");
-            // ..conduct business with client since it's authenticated and optionally encrypted too..
           }
+
         } else if (key.isWritable()) {
           //          System.out.println("key is writeable.");
         }
