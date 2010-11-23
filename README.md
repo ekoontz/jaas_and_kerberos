@@ -34,9 +34,10 @@ created this github repository.
 
 ## [Rox Java NIO Tutorial](http://rox-xmlrpc.sourceforge.net/niotut/)
 
-A good guide to learning Java NIO by James Greenfield. I started this
-project with a traditional sockets orientation and then moved to using
-NIO with the help of this guide.
+A good guide to learning Java NIO by James Greenfield, as part of his
+RoX (RPC over XML) project. Based on his helpful information, I was
+able to write a NIO version of my example code after starting with a
+traditional sockets implementation.
 
 ## [Sun/Oracle official JAAS tutorials](http://java.sun.com/j2se/1.5.0/docs/guide/security/jgss/tutorials/index.html)
 
@@ -67,7 +68,14 @@ create a separate thread to handle each client).
 
 ## Kerberos server and client tools
 
+If you're using Debian, install:
+
+* krb5-admin-server
+* krb5-kdc
+
 ## JDK
+
+This code was tested with the Sun JDK version 1.6.0_22.
 
 ## GNU Make
 
@@ -78,11 +86,33 @@ simplicity, but an Ant build.xml or a Mavel pom.xml would be good to have here.
 
 ## Choose realm name
 
+In my documentation and example configuration files, I use
+`FOOFERS.ORG` as my Kerberos realm, and `debian64-3` as the host
+running the Kerberos services. Change these based on your preference.
+
 ## Edit /etc/krb5.conf
+
+    [libdefaults]
+           default_realm = FOOFERS.ORG
+
+    [realms]
+           FOOFERS.ORG = {
+       		    kdc = debian64-3
+                    admin_server = debian64-3
+           }
+    [domain_realm]
+           .foofers.org = FOOFERS.ORG
+           foofers.org = FOOFERS.ORG
 
 ## Choose principals
 
+Choose a principal name for your example client and one for your
+example server. 
+
 ## Add principals using kadmin.local 
+
+See the file `listprincs` in this directory for the list of principals
+in my test Kerberos system.
 
 # Test Kerberos Server Infrastructure
 
@@ -90,7 +120,7 @@ simplicity, but an Ant build.xml or a Mavel pom.xml would be good to have here.
 
 # Compile Java example code
 
-Run 'make compile'
+Run `make compile`
 
 # Runtime configuration of Java example code
 
@@ -98,9 +128,35 @@ Run 'make compile'
 
 ## Edit jaas.conf: set KerberizedServer.principal
 
+See `jaas.conf` in this directory, which is also shown below:
+
+    Client {
+       com.sun.security.auth.module.Krb5LoginModule required
+       useTicketCache=false;
+    };
+
+    KerberizedServer {
+       com.sun.security.auth.module.Krb5LoginModule required
+       useKeyTab=false
+       storeKey=true
+       useTicketCache=false
+       principal="zookeeperserver/debian64-3";
+    };
+
 ## Edit server.properties: (FIXME: use keytabs rather than password in file).
 
+See `server.properties` in this directory, which is also shown below:
+
+    service.password=serverpassword
+
+
 ## Edit client.properties: (FIXME: prompt for password when client starts rather than password in file).
+
+See `client.properties` in this directory, which is also shown below:
+
+    client.principal.name=zookeeperclient
+    client.password=clientpassword
+    service.principal.name=zookeeperserver@debian64-3
 
 # Test
 
