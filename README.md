@@ -127,7 +127,9 @@ Run `make compile`
 
 ## Generate keytab for service principal
 
-## Edit jaas.conf: set KerberizedServer.principal
+(FIXME: currently we use a password (see below)). Instead it would be better to use a keytab.
+
+## Server principal in jaas.conf.
 
 See `jaas.conf` in this directory, which is also shown below:
 
@@ -144,14 +146,13 @@ See `jaas.conf` in this directory, which is also shown below:
        principal="zookeeperserver/debian64-3";
     };
 
-## Edit server.properties: (FIXME: use keytabs rather than password in file).
+## Set server password in `server.properties`: (FIXME: use keytabs rather than password in file).
 
 See `server.properties` in this directory, which is also shown below:
 
     service.password=serverpassword
 
-
-## Edit client.properties: (FIXME: prompt for password when client starts rather than password in file).
+## Set client password in `client.properties`: (FIXME: rely on user running `kinit` prior to `zkClient.sh` usage).
 
 See `client.properties` in this directory, which is also shown below:
 
