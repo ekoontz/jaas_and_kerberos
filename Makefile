@@ -16,7 +16,9 @@ waitforkill:
 %.class: %.java
 	javac -Xlint:unchecked $< 
 
-test: killserver waitforkill start_server run_client killserver
+test: killserver waitforkill start_server run_client
+#	kill server at end of test.
+	make killserver
 
 start_server: KerberizedServer.class
 	java KerberizedServer 9000 &
