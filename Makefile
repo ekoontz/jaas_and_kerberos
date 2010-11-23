@@ -29,4 +29,5 @@ run_server: killserver KerberizedServer.class
 run_client: Client.class
 	java Client client.properties localhost 9000
 
-
+README.html: README.md
+	Markdown.pl README.md > $@
