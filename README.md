@@ -1,7 +1,18 @@
 # Introduction
 
-This is a set of example code to explain how to use Kerberos with
-the JAAS (Java Authentication and Authorization Service) API.
+This is a set of example code to explain how to use Kerberos with the
+JAAS (Java Authentication and Authorization Service) API. The source
+code is split into two classes, `KerberizedServer.java` and
+`Client.java`. Running `make test` will compile and run them both, at
+which time they will set up an authenticated context between them and
+print some debugging information.
+
+# Standard Sockets and NIO (Java's New IO)
+
+There are two versions of `KerberizedServer.java`, one in the `master`
+branch that uses the traditional blocking network sockets API, and one
+in the `nio` branch that uses NIO. The standard sockets version is
+much shorter and easier to understand, so start with that.
 
 # Acknowledgements and Related Work
 
@@ -21,6 +32,12 @@ However, I wanted to have a Kerberos "Hello World" where the client
 and server communicate via a network socket, so that's why I've
 created this github repository.
 
+## [Rox Java NIO Tutorial](http://rox-xmlrpc.sourceforge.net/niotut/)
+
+A good guide to learning Java NIO by James Greenfield. I started this
+project with a traditional sockets orientation and then moved to using
+NIO with the help of this guide.
+
 ## [Sun/Oracle official JAAS tutorials](http://java.sun.com/j2se/1.5.0/docs/guide/security/jgss/tutorials/index.html)
 
 I recommend you look at my example code and then only afterwards look
@@ -33,11 +50,18 @@ Commenting on these official JAAS documentation articles, Java Monkey writes:
 > as only a lunatic would be writing their own server communications
 > layer in these days of NIO and SOA.
 
-I partially agree with him here. The Sun Tutorial uses byte arrays as
-the network payload, which does indeed seem old-fashioned. I disagree
-however with the idea that network socket-based communication is
-outmoded. I elected to use Data{Input/Output}Streams, which provides
-an abstraction layer that avoids the low-level byte-array passing. 
+I partially agree with him here. The main problem of the Sun Tutorial
+is that it doesn't actually work: the code they supply simply doesn't
+function as-is. Also, it uses byte arrays with an array-length prefix
+to communicate between the client and sever, which is unnecessarily
+low-level. I improved this by using standard sockets but used
+`Data`{`Input`/`Output`}`Streams` instead of byte arrays.
+
+Using NIO, which allows for non-blocking networking seems to make the
+code more complex (compare the `master` versus `nio` branches as
+mentioned above), but indeed you'll likely want to use NIO these days
+for performance reasons (with traditional sockets, you'll have to
+create a separate thread to handle each client).
 
 # Prerequisites
 
