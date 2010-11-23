@@ -104,10 +104,11 @@ running the Kerberos services. Change these based on your preference.
            .foofers.org = FOOFERS.ORG
            foofers.org = FOOFERS.ORG
 
-## Choose principals
+## Choose principal names.
 
 Choose a principal name for your example client and one for your
-example server. 
+example server. Below I use `zookeeperclient` for the client, and
+`zookeeperserver` for the server.
 
 ## Add principals using kadmin.local 
 
