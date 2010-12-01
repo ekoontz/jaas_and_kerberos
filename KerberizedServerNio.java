@@ -29,7 +29,7 @@ import org.ietf.jgss.GSSException;
 import org.ietf.jgss.GSSManager;
 import org.ietf.jgss.Oid;
 
-public class KerberizedServer {
+public class KerberizedServerNio {
   
   public static void main(String[] args) 
     throws IOException, GSSException {
