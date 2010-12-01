@@ -9,10 +9,14 @@ print some debugging information.
 
 # Standard Sockets and NIO (Java's New IO)
 
-There are two versions of `KerberizedServer.java`, one in the `master`
-branch that uses the traditional blocking network sockets API, and one
-in the `nio` branch that uses NIO. The standard sockets version is
-much shorter and easier to understand, so start with that.
+There are two versions of the server: `KerberizedServer.java`, which
+uses the traditional blocking network sockets API,
+`KerberizedServerNIO.java`, which uses NIO. The standard sockets
+version is much shorter and easier to understand, so start with
+that. However, most real-world Java development seems to use NIO, so I
+made a version that uses that. There is also a newer framework called
+[Netty](http://jboss.org/netty), built on top of NIO, which I'll be
+looking into at some point, and porting the server code to.
 
 # Acknowledgements and Related Work
 
