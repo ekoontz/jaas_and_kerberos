@@ -1,10 +1,10 @@
 .PHONY: all clean test compile killserver waitforkill start_server run_client run_server
-all: compile
+all: compile README.html
 
 compile: KerberizedServer.class KerberizedServerNio.class Client.class Hexdump.class
 
 clean: 
-	-rm *.class
+	-rm *.class README.html
 
 killserver:
 	echo "killing KerberizedServer java processes.."
