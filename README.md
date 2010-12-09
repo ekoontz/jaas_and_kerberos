@@ -10,7 +10,7 @@ print some debugging information.
 # Standard Sockets and NIO (Java's New IO)
 
 There are two versions of the server: `KerberizedServer.java`, which
-uses the traditional blocking network sockets API,
+uses the traditional blocking network sockets API, and
 `KerberizedServerNIO.java`, which uses NIO. The standard sockets
 version is much shorter and easier to understand, so start with
 that. However, most real-world Java development seems to use NIO, so I
@@ -55,18 +55,19 @@ Commenting on these official JAAS documentation articles, Java Monkey writes:
 > as only a lunatic would be writing their own server communications
 > layer in these days of NIO and SOA.
 
-I partially agree with him here. The main problem of the Sun Tutorial
-is that it doesn't actually work: the code they supply simply doesn't
-function as-is. Also, it uses byte arrays with an array-length prefix
-to communicate between the client and sever, which is unnecessarily
-low-level. I improved this by using standard sockets but used
-`Data`{`Input`/`Output`}`Streams` instead of byte arrays.
+I partially agree with him here. The main problem, from my experience,
+of the Sun Tutorial is that it doesn't actually work: the code they
+supply simply doesn't function as-is. Also, it uses byte arrays with
+an array-length prefix to communicate between the client and sever,
+which is unnecessarily low-level. I improved this by using standard
+sockets but used `Data`{`Input`/`Output`}`Streams` instead of byte
+arrays.
 
 Using NIO, which allows for non-blocking networking seems to make the
-code more complex (compare the `master` versus `nio` branches as
-mentioned above), but indeed you'll likely want to use NIO these days
-for performance reasons (with traditional sockets, you'll have to
-create a separate thread to handle each client).
+code more complex (compare `KerberizedServer.java` with `KerberizedServerNIO.java`), but as Java Monkey alludes to with his comment
+about "these days of NIO", you'll likely want to use NIO these
+days for performance reasons (with traditional sockets, you'll have to
+create a separate thread to handle each client, which won't scale).
 
 # Prerequisites
 
