@@ -63,7 +63,14 @@ which is unnecessarily low-level. I improved this by using standard
 sockets but used `Data`{`Input`/`Output`}`Streams` instead of byte
 arrays.
 
-A disadvantage of using NIO, however, is that you can't use
+One disadvantage of NIO compared to traditional sockets is the API
+complexity: compare `KerberizedServer.java` with
+`KerberizedServerNIO.java`: the latter is twice as long. (Although, to
+be fair, `KerberizedServer.java` as written, does not handle more than
+one client, whereas `KerberizedServerNIO.java` does, so it's not a
+fair compairison).
+
+Another disadvantage of using NIO, however, is that you can't use
 `Data`{`Input`/`Output`}`Streams`, unfortunately, as far as I can
 tell; would like to be wrong about that.
 
