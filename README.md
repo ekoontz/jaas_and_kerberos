@@ -63,11 +63,9 @@ which is unnecessarily low-level. I improved this by using standard
 sockets but used `Data`{`Input`/`Output`}`Streams` instead of byte
 arrays.
 
-Using NIO, which allows for non-blocking networking seems to make the
-code more complex (compare `KerberizedServer.java` with `KerberizedServerNIO.java`), but as Java Monkey alludes to with his comment
-about "these days of NIO", you'll likely want to use NIO these
-days for performance reasons (with traditional sockets, you'll have to
-create a separate thread to handle each client, which won't scale).
+A disadvantage of using NIO, however, is that you can't use
+`Data`{`Input`/`Output`}`Streams`, unfortunately, as far as I can
+tell; would like to be wrong about that.
 
 # Prerequisites
 
