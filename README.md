@@ -122,8 +122,35 @@ example server. Below I use `zookeeperclient` for the client, and
 
 ## Add principals using kadmin.local 
 
-See the file `listprincs` in this directory for the list of principals
-in my test Kerberos system.
+### Add server principal.
+
+We will use `testserver` as the name of the server principal that
+`KerberizedServer` and `KerberizedServerNio` uses. It's conventional
+to use keytab files, rather than passwords, as Kerberos credentials
+for server daemons. This allows a server process to start itself
+without manual intervention : no password need be supplied; the server
+process simply reads the keytab file and uses this to authenticate with the KDC.
+
+We will therefore use `kadmin.local` to add the server principals
+using the `-randkey` option to specify that we don't want to use a
+password for server authentication. You should add a principal entry
+for each network interface that your server will use (otherwise you
+may see `UNKNOWN_SERVER: authtime 0, testclient@`DOMAIN for
+testserver/`HOSTNAME`@`DOMAIN` errors).
+
+
+     # kadmin.local
+     kadmin.local: addprinc -randkey testserver/HOSTNAME
+     kadmin.local: ktadd -k /tmp/testserver.keytab testserver/HOSTNAME
+     Entry for principal testserver/HOSTNAME with kvno 2, encryption type AES-256 CTS mode with 96-bit SHA-1 HMAC added to keytab WRFILE:/tmp/testserver.keytab.
+     Entry for principal testserver/HOSTNAME with kvno 2, encryption type ArcFour with HMAC/md5 added to keytab WRFILE:/tmp/testserver.keytab.
+     kadmin.local: (Ctrl-D)
+
+     # scp /tmp/testserver.keytab user@HOSTNAME:~/jaas_and_kerberos
+
+Where `user` is the user who will run `KerberizedServer` and
+`KerberizedServerNio`, and `HOSTNAME` is the host on which you will
+run them.
 
 # Test Kerberos Server Infrastructure
 
@@ -151,16 +178,11 @@ See `jaas.conf` in this directory, which is also shown below:
     KerberizedServer {
        com.sun.security.auth.module.Krb5LoginModule required
        useKeyTab=false
-       storeKey=true
+       keyTab="testserver.keytab"
        useTicketCache=false
-       principal="zookeeperserver/debian64-3";
+       storeKey=true
+       principal="testserver/HOSTNAME";
     };
-
-## Set server password in `server.properties`: (FIXME: use keytabs rather than password in file).
-
-See `server.properties` in this directory, which is also shown below:
-
-    service.password=serverpassword
 
 ## Set client password in `client.properties`: (FIXME: rely on user running `kinit` prior to `zkClient.sh` usage).
 
@@ -168,7 +190,7 @@ See `client.properties` in this directory, which is also shown below:
 
     client.principal.name=zookeeperclient
     client.password=clientpassword
-    service.principal.name=zookeeperserver@debian64-3
+    service.principal.name=testserver
 
 # Test
 
