@@ -122,7 +122,7 @@ example server. Below I use `zookeeperclient` for the client, and
 
 ## Add principals using kadmin.local 
 
-### Add server principal.
+### Add server principal
 
 We will use `testserver` as the name of the server principal that
 `KerberizedServer` and `KerberizedServerNio` uses. It's conventional
@@ -133,11 +133,9 @@ process simply reads the keytab file and uses this to authenticate with the KDC.
 
 We will therefore use `kadmin.local` to add the server principals
 using the `-randkey` option to specify that we don't want to use a
-password for server authentication. You should add a principal entry
-for each network interface that your server will use (otherwise you
-may see `UNKNOWN_SERVER: authtime 0, testclient@`DOMAIN for
-testserver/`HOSTNAME`@`DOMAIN` errors).
+password for server authentication.
 
+On the host on which the KDC runs, do:
 
      # kadmin.local
      kadmin.local: addprinc -randkey testserver/HOSTNAME
@@ -152,9 +150,50 @@ Where `user` is the user who will run `KerberizedServer` and
 `KerberizedServerNio`, and `HOSTNAME` is the host on which you will
 run them.
 
+ You should add a principal entry for each network interface that your
+server will use - otherwise client authentication to
+`KerberizedServer` and `KerberizedServerNio` may fail, and you may see
+errors in your /var/log/auth.log like :
+
+    Dec 14 14:09:17 debian64-3 krb5kdc[4177]: TGS_REQ (6 etypes {3 1 23 16 17 18}) 192.168.56.1: UNKNOWN_SERVER: authtime 0,  testclient@FOOFERS.ORG for testserver/192.168.0.100@FOOFERS.ORG, Server not found in Kerberos database
+
+To fix this, I added (using `ktadd` as above) a principal for `testserver/192.168.0.100`.
+
+### Add client principal
+
+On the host on which the KDC runs, do:
+
+     # kadmin.local
+     kadmin.local: addprinc testclient
+     Enter password for principal "testclient@FOOFERS.ORG": 
+     Re-enter password for principal "testclient@FOOFERS.ORG": 
+
+See `client.properties` in this directory, which is also shown
+below. This assumes you used `clientpassword` as the password in
+`kadmin.local` above.
+
+    client.principal.name=zookeeperclient
+    client.password=clientpassword
+    service.principal.name=testserver
+
 # Test Kerberos Server Infrastructure
 
-## test with kinit.
+## Test server authentication with `kinit -k -t testserver.keytab`
+   (these options means use the keytab for authentication rather than
+   asking for a password).
+
+     ekoontz@ekoontz:~/jaas$ kinit -k -t testserver.keytab testserver/192.168.0.100
+     ekoontz@ekoontz:~/jaas$ 
+
+## Test client authentication with `kinit testclient`
+
+     ekoontz@ekoontz:~/jaas$ cat client.properties 
+     client.principal.name=testclient
+     client.password=clientpassword
+     service.principal.name=testserver
+     ekoontz@ekoontz:~/jaas$ kinit testclient
+     Please enter the password for testclient@FOOFERS.ORG: 
+     ekoontz@ekoontz:~/jaas$ 
 
 # Compile Java example code
 
@@ -162,13 +201,13 @@ Run `make compile`
 
 # Runtime configuration of Java example code
 
-## Generate keytab for service principal
-
-(FIXME: currently we use a password (see below)). Instead it would be better to use a keytab.
-
 ## Server principal in jaas.conf.
 
-See `jaas.conf` in this directory, which is also shown below:
+See `jaas.conf` in this directory, which is also shown below. Change
+`HOSTNAME` to the host that `KerberizedServer` and
+`KerberizedServerNio` will run on. Note that we use a single entry
+(`KerberizedServer`) for both `KerberizedServer` and
+`KerberizedServerNio`.
 
     Client {
        com.sun.security.auth.module.Krb5LoginModule required
@@ -184,17 +223,9 @@ See `jaas.conf` in this directory, which is also shown below:
        principal="testserver/HOSTNAME";
     };
 
-## Set client password in `client.properties`: (FIXME: rely on user running `kinit` prior to `zkClient.sh` usage).
-
-See `client.properties` in this directory, which is also shown below:
-
-    client.principal.name=zookeeperclient
-    client.password=clientpassword
-    service.principal.name=testserver
-
 # Test
 
-Run 'make test' will start up the example server and run the client
+Run `make test` will start up the example server and run the client
 against it. You may run the client against the same server afterwards
-by doing 'make test_client'. You can kill an existing server process
-by doing 'make killserver'.
+by doing `make test_client`. You can kill an existing server process
+by doing `make killserver`.
