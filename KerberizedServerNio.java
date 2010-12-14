@@ -39,20 +39,16 @@ public class KerberizedServerNio {
     Oid krb5Oid = new Oid( "1.2.840.113554.1.2.2");
     
     // 1.2 Set Kerberos Properties
-    Properties props = new Properties();
-    props.load( new FileInputStream( "server.properties"));
     System.setProperty( "sun.security.krb5.debug", "true");
     System.setProperty( "java.security.auth.login.config", "./jaas.conf");
     System.setProperty( "javax.security.auth.useSubjectCredsOnly", "true");
-    String password = props.getProperty( "service.password");
     
     // 2. Login to the KDC.
     LoginContext loginCtx = null;
     // "KerberizedServer" refers to a section of the JAAS configuration in the jaas.conf file.
     Subject subject = null;
     try {
-      loginCtx = new LoginContext( "KerberizedServer",
-                                   new LoginCallbackHandler( password));
+      loginCtx = new LoginContext( "KerberizedServer");
       loginCtx.login();
       subject = loginCtx.getSubject();
     }
@@ -108,7 +104,7 @@ public class KerberizedServerNio {
         
         // Check what event is available and deal with it
         if (sk.isAcceptable()) {
-          System.out.println("key is acceptable.");
+          System.out.println("accepting connection from client.");
 
           // For an accept to be pending the channel must be a server socket channel.
           ServerSocketChannel serverSocketChannel = (ServerSocketChannel) sk.channel();

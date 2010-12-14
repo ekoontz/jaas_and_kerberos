@@ -31,8 +31,6 @@ public class KerberizedServer {
        krb5Oid = new Oid( "1.2.840.113554.1.2.2");
 
        // 1.2 Set Kerberos Properties
-       Properties props = new Properties();
-       props.load( new FileInputStream( "server.properties"));
        System.setProperty( "sun.security.krb5.debug", "true");
        System.setProperty( "java.security.auth.login.config", "./jaas.conf");
        System.setProperty( "javax.security.auth.useSubjectCredsOnly", "true");
