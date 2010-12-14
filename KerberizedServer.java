@@ -36,15 +36,13 @@ public class KerberizedServer {
        System.setProperty( "sun.security.krb5.debug", "true");
        System.setProperty( "java.security.auth.login.config", "./jaas.conf");
        System.setProperty( "javax.security.auth.useSubjectCredsOnly", "true");
-       String password = props.getProperty( "service.password");
 
        // 2. Login to the KDC.
        LoginContext loginCtx = null;
        // "KerberizedServer" refers to a section of the JAAS configuration in the jaas.conf file.
        Subject subject = null;
        try {
-         loginCtx = new LoginContext( "KerberizedServer",
-                                      new LoginCallbackHandler( password));
+         loginCtx = new LoginContext( "KerberizedServer");
          loginCtx.login();
          subject = loginCtx.getSubject();
        }
