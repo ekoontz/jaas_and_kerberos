@@ -101,6 +101,8 @@ public class KerberizedServer {
           // ..conduct business with client since it's authenticated and optionally encrypted too..
         }
 
+        // TODO: add some actual content passed between client and server.
+
         System.out.println("KerberizedServer: Closing connection with client "
                            + socket.getInetAddress());
         socket.close();
