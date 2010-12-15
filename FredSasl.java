@@ -1,5 +1,5 @@
 import java.io.IOException;
-
+import java.util.HashMap;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.NameCallback;
@@ -46,6 +46,9 @@ public class FredSasl {
     
     @Override
       public void handle(Callback[] cbs) throws IOException, UnsupportedCallbackException {
+
+      System.out.println("ServerHandler::handle()");
+
       for (Callback cb : cbs) {
         if (cb instanceof AuthorizeCallback) {
           
@@ -79,9 +82,20 @@ public class FredSasl {
     
     ClientHandler clientHandler = new ClientHandler();
     ServerHandler serverHandler = new ServerHandler();
+
+    // 1 Set Kerberos Properties
+    System.setProperty( "sun.security.krb5.debug", "true");
+    System.setProperty( "java.security.auth.login.config", "./jaas.conf");
+    System.setProperty( "javax.security.auth.useSubjectCredsOnly", "true");
+    System.setProperty( "javax.security.auth.keyTab","testserver.keytab");
     
-    SaslClient sc = Sasl.createSaslClient(new String[] { "CRAM-MD5" }, null, "my_server", "FQHN", null, clientHandler); 
-    SaslServer ss = Sasl.createSaslServer("CRAM-MD5", "my_server", "FQHN", null, serverHandler);
+    HashMap<String,Object> props = new HashMap<String,Object>();
+    props.put(Sasl.QOP, "auth-conf,auth-int,auth");
+
+    SaslServer ss = Sasl.createSaslServer("GSSAPI", "FredSasl", "ekoontz", null, serverHandler);
+    //    SaslClient sc = Sasl.createSaslClient(new String[] { "GSSAPI" }, null, "ekoontz", "FQHN", null, clientHandler); 
+    /*    SaslClient sc = Sasl.createSaslClient(new String[] { "GSSAPI" }, null, "ekoontz", "FQHN", null, clientHandler); 
+
     
     challenge = ss.evaluateResponse(new byte[0]);
     response = sc.evaluateChallenge(challenge);
@@ -90,5 +104,6 @@ public class FredSasl {
     if (ss.isComplete()) {
       System.out.println("Authentication successful.");
     }
+    */
   }
 }
