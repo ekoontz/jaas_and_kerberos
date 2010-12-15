@@ -1,5 +1,3 @@
-package mypackage;
-
 import java.io.IOException;
 
 import javax.security.auth.callback.Callback;
@@ -19,7 +17,7 @@ public class FredSasl {
   
   public static void main(String[] args) throws SaslException {
     
-    new MySasl().start();
+    new FredSasl().start();
   }
   
   private static class ClientHandler implements CallbackHandler {
