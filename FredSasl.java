@@ -11,6 +11,7 @@ import javax.security.sasl.SaslClient;
 import javax.security.sasl.SaslException;
 import javax.security.sasl.SaslServer;
 import java.security.PrivilegedExceptionAction;
+import java.security.Principal;
 
 import java.security.PrivilegedAction;
 import javax.security.auth.Subject;
@@ -120,15 +121,22 @@ public class FredSasl {
       SaslClient sc = null;
       if (subject != null) {
         try {
+
+          System.out.println("<subject details (inner)>");
+          for (Principal p: subject.getPrincipals()) {
+            System.out.println("classname: " + p.getClass().getName() + " ; subject name : " + p.getName());
+          }
+          System.out.println("</subject details>");
+
           ss = Subject.doAs(subject,new PrivilegedExceptionAction<SaslServer>() {
               ServerHandler serverHandler = new ServerHandler();
               public SaslServer run() throws SaslException {
                 SaslServer saslServer = null;
                 HashMap<String,Object> props = new HashMap<String,Object>();
-                props.put(Sasl.SERVER_AUTH, "true");
+                //                props.put(Sasl.SERVER_AUTH, "true");
                 System.out.println("CREATING SERVER NOW...");
                 saslServer = Sasl.createSaslServer("GSSAPI",
-                                                   "testserver/192.168.1.206",
+                                                   "testserver",
                                                    "ekoontz",props,serverHandler);
                 System.out.println("DONE CREATING SERVER.");
                 return saslServer;
