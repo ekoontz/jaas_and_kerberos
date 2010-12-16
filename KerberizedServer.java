@@ -20,17 +20,10 @@ import java.net.Socket;
 import java.util.*;
 
 public class KerberizedServer {
-   // Oid mechanism = use Kerberos V5 as the security mechanism.
-   static Oid krb5Oid;
 
      public static void main(String[] args) 
          throws IOException, GSSException {
-       // 1. Prepare to authenticate with Kerberos.
-
-       // 1.1. Oid mechanism = use Kerberos V5 as the security mechanism.
-       krb5Oid = new Oid( "1.2.840.113554.1.2.2");
-
-       // 1.2 Set Kerberos Properties
+       // 1. Set Kerberos Properties
        System.setProperty( "sun.security.krb5.debug", "true");
        System.setProperty( "java.security.auth.login.config", "./jaas.conf");
        System.setProperty( "javax.security.auth.useSubjectCredsOnly", "true");
