@@ -1,7 +1,7 @@
-.PHONY: all clean test compile killserver waitforkill start_server_socket start_server_nio start_client run_server test_socket test_nio
+.PHONY: all clean test compile killserver waitforkill start_server_socket start_server_nio start_client run_server test_socket test_nio fred SaslTestServer
 all: compile README.html
 
-compile: KerberizedServer.class KerberizedServerNio.class Client.class Hexdump.class
+compile: KerberizedServer.class KerberizedServerNio.class Client.class Hexdump.class FredSasl.class
 
 clean: 
 	-rm *.class README.html
@@ -41,3 +41,9 @@ start_client: Client.class
 
 README.html: README.md
 	Markdown.pl README.md > $@
+
+fred: FredSasl.class
+	java -Djava.security.auth.login.config=jaas.conf FredSasl
+
+SaslTestServer: SaslTestServer.class
+	java -Djava.security.auth.login.config=jaas.conf SaslTestServer SaslTestServer localhost

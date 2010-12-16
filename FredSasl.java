@@ -11,6 +11,11 @@ import javax.security.sasl.SaslClient;
 import javax.security.sasl.SaslException;
 import javax.security.sasl.SaslServer;
 
+import java.security.PrivilegedAction;
+import javax.security.auth.Subject;
+import javax.security.auth.login.LoginContext;
+import javax.security.auth.login.LoginException;
+
 // copied from http://stackoverflow.com/questions/2077768/how-to-use-the-java-sasl-api-and-cram-md5
 
 public class FredSasl {
