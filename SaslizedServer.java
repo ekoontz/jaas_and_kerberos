@@ -86,12 +86,22 @@ public class SaslizedServer {
 
           SaslServer ss = Subject.doAs(subject,new PrivilegedExceptionAction<SaslServer>() {
               public SaslServer run() throws SaslException {
-                SaslServer saslServer = null;
-                HashMap<String,Object> props = new HashMap<String,Object>();
                 System.out.println("CREATING SERVER NOW...");
-                saslServer = Sasl.createSaslServer("GSSAPI",
-                                                   "testserver",
-                                                   "ekoontz",props,new ServerCallbackHandler());
+                SaslServer saslServer = Sasl.createSaslServer("GSSAPI",
+                                                              "testserver",
+                                                              // ^^^^^^^^  SERVICE_NAME
+                                                              // 1. jaas.conf's SaslizedServer section must have : 'principal="HOST_NAME/SERVICE_NAME"'.
+                                                              // 2. service keytab must have a principal called: HOST_NAME/SERVICE_NAME
+
+                                                              "ekoontz",
+                                                              // ^^^^^^^^  HOST_NAME
+                                                              // 1. jaas.conf's SaslizedServer section has : 'principal="HOST_NAME/SERVICE_NAME"'.
+                                                              // 2. service keytab must have a principal called: HOST_NAME/SERVICE_NAME
+
+                                                              null,
+                                                              // ^^^^ properties: null works fine for me.
+
+                                                              new ServerCallbackHandler());
                 System.out.println("DONE CREATING SERVER.");
                 return saslServer;
               }
