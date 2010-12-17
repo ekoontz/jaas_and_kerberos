@@ -43,7 +43,7 @@ README.html: README.md
 	Markdown.pl README.md > $@
 
 saslizedserver: SaslizedServer.class
-	java -Djava.util.logging.ConsoleHandler.level=FINEST  -Dhandlers=java.util.logging.ConsoleHandler -Djavax.security.sasl.level=FINEST -Djava.security.auth.login.config=jaas.conf SaslizedServer
+	java SaslizedServer
 
 SaslTestServer: SaslTestServer.class
 	java -Djava.security.auth.login.config=jaas.conf SaslTestServer SaslTestServer localhost
