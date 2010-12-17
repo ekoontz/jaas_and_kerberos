@@ -25,6 +25,7 @@ public class SaslizedServer {
     @Override
     public void handle(Callback[] callbacks) throws
         UnsupportedCallbackException {
+      System.out.println("ServerCallbackHandler::handle()");
       AuthorizeCallback ac = null;
       for (Callback callback : callbacks) {
         if (callback instanceof AuthorizeCallback) {
@@ -99,57 +100,64 @@ public class SaslizedServer {
       loginCtx = new LoginContext(SERVICE_SECTION_OF_JAAS_CONF_FILE);
       loginCtx.login();
       subject = loginCtx.getSubject();
-
-      if (subject != null) {
-        try {
-          SaslServer ss = Subject.doAs(subject,new PrivilegedExceptionAction<SaslServer>() {
-              public SaslServer run() throws SaslException {
-
-                System.out.println("STARTING SERVER NOW...");
-                SaslServer saslServer = Sasl.createSaslServer("GSSAPI",
-                                                              SERVICE_PRINCIPAL_NAME,
-                                                              HOST_NAME,
-                                                              null,
-                                                              new ServerCallbackHandler());
-
-
-                ServerSocket ss = null;
-                Socket socket = null;
-
-                try {
-                  ss = new ServerSocket(SERVER_PORT);
-                }
-                catch (IOException e) {
-                  System.err.println("new ServerSocket() failure : " + e);
-                  System.exit(-1);
-                  e.printStackTrace();
-                }
-
-                System.out.println("DONE CREATING SERVER.");
-
-                System.out.println("WAITING FOR CONNECTIONS...");
-
-                try {
-                  socket = ss.accept();
-                }
-                catch (IOException e) {
-                  System.err.println("ss.accept() failure : " + e);
-                  System.exit(-1);
-                  e.printStackTrace();
-                }
-
-                return saslServer;
-              }
-            });
-        }
-        catch (Exception e) {
-          e.printStackTrace();
-        }
-      }
     }
     catch (LoginException e) {
-      System.err.println("Login failure : " + e);
+      System.err.println("Kerberos login failure : " + e);
       System.exit(-1);
     }
+
+    if (subject == null) {
+      System.err.println("Kerberos login failure: subject is null.");
+      System.exit(-1);
+    }
+
+    try {
+      SaslServer ss = Subject.doAs(subject,new PrivilegedExceptionAction<SaslServer>() {
+          public SaslServer run() throws SaslException {
+            
+            System.out.println("STARTING SERVER NOW...");
+            SaslServer saslServer = Sasl.createSaslServer("GSSAPI",
+                                                          SERVICE_PRINCIPAL_NAME,
+                                                          HOST_NAME,
+                                                          null,
+                                                          new ServerCallbackHandler());
+            
+            
+            ServerSocket ss = null;
+            Socket socket = null;
+            
+            System.out.println("DONE CREATING SERVER.");
+            return saslServer;
+          }
+        });
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+    
+    System.out.println("WAITING FOR CONNECTIONS...");
+    
+    ServerSocket serverListenSocket = null;
+    Socket clientConnectionSocket;
+    try {
+      serverListenSocket = new ServerSocket(SERVER_PORT);
+    }
+    catch (IOException e) {
+      System.err.println("new ServerSocket() failure : " + e);
+      System.exit(-1);
+      e.printStackTrace();
+    }
+    
+    try {
+      clientConnectionSocket = serverListenSocket.accept();
+    }
+    catch (IOException e) {
+      System.err.println("sock.accept() failure : " + e);
+      System.exit(-1);
+      e.printStackTrace();
+    }
+
+    System.out.println("CONNECTED.");
+
   }
 }
