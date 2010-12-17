@@ -65,7 +65,9 @@ public class SaslizedServer {
 
     final String HOST_NAME = "ekoontz"; // The hostname that the service (this code) is running on. (might be fully qualified, or not)
 
-    final String SERVICE_PRINCIPAL_NAME = "testserver"; // The service that's running (must exist as a Kerberos principal $SERVICE_NAME/$HOSTNAME).
+    final String SERVICE_PRINCIPAL_NAME = "testserver"; // The service that we're running with this code.
+                                                        // There must exist a Kerberos principal called
+                                                        // $SERVICE_PRINCIPAL_NAME/$HOSTNAME.
 
     final String SERVICE_SECTION_OF_JAAS_CONF_FILE = "SaslizedServer"; // The section (of the JAAS configuration file named $JAAS_CONF_FILE_NAME)
                                                                        // that will be used to configure relevant parameters to do Kerberos authentication.
