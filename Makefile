@@ -45,5 +45,5 @@ README.html: README.md
 saslizedserver: SaslizedServer.class
 	java SaslizedServer
 
-SaslTestServer: SaslTestServer.class
-	java -Djava.security.auth.login.config=jaas.conf SaslTestServer SaslTestServer localhost
+saslizedclient: SaslizedClient.class
+	java SaslizedServer
