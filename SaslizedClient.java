@@ -1,9 +1,13 @@
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
 import javax.security.auth.Subject;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 import javax.security.sasl.SaslException;
 
-public class SaslizedClient {
+public class SASLizedClient {
   
   public static void main(String[] args) throws SaslException {
 
@@ -31,6 +35,17 @@ public class SaslizedClient {
     // </Constants>
 
     System.setProperty( "java.security.auth.login.config", JAAS_CONF_FILE_NAME);
+
+    // Set up Kerberos properties.
+    Properties props = new Properties();
+    try {
+      props.load( new FileInputStream(args[0]));
+    }
+    catch (IOException e) {
+      System.err.println("Client: Error opening properties file '"+args[0]+"': " + e);
+      e.printStackTrace();
+      System.exit(-1);
+    }
 
     Subject subject = null;
     try {
