@@ -46,4 +46,4 @@ saslizedserver: SaslizedServer.class
 	java SaslizedServer
 
 saslizedclient: SaslizedClient.class
-	java SaslizedServer
+	java SaslizedClient
