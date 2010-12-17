@@ -21,35 +21,6 @@ public class SASLizedServer {
     new SASLizedServer().start();
   }
   
-  private static class ServerCallbackHandler implements CallbackHandler {
-    @Override
-    public void handle(Callback[] callbacks) throws
-        UnsupportedCallbackException {
-      System.out.println("ServerCallbackHandler::handle()");
-      AuthorizeCallback ac = null;
-      for (Callback callback : callbacks) {
-        if (callback instanceof AuthorizeCallback) {
-          ac = (AuthorizeCallback) callback;
-        } else {
-          throw new UnsupportedCallbackException(callback,
-              "Unrecognized SASL GSSAPI Callback");
-        }
-      }
-      if (ac != null) {
-        String authid = ac.getAuthenticationID();
-        String authzid = ac.getAuthorizationID();
-        if (authid.equals(authzid)) {
-          ac.setAuthorized(true);
-        } else {
-          ac.setAuthorized(false);
-        }
-        if (ac.isAuthorized()) {
-          ac.setAuthorizedID(authzid);
-        }
-      }
-    }
-  }
-  
   private void start() throws SaslException {
     
     byte[] challenge;
@@ -159,6 +130,36 @@ public class SASLizedServer {
       
       System.out.println("CONNECTED.");
     }
-
   }
+
+  
+  private static class ServerCallbackHandler implements CallbackHandler {
+    @Override
+    public void handle(Callback[] callbacks) throws
+        UnsupportedCallbackException {
+      System.out.println("ServerCallbackHandler::handle()");
+      AuthorizeCallback ac = null;
+      for (Callback callback : callbacks) {
+        if (callback instanceof AuthorizeCallback) {
+          ac = (AuthorizeCallback) callback;
+        } else {
+          throw new UnsupportedCallbackException(callback,
+              "Unrecognized SASL GSSAPI Callback");
+        }
+      }
+      if (ac != null) {
+        String authid = ac.getAuthenticationID();
+        String authzid = ac.getAuthorizationID();
+        if (authid.equals(authzid)) {
+          ac.setAuthorized(true);
+        } else {
+          ac.setAuthorized(false);
+        }
+        if (ac.isAuthorized()) {
+          ac.setAuthorizedID(authzid);
+        }
+      }
+    }
+  }
+
 }
