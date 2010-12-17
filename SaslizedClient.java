@@ -18,6 +18,8 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 
 public class SASLizedClient {
   
@@ -115,16 +117,29 @@ public class SASLizedClient {
         System.exit( -1);
     }
 
+    final DataInputStream inStream;
+    final DataOutputStream outStream;
+
+    try {
+      inStream = new DataInputStream(socket.getInputStream());
+      outStream = new DataOutputStream(socket.getOutputStream());
+    }
+    catch (IOException e) {
+      e.printStackTrace();
+      System.err.println("Client: There was an error in creating a name for the host-based service that we want to connect to.");
+      System.exit(-1);
+    }
+
     // 4. Establish SASL connection with server.
     final SaslClient sc_copy = sc;
     Object result;
-    System.out.println("ESTABLISHING SASL CONNECTION WITH 'testservice' service.");
+    System.out.println("ESTABLISHING SASL CONNECTION WITH THE '" + SERVICE_PRINCIPAL_NAME + "' service.");
     try {
       result = 
         Subject.doAs(subject,new PrivilegedExceptionAction<Object>() {
             public Object run() {
               byte[] challenge;
-              byte[] response = new byte[1];
+              byte[] response = new byte[1024]; // how big..?
               if (sc_copy.hasInitialResponse()) {
                 try {
                   response = sc_copy.evaluateChallenge(response);
@@ -138,6 +153,11 @@ public class SASLizedClient {
               else {
                 response = null;
               }
+
+              while(!sc_copy.isComplete()) {
+                System.out.println("sasl client authentication is not complete yet..");
+              }
+
               return null;
           }
           });
