@@ -10,6 +10,10 @@ import java.security.PrivilegedExceptionAction;
 import javax.security.auth.Subject;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+import java.io.IOException;
 
 public class SaslizedServer {
   
@@ -66,6 +70,9 @@ public class SaslizedServer {
                                                                        // that will be used to configure relevant parameters to do Kerberos authentication.
 
     final String KEY_TAB_FILE_NAME = "testserver.keytab";// The file that holds the service's credentials.
+
+    final Integer SERVER_PORT = 4567;
+
     // </Constants>
 
     //
@@ -97,13 +104,40 @@ public class SaslizedServer {
         try {
           SaslServer ss = Subject.doAs(subject,new PrivilegedExceptionAction<SaslServer>() {
               public SaslServer run() throws SaslException {
-                System.out.println("CREATING SERVER NOW...");
+
+                System.out.println("STARTING SERVER NOW...");
                 SaslServer saslServer = Sasl.createSaslServer("GSSAPI",
                                                               SERVICE_PRINCIPAL_NAME,
                                                               HOST_NAME,
                                                               null,
                                                               new ServerCallbackHandler());
+
+
+                ServerSocket ss = null;
+                Socket socket = null;
+
+                try {
+                  ss = new ServerSocket(SERVER_PORT);
+                }
+                catch (IOException e) {
+                  System.err.println("new ServerSocket() failure : " + e);
+                  System.exit(-1);
+                  e.printStackTrace();
+                }
+
                 System.out.println("DONE CREATING SERVER.");
+
+                System.out.println("WAITING FOR CONNECTIONS...");
+
+                try {
+                  socket = ss.accept();
+                }
+                catch (IOException e) {
+                  System.err.println("ss.accept() failure : " + e);
+                  System.exit(-1);
+                  e.printStackTrace();
+                }
+
                 return saslServer;
               }
             });
