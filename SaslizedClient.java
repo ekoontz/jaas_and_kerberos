@@ -123,6 +123,68 @@ public class SASLizedClient {
     try {
       inStream = new DataInputStream(socket.getInputStream());
       outStream = new DataOutputStream(socket.getOutputStream());
+
+      // 4. Establish SASL connection with server.
+      final SaslClient saslClient = sc;
+      Object result;
+      System.out.println("ESTABLISHING SASL CONNECTION WITH THE '" + SERVICE_PRINCIPAL_NAME + "' service.");
+      try {
+        result =
+          Subject.doAs(subject,new PrivilegedExceptionAction<Object>() {
+              public Object run() {
+                try {
+                  byte[] saslToken = new byte[0];
+                  if (saslClient.hasInitialResponse())
+                    saslToken = saslClient.evaluateChallenge(saslToken);
+                  if (saslToken != null) {
+                    outStream.writeInt(saslToken.length);
+                    outStream.write(saslToken, 0, saslToken.length);
+                    outStream.flush();
+                    System.out.println("Have sent token of size " + saslToken.length
+                                       + " from initSASLContext.");
+                  }
+                  if (!saslClient.isComplete()) {
+                    readStatus(inStream);
+                    int len = inStream.readInt();
+                    saslToken = new byte[len];
+                    System.out.println("Will read input token of size " + saslToken.length
+                                       + " for processing by initSASLContext");
+                    inStream.readFully(saslToken);
+                  }
+                  while (!saslClient.isComplete()) {
+                    saslToken = saslClient.evaluateChallenge(saslToken);
+                    if (saslToken != null) {
+                      System.out.println("Will send token of size " + saslToken.length
+                                         + " from initSASLContext.");
+                      outStream.writeInt(saslToken.length);
+                      outStream.write(saslToken, 0, saslToken.length);
+                      outStream.flush();
+                    }
+                    if (!saslClient.isComplete()) {
+                      readStatus(inStream);
+                      saslToken = new byte[inStream.readInt()];
+                      System.out.println("Will read input token of size " + saslToken.length
+                                         + " for processing by initSASLContext");
+                      inStream.readFully(saslToken);
+                    }
+                  }
+                  System.out.println("SASL client context established. Negotiated QoP: "
+                                     + saslClient.getNegotiatedProperty(Sasl.QOP));
+                  return true;
+                } catch (IOException e) {
+                  try {
+                    saslClient.dispose();
+                  } catch (SaslException ignored) {
+                    // ignore further exceptions during cleanup
+                  }
+                }
+                return null;
+              }
+            });
+      }
+      catch (Exception e) {
+        e.printStackTrace();
+      }
     }
     catch (IOException e) {
       e.printStackTrace();
@@ -130,42 +192,23 @@ public class SASLizedClient {
       System.exit(-1);
     }
 
-    // 4. Establish SASL connection with server.
-    final SaslClient sc_copy = sc;
-    Object result;
-    System.out.println("ESTABLISHING SASL CONNECTION WITH THE '" + SERVICE_PRINCIPAL_NAME + "' service.");
-    try {
-      result = 
-        Subject.doAs(subject,new PrivilegedExceptionAction<Object>() {
-            public Object run() {
-              byte[] challenge;
-              byte[] response = new byte[1024]; // how big..?
-              if (sc_copy.hasInitialResponse()) {
-                try {
-                  response = sc_copy.evaluateChallenge(response);
-                }
-                catch (SaslException e) {
-                  System.err.println("Client: sasl evaluateChallenge error: " + e);
-                  e.printStackTrace();
-                  System.exit(-1);
-                }
-              }
-              else {
-                response = null;
-              }
+  }
 
-              while(!sc_copy.isComplete()) {
-                System.out.println("sasl client authentication is not complete yet..");
-              }
+  public enum SaslStatus {
+    SUCCESS (0),
+    ERROR (1);
 
-              return null;
-          }
-          });
+    public final int state;
+    private SaslStatus(int state) {
+      this.state = state;
     }
-    catch (Exception e) {
-      e.printStackTrace();
+  }
+
+  private static void readStatus(DataInputStream inStream) throws IOException {
+    int status = inStream.readInt(); // read status
+    if (status != SaslStatus.SUCCESS.state) {
+      throw new IOException("SaslStatus was not SUCCESS.");
     }
-      
   }
 
   private static class ClientCallbackHandler implements CallbackHandler {
