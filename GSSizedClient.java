@@ -75,7 +75,7 @@ public class GSSizedClient {
     catch (UnknownHostException e) {
         e.printStackTrace();
         System.err.println("Client: There was an error connecting to the server: hostname " + hostName + " not found.");
-        System.exit( -1);
+        System.exit(-1);
     }
     catch (IOException e) {
         e.printStackTrace();
