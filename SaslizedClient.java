@@ -9,6 +9,16 @@ import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 import javax.security.sasl.SaslException;
 
+import javax.security.sasl.Sasl;
+import javax.security.sasl.AuthorizeCallback;
+import javax.security.sasl.SaslClient;
+import java.security.PrivilegedExceptionAction;
+
+import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.callback.UnsupportedCallbackException;
+
+
 public class SASLizedClient {
   
   public static void main(String[] args) throws SaslException {
@@ -34,7 +44,7 @@ public class SASLizedClient {
 
     System.setProperty( "java.security.auth.login.config", JAAS_CONF_FILE_NAME);
 
-    // Set up Kerberos properties.
+    // 1. Login to Kerberos.
     Properties props = new Properties();
     try {
       props.load( new FileInputStream(args[0]));
@@ -49,10 +59,9 @@ public class SASLizedClient {
     try {
       // Login to the KDC.
       LoginContext loginCtx = null;
-      String username = props.getProperty( "client.principal.name");
       String password = props.getProperty( "client.password");
       loginCtx = new LoginContext(CLIENT_SECTION_OF_JAAS_CONF_FILE,
-                                  new LoginCallbackHandler( username, password));
+                                  new LoginCallbackHandler( CLIENT_PRINCIPAL_NAME, password));
 
       loginCtx.login();
       subject = loginCtx.getSubject();
@@ -61,6 +70,33 @@ public class SASLizedClient {
       System.err.println("Kerberos login failure : " + e);
       System.exit(-1);
     }
+
+    // 2. Create SASL client.
+    System.out.println("CREATING SASL CLIENT NOW...");
+    SaslClient sc = null;
+    try {
+      sc = Subject.doAs(subject,new PrivilegedExceptionAction<SaslClient>() {
+          public SaslClient run() throws SaslException {
+            
+            System.out.println("STARTING CLIENT NOW...");
+            String[] mechs = {"GSSAPI"};
+            SaslClient saslClient = Sasl.createSaslClient(mechs,
+                                                          CLIENT_PRINCIPAL_NAME,
+                                                          "testserver",
+                                                          HOST_NAME,
+                                                          null,
+                                                          new ClientCallbackHandler());
+            
+            System.out.println("DONE CREATING CLIENT.");
+            return saslClient;
+          }
+        });
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+    System.out.println("DONE CREATING SASL CLIENT.");
+
 
     // 3. Connect to service.
     String hostName = args[1];
@@ -79,7 +115,36 @@ public class SASLizedClient {
         System.err.println("Client: There was an error connecting to the server: " + e);
         System.exit( -1);
     }
-
-
   }
+
+  private static class ClientCallbackHandler implements CallbackHandler {
+    @Override
+    public void handle(Callback[] callbacks) throws
+        UnsupportedCallbackException {
+      System.out.println("ClientCallbackHandler::handle()");
+      AuthorizeCallback ac = null;
+      for (Callback callback : callbacks) {
+        if (callback instanceof AuthorizeCallback) {
+          ac = (AuthorizeCallback) callback;
+        } else {
+          throw new UnsupportedCallbackException(callback,
+              "Unrecognized SASL GSSAPI Callback");
+        }
+      }
+      if (ac != null) {
+        String authid = ac.getAuthenticationID();
+        String authzid = ac.getAuthorizationID();
+        if (authid.equals(authzid)) {
+          ac.setAuthorized(true);
+        } else {
+          ac.setAuthorized(false);
+        }
+        if (ac.isAuthorized()) {
+          ac.setAuthorizedID(authzid);
+        }
+      }
+    }
+  }
+
+
 }
