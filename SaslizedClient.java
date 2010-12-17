@@ -22,9 +22,6 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 public class SASLizedClient {
   
   public static void main(String[] args) throws SaslException {
-
-    byte[] challenge;
-    byte[] response;
     
     // Lots of diagnostics.
     System.setProperty("sun.security.krb5.debug", "true");
@@ -117,6 +114,38 @@ public class SASLizedClient {
         System.err.println("Client: There was an error connecting to the server: " + e);
         System.exit( -1);
     }
+
+    // 4. Establish SASL connection with server.
+    final SaslClient sc_copy = sc;
+    Object result;
+    System.out.println("ESTABLISHING SASL CONNECTION WITH 'testservice' service.");
+    try {
+      result = 
+        Subject.doAs(subject,new PrivilegedExceptionAction<Object>() {
+            public Object run() {
+              byte[] challenge;
+              byte[] response = new byte[1];
+              if (sc_copy.hasInitialResponse()) {
+                try {
+                  response = sc_copy.evaluateChallenge(response);
+                }
+                catch (SaslException e) {
+                  System.err.println("Client: sasl evaluateChallenge error: " + e);
+                  e.printStackTrace();
+                  System.exit(-1);
+                }
+              }
+              else {
+                response = null;
+              }
+              return null;
+          }
+          });
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+      
   }
 
   private static class ClientCallbackHandler implements CallbackHandler {
