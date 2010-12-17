@@ -62,16 +62,23 @@ public class SaslizedServer {
     System.setProperty("javax.security.sasl.level","FINEST");
     System.setProperty("handlers", "java.util.logging.ConsoleHandler");
 
-    // Note: there are 5 variables in play here (defaults for this example given in parenthesis).
-    // 1. $JAAS_CONF_FILE_NAME (jaas.conf)
-    // 2. $HOST_NAME (ekoontz): The hostname that the service (this code) is running on. (might be fully qualified, or not)
-    // 3. $SERVICE_NAME (testserver): The service that's running (must exist as a Kerberos principal $SERVICE_NAME/$HOSTNAME).
-    // 4. $SERVICE_SECTION (SaslizedServer): The section of the JAAS configuration file $JAAS_CONF_FILE_NAME that we'll use to authenticate this service.
-    // 5. $KEY_TAB_FILE_NAME (testserver.keytab): The file that holds the service's credentials.
+    // <Constants>
+    final String JAAS_CONF_FILE_NAME = "jaas.conf";
+
+    final String HOST_NAME = "ekoontz"; // The hostname that the service (this code) is running on. (might be fully qualified, or not)
+
+    final String SERVICE_PRINCIPAL_NAME = "testserver"; // The service that's running (must exist as a Kerberos principal $SERVICE_NAME/$HOSTNAME).
+
+    final String SERVICE_SECTION_OF_JAAS_CONF_FILE = "SaslizedServer"; // The section (of the JAAS configuration file named $JAAS_CONF_FILE_NAME)
+                                                                       // that will be used to configure relevant parameters to do Kerberos authentication.
+
+    final String KEY_TAB_FILE_NAME = "testserver.keytab";// The file that holds the service's credentials.
+    // </Constants>
+
     //
-    // The file $JAAS_CONF_FILE_NAME must have :
+    // The file given in JAAS_CONF_FILE_NAME must have :
     //
-    // $SERVICE_SECTION {
+    // $SERVICE_SECTION_OF_JAAS_CONF_FILE {
     //   com.sun.security.auth.module.Krb5LoginModule required
     //   useKeyTab=true
     //   keyTab="$KEY_TAB_FILE_NAME"
@@ -83,14 +90,13 @@ public class SaslizedServer {
     // };
 
 
-    System.setProperty( "java.security.auth.login.config", "./jaas.conf");
-    // ^^^^^^^^^^^^^^^^^$JAAS_CONF_FILE_NAME^^^^^^^^^^
+    System.setProperty( "java.security.auth.login.config", JAAS_CONF_FILE_NAME);
 
     Subject subject = null;
     try {
       // Login to the KDC.
       LoginContext loginCtx = null;
-      loginCtx = new LoginContext("SaslizedServer");
+      loginCtx = new LoginContext(SERVICE_SECTION_OF_JAAS_CONF_FILE);
       // ^^^^^^^^^^^^^^$SERVICE_SECTION^^^^^^^
       loginCtx.login();
       subject = loginCtx.getSubject();
@@ -101,12 +107,9 @@ public class SaslizedServer {
               public SaslServer run() throws SaslException {
                 System.out.println("CREATING SERVER NOW...");
                 SaslServer saslServer = Sasl.createSaslServer("GSSAPI",
-                                                              "testserver",
-                                                              // ^^^$SERVICE_NAME^^^
-                                                              "ekoontz",
-                                                              // ^^^$HOST_NAME^^^
+                                                              SERVICE_PRINCIPAL_NAME,
+                                                              HOST_NAME,
                                                               null,
-                                                              // ^^^^ properties: null works fine for me.
                                                               new ServerCallbackHandler());
                 System.out.println("DONE CREATING SERVER.");
                 return saslServer;
