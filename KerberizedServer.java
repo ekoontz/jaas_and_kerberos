@@ -30,10 +30,10 @@ public class KerberizedServer {
 
        // 2. Login to the KDC.
        LoginContext loginCtx = null;
-       // "KerberizedServer" refers to a section of the JAAS configuration in the jaas.conf file.
+       // "Server" refers to a section of the JAAS configuration in the jaas.conf file.
        Subject subject = null;
        try {
-         loginCtx = new LoginContext( "KerberizedServer");
+         loginCtx = new LoginContext("Server");
          loginCtx.login();
          subject = loginCtx.getSubject();
        }

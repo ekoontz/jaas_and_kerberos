@@ -69,12 +69,13 @@ public class SaslizedServer {
                                                         // There must exist a Kerberos principal called
                                                         // $SERVICE_PRINCIPAL_NAME/$HOSTNAME.
 
-    final String SERVICE_SECTION_OF_JAAS_CONF_FILE = "SaslizedServer"; // The section (of the JAAS configuration file named $JAAS_CONF_FILE_NAME)
-                                                                       // that will be used to configure relevant parameters to do Kerberos authentication.
+    final String SERVICE_SECTION_OF_JAAS_CONF_FILE = "Server"; // The section (of the JAAS configuration file named $JAAS_CONF_FILE_NAME)
+                                                               // that will be used to configure relevant parameters to do Kerberos authentication.
 
-    final String KEY_TAB_FILE_NAME = "testserver.keytab";// The file that holds the service's credentials.
+    final String KEY_TAB_FILE_NAME = "testserver.keytab"; // The file that holds the service's credentials.
 
-    final Integer SERVER_PORT = 4567;
+    final Integer SERVER_PORT = 4567; // Use anything you want here for testing - 
+                                      // A real service will have a specific conventional port number. (see http://www.iana.org/assignments/port-numbers)
 
     // </Constants>
 
