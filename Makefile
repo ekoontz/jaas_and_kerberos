@@ -46,4 +46,4 @@ saslizedserver: SASLizedServer.class
 	java SASLizedServer
 
 saslizedclient: SASLizedClient.class
-	java SASLizedClient client.properties
+	java SASLizedClient client.properties localhost 4567

@@ -138,8 +138,6 @@ public class SASLizedServer {
       e.printStackTrace();
     }
     
-    System.out.println("WAITING FOR CONNECTIONS...");
-    
     ServerSocket serverListenSocket = null;
     Socket clientConnectionSocket;
     try {
@@ -150,17 +148,21 @@ public class SASLizedServer {
       System.exit(-1);
       e.printStackTrace();
     }
-    
-    try {
-      clientConnectionSocket = serverListenSocket.accept();
-    }
-    catch (IOException e) {
-      System.err.println("sock.accept() failure : " + e);
-      System.exit(-1);
-      e.printStackTrace();
-    }
 
-    System.out.println("CONNECTED.");
+    while(true) {
+      System.out.println("WAITING FOR CONNECTIONS...");
+          
+      try {
+        clientConnectionSocket = serverListenSocket.accept();
+      }
+      catch (IOException e) {
+        System.err.println("sock.accept() failure : " + e);
+        System.exit(-1);
+        e.printStackTrace();
+      }
+      
+      System.out.println("CONNECTED.");
+    }
 
   }
 }

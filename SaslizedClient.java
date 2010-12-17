@@ -1,5 +1,7 @@
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.UnknownHostException;
+import java.net.Socket;
 import java.util.Properties;
 
 import javax.security.auth.Subject;
@@ -27,11 +29,7 @@ public class SASLizedClient {
     final String CLIENT_PRINCIPAL_NAME = "testclient"; // The service that's running (must exist as a Kerberos principal $CLIENT_PRINCIPCAL_NAME).
 
     final String CLIENT_SECTION_OF_JAAS_CONF_FILE = "Client"; // The section (of the JAAS configuration file named $JAAS_CONF_FILE_NAME)
-    //    final String CLIENT_SECTION_OF_JAAS_CONF_FILE = "SaslizedClient"; // The section (of the JAAS configuration file named $JAAS_CONF_FILE_NAME)
-                                                                      // that will be used to configure relevant parameters to do Kerberos authentication.
-
-
-    final Integer SERVER_PORT = 4567; // The port on which SaslizedServer is listening.
+                                                              // that will be used to configure relevant parameters to do Kerberos authentication.
     // </Constants>
 
     System.setProperty( "java.security.auth.login.config", JAAS_CONF_FILE_NAME);
@@ -64,6 +62,23 @@ public class SASLizedClient {
       System.exit(-1);
     }
 
+    // 3. Connect to service.
+    String hostName = args[1];
+    int port = Integer.parseInt(args[2]);
+    Socket socket = null;
+    try {
+      socket = new Socket(hostName,port);
+    }
+    catch (UnknownHostException e) {
+        e.printStackTrace();
+        System.err.println("Client: There was an error connecting to the server: hostname " + hostName + " not found.");
+        System.exit( -1);
+    }
+    catch (IOException e) {
+        e.printStackTrace();
+        System.err.println("Client: There was an error connecting to the server: " + e);
+        System.exit( -1);
+    }
 
 
   }
