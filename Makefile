@@ -1,7 +1,7 @@
 .PHONY: all clean test compile killserver waitforkill start_server_socket start_server_nio start_client run_server test_socket test_nio fred SaslTestServer
 all: compile README.html
 
-compile: KerberizedServer.class KerberizedServerNio.class Client.class Hexdump.class FredSasl.class
+compile: KerberizedServer.class KerberizedServerNio.class GSSizedClient.class Hexdump.class FredSasl.class
 
 clean: 
 	-rm *.class README.html
@@ -36,14 +36,14 @@ start_server_nio: KerberizedServerNio.class
 	echo "let kerberized (nio) service come up..."
 	sleep 1
 
-start_client: Client.class
-	java Client client.properties localhost 9000
+start_client: GSSizedClient.class
+	java GSSizedClient client.properties localhost 9000
 
 README.html: README.md
 	Markdown.pl README.md > $@
 
-saslizedserver: SaslizedServer.class
-	java SaslizedServer
+saslizedserver: SASLizedServer.class
+	java SASLizedServer
 
-saslizedclient: SaslizedClient.class
-	java SaslizedClient
+saslizedclient: SASLizedClient.class
+	java SASLizedClient

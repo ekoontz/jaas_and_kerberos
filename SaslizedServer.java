@@ -15,10 +15,10 @@ import java.net.Socket;
 
 import java.io.IOException;
 
-public class SaslizedServer {
+public class SASLizedServer {
   
   public static void main(String[] args) throws SaslException {
-    new SaslizedServer().start();
+    new SASLizedServer().start();
   }
   
   private static class ServerCallbackHandler implements CallbackHandler {
