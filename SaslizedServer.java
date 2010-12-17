@@ -125,10 +125,6 @@ public class SASLizedServer {
                                                           null,
                                                           new ServerCallbackHandler());
             
-            
-            ServerSocket ss = null;
-            Socket socket = null;
-            
             System.out.println("DONE CREATING SERVER.");
             return saslServer;
           }
