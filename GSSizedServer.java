@@ -19,7 +19,7 @@ import java.net.Socket;
 
 import java.util.*;
 
-public class KerberizedServer {
+public class GSSizedServer {
 
      public static void main(String[] args) 
          throws IOException, GSSException {
@@ -44,7 +44,7 @@ public class KerberizedServer {
        // Obtain the command-line arguments and parse the port number
 
        if (args.length != 1) {
-         System.err.println("Usage: java <options> KerberizedServer <localPort>");
+         System.err.println("Usage: java <options> GSSizedServer <localPort>");
          System.exit(-1);
        }
 
@@ -55,7 +55,7 @@ public class KerberizedServer {
 
        while (true) {
 
-         System.out.println("KerberizedServer: Waiting for client connection...");
+         System.out.println("GSSizedServer: Waiting for client connection...");
 
 
          // 3.2 Receive a client connection.
@@ -65,7 +65,7 @@ public class KerberizedServer {
          final DataOutputStream outStream = 
            new DataOutputStream(socket.getOutputStream());
 
-         System.out.println("KerberizedServer: Got connection from client "
+         System.out.println("GSSizedServer: Got connection from client "
                            + socket.getInetAddress());
 	
         // 3.3 get client's security context
@@ -76,7 +76,7 @@ public class KerberizedServer {
                   GSSManager manager = GSSManager.getInstance();
                   GSSContext context = manager.createContext( (GSSCredential) null);
                   while (!context.isEstablished()) {
-                    System.out.println("KerberizedServer: context not yet established: accepting from client.");
+                    System.out.println("GSSizedServer: context not yet established: accepting from client.");
                     context.acceptSecContext(inStream,outStream);
                   }
                   
@@ -90,13 +90,13 @@ public class KerberizedServer {
             }
             );
         if (clientContext != null) {
-          System.out.println("KerberizedServer: Client authenticated: (principal: " + clientContext.getSrcName() + ")");
+          System.out.println("GSSizedServer: Client authenticated: (principal: " + clientContext.getSrcName() + ")");
           // ..conduct business with client since it's authenticated and optionally encrypted too..
         }
 
         // TODO: add some actual content passed between client and server.
 
-        System.out.println("KerberizedServer: Closing connection with client "
+        System.out.println("GSSizedServer: Closing connection with client "
                            + socket.getInetAddress());
         socket.close();
       }

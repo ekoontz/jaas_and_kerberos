@@ -29,7 +29,7 @@ import org.ietf.jgss.GSSException;
 import org.ietf.jgss.GSSManager;
 import org.ietf.jgss.Oid;
 
-public class KerberizedServerNio {
+public class GSSizedServerNio {
   
   public static void main(String[] args) 
     throws IOException, GSSException {
@@ -59,7 +59,7 @@ public class KerberizedServerNio {
     // Obtain the command-line arguments and parse the port number
     
     if (args.length != 1) {
-      System.err.println("Usage: java <options> KerberizedServer <localPort>");
+      System.err.println("Usage: java <options> GSSizedServer <localPort>");
       System.exit(-1);
     }
     
@@ -127,7 +127,7 @@ public class KerberizedServerNio {
                     GSSManager manager = GSSManager.getInstance();
                     GSSContext context = manager.createContext( (GSSCredential) null);
                     while (!context.isEstablished()) {
-                      System.out.println("KerberizedServer: context not yet established: accepting from client.");
+                      System.out.println("GSSizedServer: context not yet established: accepting from client.");
                       
                       ByteBuffer readBuffer = ByteBuffer.allocate(8192);
                       readBuffer.clear();
@@ -199,7 +199,7 @@ public class KerberizedServerNio {
           System.out.println("done with client context-acceptance.");
           if (clientContext != null) {
             clientToContext.put(sk,clientContext);
-            System.out.println("KerberizedServer: Client authenticated: (principal: " + clientContext.getSrcName() + ")");
+            System.out.println("GSSizedServer: Client authenticated: (principal: " + clientContext.getSrcName() + ")");
             // ..conduct business with client since it's authenticated and optionally encrypted too..
             
             

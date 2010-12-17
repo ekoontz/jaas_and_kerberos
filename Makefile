@@ -1,14 +1,14 @@
-.PHONY: all clean test compile killserver waitforkill start_server_socket start_server_nio start_client run_server test_socket test_nio fred SaslTestServer
+.PHONY: all clean test compile killserver waitforkill start_server_socket start_server_nio start_client run_server test_socket test_nio fred saslizedserver saslizedclient
 all: compile README.html
 
-compile: KerberizedServer.class KerberizedServerNio.class GSSizedClient.class Hexdump.class FredSasl.class
+compile: GSSizedServer.class GSSizedServerNio.class GSSizedClient.class Hexdump.class FredSasl.class
 
 clean: 
 	-rm *.class README.html
 
 killserver:
-	echo "killing KerberizedServer java processes.."
-	-kill `ps -Ao pid,command | grep java | sed "s/^[ ]*//" | cut -d\  -f1,3 | grep KerberizedServer | cut -d\  -f1`
+	echo "killing GSSizedServer java processes.."
+	-kill `ps -Ao pid,command | grep java | sed "s/^[ ]*//" | cut -d\  -f1,3 | grep GSSizedServer | cut -d\  -f1`
 waitforkill:
 	sleep 1
 
@@ -26,13 +26,13 @@ test_socket: killserver waitforkill start_server_socket start_client
 test_nio: killserver waitforkill start_server_nio start_client
 	make killserver
 
-start_server_socket: KerberizedServer.class
-	java KerberizedServer 9000 &
+start_server_socket: GSSizedServer.class
+	java GSSizedServer 9000 &
 	echo "let kerberized (socket) service come up..."
 	sleep 1
 
-start_server_nio: KerberizedServerNio.class
-	java KerberizedServerNio 9000 &
+start_server_nio: GSSizedServerNio.class
+	java GSSizedServerNio 9000 &
 	echo "let kerberized (nio) service come up..."
 	sleep 1
 
