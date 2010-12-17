@@ -57,50 +57,56 @@ public class SaslizedServer {
     byte[] challenge;
     byte[] response;
     
-    // 1 Set Kerberos Properties
-    System.setProperty( "sun.security.krb5.debug", "true");
-    
+    // Lots of diagnostics.
+    System.setProperty("sun.security.krb5.debug", "true");
     System.setProperty("javax.security.sasl.level","FINEST");
+    System.setProperty("handlers", "java.util.logging.ConsoleHandler");
+
+    // Note: there are 5 variables in play here (defaults for this example given in parenthesis).
+    // 1. $JAAS_CONF_FILE_NAME (jaas.conf)
+    // 2. $HOST_NAME (ekoontz): The hostname that the service (this code) is running on. (might be fully qualified, or not)
+    // 3. $SERVICE_NAME (testserver): The service that's running (must exist as a Kerberos principal $SERVICE_NAME/$HOSTNAME).
+    // 4. $SERVICE_SECTION (SaslizedServer): The section of the JAAS configuration file $JAAS_CONF_FILE_NAME that we'll use to authenticate this service.
+    // 5. $KEY_TAB_FILE_NAME (testserver.keytab): The file that holds the service's credentials.
+    //
+    // The file $JAAS_CONF_FILE_NAME must have :
+    //
+    // $SERVICE_SECTION {
+    //   com.sun.security.auth.module.Krb5LoginModule required
+    //   useKeyTab=true
+    //   keyTab="$KEY_TAB_FILE_NAME"
+    //   doNotPrompt=true
+    //   useTicketCache=false
+    //   storeKey=true
+    //   debug=true
+    //   principal="$SERVICE_NAME/$HOST_NAME";
+    // };
+
 
     System.setProperty( "java.security.auth.login.config", "./jaas.conf");
-    System.setProperty( "javax.security.auth.useSubjectCredsOnly", "true");
-    System.setProperty( "javax.security.auth.keyTab","testserver.keytab");
+    // ^^^^^^^^^^^^^^^^^$JAAS_CONF_FILE_NAME^^^^^^^^^^
 
-    // 2. Login to the KDC.
-    LoginContext loginCtx = null;
-    // "KerberizedServer" refers to a section of the JAAS configuration in the jaas.conf file.
     Subject subject = null;
     try {
+      // Login to the KDC.
+      LoginContext loginCtx = null;
       loginCtx = new LoginContext("SaslizedServer");
+      // ^^^^^^^^^^^^^^$SERVICE_SECTION^^^^^^^
       loginCtx.login();
       subject = loginCtx.getSubject();
 
       if (subject != null) {
         try {
-
-          System.out.println("<subject details (inner)>");
-          for (Principal p: subject.getPrincipals()) {
-            System.out.println("classname: " + p.getClass().getName() + " ; subject name : " + p.getName());
-          }
-          System.out.println("</subject details>");
-
           SaslServer ss = Subject.doAs(subject,new PrivilegedExceptionAction<SaslServer>() {
               public SaslServer run() throws SaslException {
                 System.out.println("CREATING SERVER NOW...");
                 SaslServer saslServer = Sasl.createSaslServer("GSSAPI",
                                                               "testserver",
-                                                              // ^^^^^^^^  SERVICE_NAME
-                                                              // 1. jaas.conf's SaslizedServer section must have : 'principal="HOST_NAME/SERVICE_NAME"'.
-                                                              // 2. service keytab must have a principal called: HOST_NAME/SERVICE_NAME
-
+                                                              // ^^^$SERVICE_NAME^^^
                                                               "ekoontz",
-                                                              // ^^^^^^^^  HOST_NAME
-                                                              // 1. jaas.conf's SaslizedServer section has : 'principal="HOST_NAME/SERVICE_NAME"'.
-                                                              // 2. service keytab must have a principal called: HOST_NAME/SERVICE_NAME
-
+                                                              // ^^^$HOST_NAME^^^
                                                               null,
                                                               // ^^^^ properties: null works fine for me.
-
                                                               new ServerCallbackHandler());
                 System.out.println("DONE CREATING SERVER.");
                 return saslServer;
