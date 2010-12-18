@@ -163,7 +163,7 @@ public class GSSizedServerNio {
                       if (numRead == -1) {
                         // Remote entity shut the socket down cleanly. Do the
                         // same from our end and cancel the channel.
-                        System.out.println("removing key from clientToContext.");
+                        System.out.println("Nothing left to read from client: removing selection key from clientToContext.");
                         clientToContext.remove(sk);
                         try {
                           sk.channel().close();
@@ -200,9 +200,7 @@ public class GSSizedServerNio {
           if (clientContext != null) {
             clientToContext.put(sk,clientContext);
             System.out.println("GSSizedServer: Client authenticated: (principal: " + clientContext.getSrcName() + ")");
-            // ..conduct business with client since it's authenticated and optionally encrypted too..
-            
-            
+            // ..conduct business with client since it's authenticated and optionally encrypted too..            
           }
           
           // dump current client->context mapping to console.
