@@ -54,9 +54,7 @@ public class GSSizedServer {
        ServerSocket ss = new ServerSocket(localPort);
 
        while (true) {
-
          System.out.println("GSSizedServer: Waiting for client connection...");
-
 
          // 3.2 Receive a client connection.
          Socket socket = ss.accept();
