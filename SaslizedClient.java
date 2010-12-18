@@ -29,6 +29,7 @@ public class SASLizedClient {
     System.setProperty("sun.security.krb5.debug", "true");
     System.setProperty("javax.security.sasl.level","FINEST");
     System.setProperty("handlers", "java.util.logging.ConsoleHandler");
+    System.setProperty("java.util.logging.ConsoleHandler","FINEST");
 
     // <Constants>
     final String JAAS_CONF_FILE_NAME = "jaas.conf";
@@ -134,22 +135,31 @@ public class SASLizedClient {
               public Object run() {
                 try {
                   byte[] saslToken = new byte[0];
+                  System.out.println("evaluating callenge..");
+                  saslToken = saslClient.evaluateChallenge(saslToken);
+                  System.out.println("evaluated callenge..");
+                  if (false) {
                   if (saslClient.hasInitialResponse()) {
-                    System.out.println("Client: initial response exists : ");
+                    System.out.println("Client: initial response exists with length: " + saslToken.length);
                     int numRead = 4096;
                     Hexdump.hexdump(System.out,saslToken,0,saslToken.length);
 
-                    saslToken = saslClient.evaluateChallenge(saslToken);
+                    //                    saslToken = saslClient.evaluateChallenge(saslToken);
                   }
+                  }
+                  System.out.println("Client: got here (1)");
                   if (saslToken != null) {
+                    System.out.println("Client: got here (2) (saslToken != null)");
                     outStream.writeInt(saslToken.length);
                     outStream.write(saslToken, 0, saslToken.length);
                     outStream.flush();
-                    System.out.println("Have sent token of size " + saslToken.length
+                    System.out.println("Sent token of size " + saslToken.length
                                        + " from initSASLContext.");
                   }
                   if (!saslClient.isComplete()) {
+                    System.out.println("READING STATUS..");
                     readStatus(inStream);
+                    System.out.println("DONE READING STATUS.");
                     int len = inStream.readInt();
                     saslToken = new byte[len];
                     System.out.println("Will read input token of size " + saslToken.length

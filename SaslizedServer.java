@@ -140,8 +140,8 @@ public class SASLizedServer {
           ss.evaluateResponse(saslToken);
         }
         catch (SaslException e) {
-          System.err.println("Oops: attempt to evaluate response caused a SaslException.");
-          ss.dispose();
+          System.err.println("Oops: attempt to evaluate response caused a SaslException: closing connection with this client.");
+          e.printStackTrace();
           try {
             clientConnectionSocket.close();
           }
