@@ -107,7 +107,7 @@ public class SASLizedServer {
     }
     
     ServerSocket serverListenSocket = null;
-    Socket clientConnectionSocket;
+    Socket clientConnectionSocket = null;
     try {
       serverListenSocket = new ServerSocket(SERVER_PORT);
     }
@@ -136,7 +136,20 @@ public class SASLizedServer {
       // Perform authentication steps until done
       byte[] saslToken = new byte[0];
       while (!ss.isComplete()) {
-        ss.evaluateResponse(saslToken);
+        try {
+          ss.evaluateResponse(saslToken);
+        }
+        catch (SaslException e) {
+          System.err.println("Oops: attempt to evaluate response caused a SaslException.");
+          ss.dispose();
+          try {
+            clientConnectionSocket.close();
+          }
+          catch (IOException ex) {
+            System.err.println("error closing client connection.");
+          }
+          break;
+        }
       }
     }
   }

@@ -45,5 +45,5 @@ README.html: README.md
 saslizedserver: SASLizedServer.class
 	java SASLizedServer
 
-saslizedclient: SASLizedClient.class
-	java SASLizedClient client.properties localhost 4567
+saslizedclient: SASLizedClient.class Hexdump.class
+	java -cp . SASLizedClient client.properties localhost 4567

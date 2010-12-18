@@ -135,7 +135,10 @@ public class SASLizedClient {
                 try {
                   byte[] saslToken = new byte[0];
                   if (saslClient.hasInitialResponse()) {
-                    System.out.println("Client: initial response exists.");
+                    System.out.println("Client: initial response exists : ");
+                    int numRead = 4096;
+                    Hexdump.hexdump(System.out,saslToken,0,saslToken.length);
+
                     saslToken = saslClient.evaluateChallenge(saslToken);
                   }
                   if (saslToken != null) {
@@ -154,6 +157,9 @@ public class SASLizedClient {
                     inStream.readFully(saslToken);
                   }
                   while (!saslClient.isComplete()) {
+
+                    System.out.println("Connection setup not done: evaluating challenge.");
+
                     saslToken = saslClient.evaluateChallenge(saslToken);
                     if (saslToken != null) {
                       System.out.println("Will send token of size " + saslToken.length
