@@ -134,8 +134,10 @@ public class SASLizedClient {
               public Object run() {
                 try {
                   byte[] saslToken = new byte[0];
-                  if (saslClient.hasInitialResponse())
+                  if (saslClient.hasInitialResponse()) {
+                    System.out.println("Client: initial response exists.");
                     saslToken = saslClient.evaluateChallenge(saslToken);
+                  }
                   if (saslToken != null) {
                     outStream.writeInt(saslToken.length);
                     outStream.write(saslToken, 0, saslToken.length);

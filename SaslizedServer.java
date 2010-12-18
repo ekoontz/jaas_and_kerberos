@@ -85,8 +85,9 @@ public class SASLizedServer {
       System.exit(-1);
     }
 
+    SaslServer ss = null;
     try {
-      SaslServer ss = Subject.doAs(subject,new PrivilegedExceptionAction<SaslServer>() {
+      ss = Subject.doAs(subject,new PrivilegedExceptionAction<SaslServer>() {
           public SaslServer run() throws SaslException {
             
             System.out.println("STARTING SERVER NOW...");
@@ -129,6 +130,14 @@ public class SASLizedServer {
       }
       
       System.out.println("CONNECTED.");
+
+      System.out.println("DOING SASL AUTHENTICATION.");
+
+      // Perform authentication steps until done
+      byte[] saslToken = new byte[0];
+      while (!ss.isComplete()) {
+        ss.evaluateResponse(saslToken);
+      }
     }
   }
 
