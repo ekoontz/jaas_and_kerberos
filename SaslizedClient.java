@@ -26,7 +26,7 @@ public class SASLizedClient {
   public static void main(String[] args) throws SaslException {
     
     // Lots of diagnostics.
-    System.setProperty("sun.security.krb5.debug", "true");
+    //    System.setProperty("sun.security.krb5.debug", "true");
     System.setProperty("javax.security.sasl.level","FINEST");
     System.setProperty("handlers", "java.util.logging.ConsoleHandler");
     System.setProperty("java.util.logging.ConsoleHandler","FINEST");
@@ -135,66 +135,53 @@ public class SASLizedClient {
               public Object run() {
                 try {
                   byte[] saslToken = new byte[0];
-                  System.out.println("evaluating callenge..");
-                  saslToken = saslClient.evaluateChallenge(saslToken);
-                  System.out.println("evaluated callenge..");
-                  if (false) {
-                  if (saslClient.hasInitialResponse()) {
-                    System.out.println("Client: initial response exists with length: " + saslToken.length);
-                    int numRead = 4096;
-                    Hexdump.hexdump(System.out,saslToken,0,saslToken.length);
 
-                    //                    saslToken = saslClient.evaluateChallenge(saslToken);
+                  if (saslClient.hasInitialResponse()) {
+                    System.out.println("evaluating initial response..");
+                    saslToken = saslClient.evaluateChallenge(saslToken);
+                    System.out.println("evaluateChallenge(): response has length : " + saslToken.length);
                   }
-                  }
-                  System.out.println("Client: got here (1)");
-                  if (saslToken != null) {
-                    System.out.println("Client: got here (2) (saslToken != null)");
+
+                  byte[] emptyArray = new byte[0];
+
+                  while (!saslClient.isComplete()) {
+                    System.out.println("");
+                    System.out.println("(client challenge/response loop..)");
+                    System.out.println("writing response of length: " + saslToken.length);
                     outStream.writeInt(saslToken.length);
                     outStream.write(saslToken, 0, saslToken.length);
                     outStream.flush();
-                    System.out.println("Sent token of size " + saslToken.length
-                                       + " from initSASLContext.");
-                  }
-                  if (!saslClient.isComplete()) {
-                    System.out.println("READING STATUS..");
-                    readStatus(inStream);
-                    System.out.println("DONE READING STATUS.");
-                    int len = inStream.readInt();
-                    saslToken = new byte[len];
-                    System.out.println("Will read input token of size " + saslToken.length
-                                       + " for processing by initSASLContext");
-                    inStream.readFully(saslToken);
-                  }
-                  while (!saslClient.isComplete()) {
+                    System.out.println("wrote response.");
 
-                    System.out.println("Connection setup not done: evaluating challenge.");
+                    System.out.println("reading challenge length.");
+                    int length = inStream.readInt();
+                    System.out.println("challenge token length is: " + length);
+                    if (length == 0) {
+                      System.out.println("challenge token length is zero length");
+                      saslToken = new byte[0];
+                    }
+                    else {
+                      saslToken = new byte[length];
+                      inStream.readFully(saslToken,0,length);
+                      System.out.println("read challenge: saslToken length: " + saslToken.length);
+                    }
 
                     saslToken = saslClient.evaluateChallenge(saslToken);
-                    if (saslToken != null) {
-                      System.out.println("Will send token of size " + saslToken.length
-                                         + " from initSASLContext.");
-                      outStream.writeInt(saslToken.length);
-                      outStream.write(saslToken, 0, saslToken.length);
-                      outStream.flush();
+
+                    if (saslClient.isComplete()) {
+                      System.out.println("CLIENT SAYS: COMPLETE.");
                     }
-                    if (!saslClient.isComplete()) {
-                      readStatus(inStream);
-                      saslToken = new byte[inStream.readInt()];
-                      System.out.println("Will read input token of size " + saslToken.length
-                                         + " for processing by initSASLContext");
-                      inStream.readFully(saslToken);
+                    else {
+                      System.out.println("CLIENT SAYS: NOT COMPLETE.");
                     }
+
                   }
                   System.out.println("SASL client context established. Negotiated QoP: "
                                      + saslClient.getNegotiatedProperty(Sasl.QOP));
                   return true;
                 } catch (IOException e) {
-                  try {
-                    saslClient.dispose();
-                  } catch (SaslException ignored) {
-                    // ignore further exceptions during cleanup
-                  }
+                  System.err.println("IOException happened in run():");
+                  e.printStackTrace();
                 }
                 return null;
               }

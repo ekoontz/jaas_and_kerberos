@@ -15,6 +15,9 @@ import java.net.Socket;
 
 import java.io.IOException;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+
 public class SASLizedServer {
   
   public static void main(String[] args) throws SaslException {
@@ -27,7 +30,7 @@ public class SASLizedServer {
     byte[] response;
     
     // Lots of diagnostics.
-    System.setProperty("sun.security.krb5.debug", "true");
+    //    System.setProperty("sun.security.krb5.debug", "true");
     System.setProperty("javax.security.sasl.level","FINEST");
     System.setProperty("handlers", "java.util.logging.ConsoleHandler");
 
@@ -107,7 +110,6 @@ public class SASLizedServer {
     }
     
     ServerSocket serverListenSocket = null;
-    Socket clientConnectionSocket = null;
     try {
       serverListenSocket = new ServerSocket(SERVER_PORT);
     }
@@ -119,7 +121,9 @@ public class SASLizedServer {
 
     while(true) {
       System.out.println("WAITING FOR CONNECTIONS...");
-          
+      
+      Socket clientConnectionSocket = null;
+
       try {
         clientConnectionSocket = serverListenSocket.accept();
       }
@@ -127,33 +131,98 @@ public class SASLizedServer {
         System.err.println("sock.accept() failure : " + e);
         System.exit(-1);
         e.printStackTrace();
-      }
-      
-      System.out.println("CONNECTED.");
-
-      System.out.println("DOING SASL AUTHENTICATION.");
-
-      // Perform authentication steps until done
-      byte[] saslToken = new byte[0];
-      while (!ss.isComplete()) {
-        try {
-          ss.evaluateResponse(saslToken);
-        }
-        catch (SaslException e) {
-          System.err.println("Oops: attempt to evaluate response caused a SaslException: closing connection with this client.");
-          e.printStackTrace();
+        if (clientConnectionSocket != null) {
           try {
             clientConnectionSocket.close();
           }
-          catch (IOException ex) {
-            System.err.println("error closing client connection.");
+          catch (Exception ex) {
+            System.out.println("Error closing clientConnectionSocket().");
           }
-          break;
         }
+      }
+
+      try {
+        final DataInputStream inStream = new DataInputStream(clientConnectionSocket.getInputStream());
+        final DataOutputStream outStream = new DataOutputStream(clientConnectionSocket.getOutputStream());
+      
+        System.out.println("CONNECTED.");
+        
+        System.out.println("DOING SASL AUTHENTICATION.");
+        
+        final SaslServer saslServer = ss;
+        
+        try {
+          Object result =
+            Subject.doAs(subject,new PrivilegedExceptionAction<Object>() {
+                public Object run() {
+                  
+                  try {
+                    
+                    // Perform authentication steps until done
+                    while (!saslServer.isComplete()) {
+                      int length = inStream.readInt();
+                      System.out.println("");
+                      System.out.println("");
+                      System.out.println("Server: read length integer: " + length);
+                      byte[] saslToken = new byte[length];
+                      inStream.readFully(saslToken,0,length);
+                      System.out.println("Server: response token read of length " + saslToken.length);
+                      byte[] challengeToken = new byte[4096];
+                      try {
+                        challengeToken = saslServer.evaluateResponse(saslToken);
+                      }
+                      catch (SaslException e) {
+                        System.err.println("Oops: attempt to evaluate response caused a SaslException: closing connection with this client.");
+                        e.printStackTrace();
+                        return null;
+                      }
+                      System.out.println("Server: evaluated response; challenge length: " + challengeToken.length);
+                                            
+                      if (challengeToken.length > 0) {
+                        outStream.writeInt(challengeToken.length);
+                        outStream.write(challengeToken,0,challengeToken.length);
+                        outStream.flush();
+                        System.out.println("Wrote token of length: " + challengeToken.length);
+                      }
+                      else {
+                        outStream.writeInt(0);
+                        System.out.println("Challenge length is 0: not sending (just sending integer 0 length).");
+                      }
+
+                      if (saslServer.isComplete()) {
+                        System.out.println("Server: saslServer is complete.");
+                      }
+                      else {
+                        System.out.println("Server: saslServer is not complete.");
+                      }
+
+
+                    }
+                    System.out.println("Finished authenticated client!");
+                    System.out.println(" authorization id: " + saslServer.getAuthorizationID());
+
+                    //                    outStream.writeInt(saslToken.length);
+                  }
+                  catch (Exception e) {
+                    System.err.println("Error authenticating client.");
+                    e.printStackTrace();
+                  }
+                  return null;
+                }
+                
+              });
+        }
+        catch (Exception e) {
+          System.err.println("Caught exception:");
+          e.printStackTrace();
+        }
+      }
+      catch (Exception ioe) {
+        System.err.println("Caught exception:");
+        ioe.printStackTrace();
       }
     }
   }
-
   
   private static class ServerCallbackHandler implements CallbackHandler {
     @Override
