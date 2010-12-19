@@ -146,7 +146,7 @@ public class SASLizedClient {
 
                   while (!saslClient.isComplete()) {
                     System.out.println("");
-                    System.out.println("(client challenge/response loop..)");
+                    System.out.println("<client challenge/response loop>");
                     System.out.println("writing response of length: " + saslToken.length);
                     outStream.writeInt(saslToken.length);
                     outStream.write(saslToken, 0, saslToken.length);
@@ -156,17 +156,17 @@ public class SASLizedClient {
                     System.out.println("reading challenge length.");
                     int length = inStream.readInt();
                     System.out.println("challenge token length is: " + length);
-                    if (length == 0) {
-                      System.out.println("challenge token length is zero length");
-                      saslToken = new byte[0];
-                    }
-                    else {
-                      saslToken = new byte[length];
+                    saslToken = new byte[length];
+                    if (length > 0) {
                       inStream.readFully(saslToken,0,length);
                       System.out.println("read challenge: saslToken length: " + saslToken.length);
                     }
+                    else {
+                      System.out.println("zero-length challenge: nothing to read from server.");
+                    }
 
                     saslToken = saslClient.evaluateChallenge(saslToken);
+                    System.out.println("evaluateChallenge(): response has length : " + saslToken.length);
 
                     if (saslClient.isComplete()) {
                       System.out.println("CLIENT SAYS: COMPLETE.");
@@ -175,6 +175,7 @@ public class SASLizedClient {
                       System.out.println("CLIENT SAYS: NOT COMPLETE.");
                     }
 
+                    System.out.println("</client challenge/response loop>");
                   }
                   System.out.println("SASL client context established. Negotiated QoP: "
                                      + saslClient.getNegotiatedProperty(Sasl.QOP));
