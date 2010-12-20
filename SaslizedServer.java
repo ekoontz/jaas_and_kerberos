@@ -48,8 +48,8 @@ public class SASLizedServer {
 
     final String KEY_TAB_FILE_NAME = "testserver.keytab"; // The file that holds the service's credentials.
 
-    final Integer SERVER_PORT = 4567; // Use anything you want here for testing - 
-                                      // A real service will have a specific conventional port number. (see http://www.iana.org/assignments/port-numbers)
+    final Integer serverPort = Integer.parseInt(args[1]); // Port that the server will listen on.
+
 
     // </Constants>
 
@@ -81,7 +81,7 @@ public class SASLizedServer {
 
       ServerSocket serverListenSocket = null;
       try {
-        serverListenSocket = new ServerSocket(SERVER_PORT);
+        serverListenSocket = new ServerSocket(serverPort);
       }
       catch (IOException e) {
         System.err.println("new ServerSocket() failure : " + e);
