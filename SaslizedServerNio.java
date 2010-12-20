@@ -29,6 +29,9 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
 
+//import java.util.HashMap; // GSSContext
+import java.util.Iterator;
+
 public class SASLizedServerNio {
   public static void main(String[] args) throws SaslException {
     
@@ -73,7 +76,7 @@ public class SASLizedServerNio {
     // };
 
     try {
-      final Integer serverPort = Integer.parseInt(args[0]); // Port that the server will listen on.
+
       final Subject subject;
       ServerSocket serverListenSocket = null;
 
@@ -83,12 +86,90 @@ public class SASLizedServerNio {
       loginCtx = new LoginContext(SERVICE_SECTION_OF_JAAS_CONF_FILE);
       loginCtx.login();
       subject = loginCtx.getSubject();
-      serverListenSocket = new ServerSocket(serverPort);
-      int clientConnectionNumber = 0;
 
+
+      // 1.5 NIO Setup
+
+      // TODO: Convert from GSSAPI to SASL
+      //      GSSContext clientContext = null;
+      final Integer serverPort = Integer.parseInt(args[0]); // Port that the server will listen on.
+
+      Selector selector = SelectorProvider.provider().openSelector();
+      
+      // Create a new non-blocking server socket channel
+      ServerSocketChannel serverChannel = ServerSocketChannel.open();
+      serverChannel.configureBlocking(false);
+      
+      // Bind the server socket to the specified address and port
+      InetSocketAddress isa = new InetSocketAddress("localhost",serverPort);
+      serverChannel.socket().bind(isa);
+      
+      // Register the server socket channel, indicating an interest in 
+      // accepting new connections
+      serverChannel.register(selector, SelectionKey.OP_ACCEPT);
+     
+      // selection key => context map.
+      // TODO: Convert from GSSAPI to SASL
+      // final HashMap<SelectionKey,GSSContext> clientToContext = new HashMap<SelectionKey,GSSContext>();
+
+
+      int clientConnectionNumber = 0;
       // 2. Process client connections.
       while(true) {
         System.out.println("WAITING FOR CONNECTIONS...");
+
+        selector.select();
+        Iterator selectedKeys = selector.selectedKeys().iterator();
+        while (selectedKeys.hasNext()) {
+          final SelectionKey sk = (SelectionKey) selectedKeys.next();
+          selectedKeys.remove();
+          
+          if (!sk.isValid()) {
+            System.out.println("key is not valid; continuing.");
+            continue;
+          }
+          
+          // Check what event is available and deal with it according to its abilities.
+          if (sk.isAcceptable()) {
+            System.out.println("accepting connection from client.");
+
+            // For an accept to be pending the channel must be a server socket channel.
+            ServerSocketChannel serverSocketChannel = (ServerSocketChannel) sk.channel();
+            
+            // Accept the connection and make it non-blocking
+            SocketChannel socketChannel = serverSocketChannel.accept();
+            socketChannel.configureBlocking(false);
+            
+            // Register the new SocketChannel with our Selector, indicating
+            // we'd like to be notified when there's data waiting to be read
+            socketChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+          } else if (sk.isReadable()) {
+            System.out.println("client is readable.");
+          } else if (sk.isWritable()) {
+            System.out.println("client is writable.");
+            final SocketChannel socketChannel = (SocketChannel) sk.channel();
+
+            // 2.1. Create Sasl Server.
+            SaslServer saslServer = createSaslServer(subject, "GSSAPI",SERVICE_PRINCIPAL_NAME,HOST_NAME);
+
+            /*            // 2.2. Perform authentication steps until authentication process is finished.
+            while (!saslServer.isComplete()) {
+              exchangeTokens(saslServer,inStream,outStream);
+            }
+            System.out.println("Finished authenticated client: authorization id: " + saslServer.getAuthorizationID());
+            
+            // 2.3. Do actual useful communication with authenticated client (for now, just send order in which client connected).
+            System.out.println("Writing actual message payload after authentication.");
+            outStream.writeInt(clientConnectionNumber);
+            */
+
+          }
+         
+          
+        }
+
+        /*
+
         Socket clientConnectionSocket = null;
         clientConnectionSocket = serverListenSocket.accept();
         final DataInputStream inStream = new DataInputStream(clientConnectionSocket.getInputStream());
@@ -99,16 +180,7 @@ public class SASLizedServerNio {
         // 2.1. Create Sasl Server.
         SaslServer saslServer = createSaslServer(subject, "GSSAPI",SERVICE_PRINCIPAL_NAME,HOST_NAME);
         
-        // 2.2. Perform authentication steps until authentication process is finished.
-        while (!saslServer.isComplete()) {
-          exchangeTokens(saslServer,inStream,outStream);
-        }
-        System.out.println("Finished authenticated client: authorization id: " + saslServer.getAuthorizationID());
-
-        // 2.3. Do actual useful communication with authenticated client (for now, just send order in which client connected).
-        System.out.println("Writing actual message payload after authentication.");
-        outStream.writeInt(clientConnectionNumber);
-
+        */
 
 
 
