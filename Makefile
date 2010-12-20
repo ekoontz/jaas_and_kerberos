@@ -50,7 +50,7 @@ saslizedserver: killsaslizedserver SASLizedServer.class
 	java SASLizedServer 4567 &
 
 saslizedserver_nio: killsaslizedserver SASLizedServerNio.class
-	java SASLizedServerNio 4567 &
+	java SASLizedServerNio 4567 
 
 killsaslizedserver:
 	echo "killing saslizedserver java processes.."
