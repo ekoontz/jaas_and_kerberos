@@ -46,7 +46,7 @@ start_client: GSSizedClient.class
 README.html: README.md
 	Markdown.pl README.md > $@
 
-saslizedserver: SASLizedServer.class
+saslizedserver: killsaslizedserver SASLizedServer.class
 	java SASLizedServer 4567 &
 
 killsaslizedserver:
