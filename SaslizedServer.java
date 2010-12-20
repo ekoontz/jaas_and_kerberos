@@ -109,7 +109,6 @@ public class SASLizedServer {
               SaslServer saslServer =
                 Subject.doAs(subject,new PrivilegedExceptionAction<SaslServer>() {
                     public SaslServer run() {
-                      System.out.println("run() starting..");
                       SaslServer saslServer = null;
                       
                       try {
@@ -121,45 +120,17 @@ public class SASLizedServer {
                         
                         System.out.println("DONE CREATING SERVER.");
                         
-                        // Perform authentication steps until done
+                        // Perform authentication steps until authentication process is finished.
                         while (!saslServer.isComplete()) {
-                          System.out.println("");
-                          System.out.println("");
                           try {
-                            int length = inStream.readInt();
-                            System.out.println("Server: read integer: " + length);
-                            byte[] saslToken = new byte[length];
-                            inStream.readFully(saslToken,0,length);
-                            System.out.println("Server: response token read of length " + saslToken.length);
-                            try {
-                              saslToken = saslServer.evaluateResponse(saslToken);
-                              if (saslToken != null) {
-                                if (saslToken.length > 0) {
-                                  outStream.writeInt(saslToken.length);
-                                  outStream.write(saslToken,0,saslToken.length);
-                                  outStream.flush();
-                                  System.out.println("Wrote token of length: " + saslToken.length);
-                                }
-                                else {
-                                  outStream.writeInt(0);
-                                  System.out.println("Challenge length is 0: not sending (just sending integer 0 length).");
-                                }
-                              }
-                              else {
-                                System.out.println("evaluateResponse() returned a null token: continuing without writing anything to client.");
-                              }
-                            }
-                            catch (SaslException e) {
-                              System.err.println("Oops: attempt to evaluate response caused a SaslException: closing connection with this client.");
-                              e.printStackTrace();
-                              return null;
-                            }
+                            exchangeTokens(saslServer,inStream,outStream);
                           }
-                          catch (IOException e) {
-                            System.err.println("Failed to read integer from client.");
+                          catch (SaslException e) {
+                            System.err.println("Error authenticating client.");
                             e.printStackTrace();
-                            return null;
+                            break;
                           }
+
                         }
                         System.out.println("Finished authenticated client: authorization id: " + saslServer.getAuthorizationID());
                         return saslServer;
@@ -168,7 +139,7 @@ public class SASLizedServer {
                         System.err.println("Error authenticating client.");
                         e.printStackTrace();
                       }
-                      return saslServer;
+                      return null;
                     }
                   });
               
@@ -181,7 +152,6 @@ public class SASLizedServer {
               e.printStackTrace();
             }
             System.out.println("Closing client connection.");
-            //        saslServer.dispose();
             clientConnectionSocket.close();
           }
           catch (Exception ioe) {
@@ -209,6 +179,43 @@ public class SASLizedServer {
       System.exit(-1);
     }
     
+  }
+
+  private static void exchangeTokens(SaslServer saslServer, DataInputStream inStream, DataOutputStream outStream) throws SaslException {
+    try {
+      int length = inStream.readInt();
+
+      System.out.println("Server: read integer: " + length);
+      byte[] saslToken = new byte[length];
+      inStream.readFully(saslToken,0,length);
+      System.out.println("Server: response token read of length " + saslToken.length);
+      try {
+        saslToken = saslServer.evaluateResponse(saslToken);
+        if (saslToken != null) {
+          if (saslToken.length > 0) {
+            outStream.writeInt(saslToken.length);
+            outStream.write(saslToken,0,saslToken.length);
+            outStream.flush();
+            System.out.println("Wrote token of length: " + saslToken.length);
+          }
+          else {
+            outStream.writeInt(0);
+            System.out.println("Challenge length is 0: not sending (just sending integer 0 length).");
+          }
+        }
+        else {
+          System.out.println("evaluateResponse() returned a null token: continuing without writing anything to client.");
+        }
+      }
+      catch (SaslException e) {
+        System.err.println("exchangeTokens(): throwing SaslException.");
+        throw e;
+      }
+    }
+    catch (IOException e) {
+      System.err.println("Failed to read integer from client.");
+      e.printStackTrace();
+    }
   }
   
   private static class ServerCallbackHandler implements CallbackHandler {
