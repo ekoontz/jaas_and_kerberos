@@ -177,6 +177,11 @@ public class SASLizedClient {
 
                     System.out.println("</client challenge/response loop>");
                   }
+                  System.out.println("Done with authentication loop. Sending last token.");
+                  outStream.writeInt(saslToken.length);
+                  outStream.write(saslToken, 0, saslToken.length);
+                  outStream.flush();
+
                   System.out.println("SASL client context established. Negotiated QoP: "
                                      + saslClient.getNegotiatedProperty(Sasl.QOP));
                   return true;
@@ -224,6 +229,7 @@ public class SASLizedClient {
       System.out.println("ClientCallbackHandler::handle()");
       AuthorizeCallback ac = null;
       for (Callback callback : callbacks) {
+        System.out.println("ClientCallbackHandler::handle()::each callback");        
         if (callback instanceof AuthorizeCallback) {
           ac = (AuthorizeCallback) callback;
         } else {

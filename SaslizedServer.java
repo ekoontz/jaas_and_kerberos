@@ -160,10 +160,10 @@ public class SASLizedServer {
                     
                     // Perform authentication steps until done
                     while (!saslServer.isComplete()) {
+                      System.out.println("");
+                      System.out.println("");
                       int length = inStream.readInt();
-                      System.out.println("");
-                      System.out.println("");
-                      System.out.println("Server: read length integer: " + length);
+                      System.out.println("Server: read integer: " + length);
                       byte[] saslToken = new byte[length];
                       inStream.readFully(saslToken,0,length);
                       System.out.println("Server: response token read of length " + saslToken.length);
@@ -176,17 +176,20 @@ public class SASLizedServer {
                         e.printStackTrace();
                         return null;
                       }
-                      System.out.println("Server: evaluated response; challenge length: " + challengeToken.length);
-                                            
-                      if (challengeToken.length > 0) {
-                        outStream.writeInt(challengeToken.length);
-                        outStream.write(challengeToken,0,challengeToken.length);
-                        outStream.flush();
-                        System.out.println("Wrote token of length: " + challengeToken.length);
-                      }
-                      else {
-                        outStream.writeInt(0);
-                        System.out.println("Challenge length is 0: not sending (just sending integer 0 length).");
+                      System.out.println("got here so far...");
+                      //                      System.out.println("Server: evaluated response; challenge length: " + challengeToken.length);
+                      
+                      if (challengeToken != null) {
+                        if (challengeToken.length > 0) {
+                          outStream.writeInt(challengeToken.length);
+                          outStream.write(challengeToken,0,challengeToken.length);
+                          outStream.flush();
+                          System.out.println("Wrote token of length: " + challengeToken.length);
+                        }
+                        else {
+                          outStream.writeInt(0);
+                          System.out.println("Challenge length is 0: not sending (just sending integer 0 length).");
+                        }
                       }
 
                       if (saslServer.isComplete()) {
@@ -231,20 +234,37 @@ public class SASLizedServer {
       System.out.println("ServerCallbackHandler::handle()");
       AuthorizeCallback ac = null;
       for (Callback callback : callbacks) {
+        System.out.println("IN CALLBACK FOR LOOP.");
         if (callback instanceof AuthorizeCallback) {
+          System.out.println("IN AUTHORIZECALLBACK");
           ac = (AuthorizeCallback) callback;
         } else {
+          System.out.println("IN ELSE CALLBACK");
           throw new UnsupportedCallbackException(callback,
               "Unrecognized SASL GSSAPI Callback");
         }
       }
+      if (ac == null) {
+        System.out.println("AuthorizeCallback is NULL.");
+      }
       if (ac != null) {
+        System.out.println("AuthorizeCallback is not NULL.");
         String authid = ac.getAuthenticationID();
         String authzid = ac.getAuthorizationID();
+
+        System.out.println("authid: " + authid);
+        System.out.println("authzid: " + authzid);
+
         if (authid.equals(authzid)) {
           ac.setAuthorized(true);
         } else {
-          ac.setAuthorized(false);
+          if (true) {
+            System.out.println("authid != authzid; setting to authorized anyway.");
+            ac.setAuthorized(true);
+          }
+          else {
+            //          ac.setAuthorized(false);
+          }
         }
         if (ac.isAuthorized()) {
           ac.setAuthorizedID(authzid);
