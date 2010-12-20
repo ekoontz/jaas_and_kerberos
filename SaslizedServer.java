@@ -89,9 +89,12 @@ public class SASLizedServer {
         e.printStackTrace();
       }
 
+      int clientConnectionNumber = 0;
+
       while(true) {
         System.out.println("WAITING FOR CONNECTIONS...");
         
+
         Socket clientConnectionSocket = null;
         
         try {
@@ -119,9 +122,8 @@ public class SASLizedServer {
           
           System.out.println("DOING SASL AUTHENTICATION.");
           
-          SaslServer saslServer = null;
           try {
-            saslServer =
+            SaslServer saslServer =
               Subject.doAs(subject,new PrivilegedExceptionAction<SaslServer>() {
                   public SaslServer run() {
                     System.out.println("run() starting..");
@@ -187,8 +189,8 @@ public class SASLizedServer {
                 });
                 
                 System.out.println("Writing actual message payload after authentication.");
-                outStream.writeInt(42);
-                //          saslServer.dispose();
+                outStream.writeInt(clientConnectionNumber);
+                clientNumber++;
           }
           catch (Exception e) {
             System.err.println("Caught exception:");
