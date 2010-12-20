@@ -77,7 +77,7 @@ public class SASLizedServerNio {
       final Subject subject;
       ServerSocket serverListenSocket = null;
 
-      // Login to the KDC.
+      // 1. Login to Kerberos.
       LoginContext loginCtx = null;
       System.out.println("Authenticating using '" + SERVICE_SECTION_OF_JAAS_CONF_FILE + "' section of '" + JAAS_CONF_FILE_NAME + "'.");
       loginCtx = new LoginContext(SERVICE_SECTION_OF_JAAS_CONF_FILE);
@@ -85,6 +85,8 @@ public class SASLizedServerNio {
       subject = loginCtx.getSubject();
       serverListenSocket = new ServerSocket(serverPort);
       int clientConnectionNumber = 0;
+
+      // 2. Process client connections.
       while(true) {
         System.out.println("WAITING FOR CONNECTIONS...");
         Socket clientConnectionSocket = null;
@@ -93,16 +95,24 @@ public class SASLizedServerNio {
         final DataOutputStream outStream = new DataOutputStream(clientConnectionSocket.getOutputStream());
         System.out.println("CONNECTED.");
         System.out.println("DOING SASL AUTHENTICATION.");
-        
+
+        // 2.1. Create Sasl Server.
         SaslServer saslServer = createSaslServer(subject, "GSSAPI",SERVICE_PRINCIPAL_NAME,HOST_NAME);
         
-        // Perform authentication steps until authentication process is finished.
+        // 2.2. Perform authentication steps until authentication process is finished.
         while (!saslServer.isComplete()) {
           exchangeTokens(saslServer,inStream,outStream);
         }
         System.out.println("Finished authenticated client: authorization id: " + saslServer.getAuthorizationID());
+
+        // 2.3. Do actual useful communication with authenticated client (for now, just send order in which client connected).
         System.out.println("Writing actual message payload after authentication.");
         outStream.writeInt(clientConnectionNumber);
+
+
+
+
+
         clientConnectionNumber++;
       }
     }
