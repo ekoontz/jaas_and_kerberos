@@ -72,97 +72,50 @@ public class SASLizedServerNio {
     //   principal="$SERVICE_NAME/$HOST_NAME";
     // };
 
-
-
-    final Integer serverPort = Integer.parseInt(args[0]); // Port that the server will listen on.
-
-    final Subject subject;
     try {
+      final Integer serverPort = Integer.parseInt(args[0]); // Port that the server will listen on.
+      final Subject subject;
+      ServerSocket serverListenSocket = null;
+
       // Login to the KDC.
       LoginContext loginCtx = null;
       System.out.println("Authenticating using '" + SERVICE_SECTION_OF_JAAS_CONF_FILE + "' section of '" + JAAS_CONF_FILE_NAME + "'.");
       loginCtx = new LoginContext(SERVICE_SECTION_OF_JAAS_CONF_FILE);
       loginCtx.login();
       subject = loginCtx.getSubject();
-
-
-      ServerSocket serverListenSocket = null;
-      try {
-        serverListenSocket = new ServerSocket(serverPort);
-      }
-      catch (IOException e) {
-        System.err.println("new ServerSocket() failure : " + e);
-        System.exit(-1);
-        e.printStackTrace();
-      }
-
+      serverListenSocket = new ServerSocket(serverPort);
       int clientConnectionNumber = 0;
-
       while(true) {
         System.out.println("WAITING FOR CONNECTIONS...");
         Socket clientConnectionSocket = null;
-        try { 
-          clientConnectionSocket = serverListenSocket.accept();
-          try { 
-            final DataInputStream inStream = new DataInputStream(clientConnectionSocket.getInputStream());
-            final DataOutputStream outStream = new DataOutputStream(clientConnectionSocket.getOutputStream());
-            System.out.println("CONNECTED.");
-            System.out.println("DOING SASL AUTHENTICATION.");
-
-            SaslServer saslServer = createSaslServer(subject, "GSSAPI",SERVICE_PRINCIPAL_NAME,HOST_NAME);
-
-            // Perform authentication steps until authentication process is finished.
-            while (!saslServer.isComplete()) {
-              try {
-                exchangeTokens(saslServer,inStream,outStream);
-              }
-              catch (SaslException e) {
-                System.err.println("Error authenticating client in the midst of exchanging authentication tokens.");
-                e.printStackTrace();
-                // Shutdown client connection: since authentication failed, 
-                // we don't want to have anything more to do with this client.
-                if (clientConnectionSocket != null) {
-                  try {
-                    clientConnectionSocket.close();
-                    throw e;
-                  }
-                  catch (Exception ex) {
-                    System.out.println("Error closing clientConnectionSocket().");
-                  }
-                }
-                break;
-              }
-            }
-            System.out.println("Finished authenticated client: authorization id: " + saslServer.getAuthorizationID());
-            System.out.println("Writing actual message payload after authentication.");
-            outStream.writeInt(clientConnectionNumber);
-            clientConnectionNumber++;
-          }
-          catch (SaslException e) {
-            System.err.println("Error creating SaslServer object using service principal " + SERVICE_PRINCIPAL_NAME);
-            e.printStackTrace();
-          }
+        clientConnectionSocket = serverListenSocket.accept();
+        final DataInputStream inStream = new DataInputStream(clientConnectionSocket.getInputStream());
+        final DataOutputStream outStream = new DataOutputStream(clientConnectionSocket.getOutputStream());
+        System.out.println("CONNECTED.");
+        System.out.println("DOING SASL AUTHENTICATION.");
+        
+        SaslServer saslServer = createSaslServer(subject, "GSSAPI",SERVICE_PRINCIPAL_NAME,HOST_NAME);
+        
+        // Perform authentication steps until authentication process is finished.
+        while (!saslServer.isComplete()) {
+          exchangeTokens(saslServer,inStream,outStream);
         }
-        catch (IOException e) { // serverListenSocket.accept() failed.
-          System.err.println("Could not accept connections: sock.accept() failure : " + e);
-          System.exit(-1);
-          e.printStackTrace();
-          if (clientConnectionSocket != null) {
-            try {
-              clientConnectionSocket.close();
-            }
-            catch (Exception ex) {
-              System.out.println("Error closing clientConnectionSocket().");
-            }
-          }
-        }
+        System.out.println("Finished authenticated client: authorization id: " + saslServer.getAuthorizationID());
+        System.out.println("Writing actual message payload after authentication.");
+        outStream.writeInt(clientConnectionNumber);
+        clientConnectionNumber++;
       }
     }
-    catch (LoginException e) {
-      System.err.println("Kerberos login failure : " + e);
+    catch (IOException e) {
+      System.err.println("IOException: : " + e);
+      e.printStackTrace();
       System.exit(-1);
     }
-    
+    catch (LoginException e) {
+      System.err.println("LoginException: : " + e);
+      e.printStackTrace();
+      System.exit(-1);
+    }
   }
 
   private static SaslServer createSaslServer(final Subject subject, final String mech,final String principalName,final String hostName) {
