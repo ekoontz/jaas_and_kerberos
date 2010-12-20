@@ -21,10 +21,6 @@ import java.io.DataOutputStream;
 public class SASLizedServer {
   
   public static void main(String[] args) throws SaslException {
-    new SASLizedServer().start();
-  }
-  
-  private void start() throws SaslException {
     
     byte[] challenge;
     byte[] response;
@@ -48,8 +44,7 @@ public class SASLizedServer {
 
     final String KEY_TAB_FILE_NAME = "testserver.keytab"; // The file that holds the service's credentials.
 
-    final Integer serverPort = Integer.parseInt(args[1]); // Port that the server will listen on.
-
+    final Integer serverPort = Integer.parseInt(args[0]); // Port that the server will listen on.
 
     // </Constants>
 
@@ -190,7 +185,7 @@ public class SASLizedServer {
                 
                 System.out.println("Writing actual message payload after authentication.");
                 outStream.writeInt(clientConnectionNumber);
-                clientNumber++;
+                clientConnectionNumber++;
           }
           catch (Exception e) {
             System.err.println("Caught exception:");
