@@ -1,4 +1,4 @@
-.PHONY: all clean test compile killserver waitforkill start_server_socket start_server_nio start_client run_server test_socket test_nio fred saslizedserver saslizedclient
+.PHONY: all clean test compile killserver waitforkill start_server_socket start_server_nio start_client run_server test_socket test_nio fred saslizedserver saslizedclient testsasl killsaslizedserver
 all: compile README.html
 
 compile: GSSizedServer.class GSSizedServerNio.class GSSizedClient.class Hexdump.class FredSasl.class
@@ -43,7 +43,18 @@ README.html: README.md
 	Markdown.pl README.md > $@
 
 saslizedserver: SASLizedServer.class
-	java SASLizedServer
+	java SASLizedServer 4567 &
+
+killsaslizedserver:
+	echo "killing saslizedserver java processes.."
+	-kill `ps -Ao pid,command | grep java | sed "s/^[ ]*//" | cut -d\  -f1,3 | grep SASLizedServer | cut -d\  -f1`
 
 saslizedclient: SASLizedClient.class Hexdump.class
 	java -cp . SASLizedClient client.properties localhost 4567
+
+testsasl: killsaslizedserver saslizedserver SASLizedServer.class
+	for i in 1 2 3 4 5 6 7 8 9 10; \
+	do \
+		java -cp . SASLizedClient client.properties localhost 4567; \
+	done
+	make killsaslizedserver
