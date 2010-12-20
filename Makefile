@@ -49,6 +49,9 @@ README.html: README.md
 saslizedserver: killsaslizedserver SASLizedServer.class
 	java SASLizedServer 4567 &
 
+saslizedserver_nio: killsaslizedserver SASLizedServerNio.class
+	java SASLizedServerNio 4567 &
+
 killsaslizedserver:
 	echo "killing saslizedserver java processes.."
 	-kill `ps -Ao pid,command | grep java | sed "s/^[ ]*//" | cut -d\  -f1,3 | grep SASLizedServer | cut -d\  -f1`
@@ -62,3 +65,11 @@ testsasl: killsaslizedserver saslizedserver SASLizedServer.class SASLizedClient.
 		java -cp . SASLizedClient client.properties localhost 4567; \
 	done
 	make killsaslizedserver
+
+testsasl_nio: killsaslizedserver saslizedserver_nio SASLizedServerNio.class SASLizedClient.class
+	for i in 1 2 3 4 5 6 7 8 9 10; \
+	do \
+		java -cp . SASLizedClient client.properties localhost 4567; \
+	done
+	-make killsaslizedserver
+	echo "testsasl_nio test finished successfully."
