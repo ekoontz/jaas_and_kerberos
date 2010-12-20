@@ -6,6 +6,7 @@ import javax.security.sasl.Sasl;
 import javax.security.sasl.SaslException;
 import javax.security.sasl.SaslServer;
 import java.security.PrivilegedExceptionAction;
+import java.security.PrivilegedActionException;
 
 import javax.security.auth.Subject;
 import javax.security.auth.login.LoginContext;
@@ -137,12 +138,14 @@ public class SASLizedServer {
               outStream.writeInt(clientConnectionNumber);
               clientConnectionNumber++;
             }
-            catch (Exception e) {
-              // got exception...
+            catch (SaslException e) {
+              System.err.println("Error creating SaslServer object using service principal " + SERVICE_PRINCIPAL_NAME);
+              e.printStackTrace();
             }
           }
-          catch (Exception e) {
-            // got exception...
+          catch (PrivilegedActionException e) {
+              System.err.println("Error creating SaslServer object while calling doAs((principal='" + SERVICE_PRINCIPAL_NAME + "'),..)");
+              e.printStackTrace();
           }
         }
         catch (IOException e) { // serverListenSocket.accept() failed.
