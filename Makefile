@@ -1,4 +1,8 @@
-.PHONY: all clean test compile killserver waitforkill start_server_socket start_server_nio start_client run_server test_socket test_nio fred saslizedserver saslizedclient testsasl killsaslizedserver
+.PHONY: all clean test compile killserver waitforkill \
+ start_server_socket start_server_nio start_client \
+ run_server test_socket test_nio fred saslizedserver \
+ saslizedclient testsasl killsaslizedserver
+
 all: compile README.html
 
 compile: GSSizedServer.class GSSizedServerNio.class GSSizedClient.class Hexdump.class FredSasl.class
