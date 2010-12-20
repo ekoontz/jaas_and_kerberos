@@ -77,7 +77,7 @@ public class SASLizedServer {
 
 
       ServerSocket serverListenSocket = null;
-      try {
+      try { // Z
         serverListenSocket = new ServerSocket(serverPort);
       }
       catch (IOException e) {
@@ -90,77 +90,63 @@ public class SASLizedServer {
 
       while(true) {
         System.out.println("WAITING FOR CONNECTIONS...");
-        
-
         Socket clientConnectionSocket = null;
-        
-        try {
+        try { 
           clientConnectionSocket = serverListenSocket.accept();
-        
-          try {
+          try { 
             final DataInputStream inStream = new DataInputStream(clientConnectionSocket.getInputStream());
             final DataOutputStream outStream = new DataOutputStream(clientConnectionSocket.getOutputStream());
-            
             System.out.println("CONNECTED.");
-            
             System.out.println("DOING SASL AUTHENTICATION.");
-            
             try {
               SaslServer saslServer =
                 Subject.doAs(subject,new PrivilegedExceptionAction<SaslServer>() {
                     public SaslServer run() {
                       SaslServer saslServer = null;
-                      
                       try {
                         saslServer = Sasl.createSaslServer("GSSAPI",
                                                            SERVICE_PRINCIPAL_NAME,
                                                            HOST_NAME,
                                                            null,
                                                            new ServerCallbackHandler());
-                        
                         System.out.println("DONE CREATING SERVER.");
-                        
-                        // Perform authentication steps until authentication process is finished.
-                        while (!saslServer.isComplete()) {
-                          try {
-                            exchangeTokens(saslServer,inStream,outStream);
-                          }
-                          catch (SaslException e) {
-                            System.err.println("Error authenticating client.");
-                            e.printStackTrace();
-                            break;
-                          }
-
-                        }
-                        System.out.println("Finished authenticated client: authorization id: " + saslServer.getAuthorizationID());
-                        return saslServer;
                       }
                       catch (SaslException e) {
                         System.err.println("Error authenticating client.");
                         e.printStackTrace();
                       }
-                      return null;
+                      return saslServer;
                     }
-                  });
-              
+                  }
+                  );
+
+              // Perform authentication steps until authentication process is finished.
+              while (!saslServer.isComplete()) {
+                try {
+                  exchangeTokens(saslServer,inStream,outStream);
+                }
+                catch (SaslException e) {
+                  System.err.println("Error authenticating client in the midst of exchanging authentication tokens.");
+                  e.printStackTrace();
+                  throw e;
+                }
+              }
+              System.out.println("Finished authenticated client: authorization id: " + saslServer.getAuthorizationID());
+
               System.out.println("Writing actual message payload after authentication.");
               outStream.writeInt(clientConnectionNumber);
               clientConnectionNumber++;
             }
             catch (Exception e) {
-              System.err.println("Caught exception:");
-              e.printStackTrace();
+              // got exception...
             }
-            System.out.println("Closing client connection.");
-            clientConnectionSocket.close();
           }
-          catch (Exception ioe) {
-            System.err.println("Caught exception:");
-            ioe.printStackTrace();
+          catch (Exception e) {
+            // got exception...
           }
         }
         catch (IOException e) { // serverListenSocket.accept() failed.
-          System.err.println("sock.accept() failure : " + e);
+          System.err.println("Could not accept connections: sock.accept() failure : " + e);
           System.exit(-1);
           e.printStackTrace();
           if (clientConnectionSocket != null) {
