@@ -132,24 +132,26 @@ public class SASLizedServer {
                             System.out.println("Server: response token read of length " + saslToken.length);
                             try {
                               saslToken = saslServer.evaluateResponse(saslToken);
+                              if (saslToken != null) {
+                                if (saslToken.length > 0) {
+                                  outStream.writeInt(saslToken.length);
+                                  outStream.write(saslToken,0,saslToken.length);
+                                  outStream.flush();
+                                  System.out.println("Wrote token of length: " + saslToken.length);
+                                }
+                                else {
+                                  outStream.writeInt(0);
+                                  System.out.println("Challenge length is 0: not sending (just sending integer 0 length).");
+                                }
+                              }
+                              else {
+                                System.out.println("evaluateResponse() returned a null token: continuing without writing anything to client.");
+                              }
                             }
                             catch (SaslException e) {
                               System.err.println("Oops: attempt to evaluate response caused a SaslException: closing connection with this client.");
                               e.printStackTrace();
                               return null;
-                            }
-                            
-                            if (saslToken != null) {
-                              if (saslToken.length > 0) {
-                                outStream.writeInt(saslToken.length);
-                                outStream.write(saslToken,0,saslToken.length);
-                                outStream.flush();
-                                System.out.println("Wrote token of length: " + saslToken.length);
-                              }
-                              else {
-                                outStream.writeInt(0);
-                                System.out.println("Challenge length is 0: not sending (just sending integer 0 length).");
-                              }
                             }
                           }
                           catch (IOException e) {
