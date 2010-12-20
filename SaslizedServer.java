@@ -130,9 +130,8 @@ public class SASLizedServer {
                             byte[] saslToken = new byte[length];
                             inStream.readFully(saslToken,0,length);
                             System.out.println("Server: response token read of length " + saslToken.length);
-                            byte[] challengeToken;
                             try {
-                              challengeToken = saslServer.evaluateResponse(saslToken);
+                              saslToken = saslServer.evaluateResponse(saslToken);
                             }
                             catch (SaslException e) {
                               System.err.println("Oops: attempt to evaluate response caused a SaslException: closing connection with this client.");
@@ -140,12 +139,12 @@ public class SASLizedServer {
                               return null;
                             }
                             
-                            if (challengeToken != null) {
-                              if (challengeToken.length > 0) {
-                                outStream.writeInt(challengeToken.length);
-                                outStream.write(challengeToken,0,challengeToken.length);
+                            if (saslToken != null) {
+                              if (saslToken.length > 0) {
+                                outStream.writeInt(saslToken.length);
+                                outStream.write(saslToken,0,saslToken.length);
                                 outStream.flush();
-                                System.out.println("Wrote token of length: " + challengeToken.length);
+                                System.out.println("Wrote token of length: " + saslToken.length);
                               }
                               else {
                                 outStream.writeInt(0);
