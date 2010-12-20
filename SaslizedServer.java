@@ -176,8 +176,6 @@ public class SASLizedServer {
                         e.printStackTrace();
                         return null;
                       }
-                      System.out.println("got here so far...");
-                      //                      System.out.println("Server: evaluated response; challenge length: " + challengeToken.length);
                       
                       if (challengeToken != null) {
                         if (challengeToken.length > 0) {
@@ -191,26 +189,14 @@ public class SASLizedServer {
                           System.out.println("Challenge length is 0: not sending (just sending integer 0 length).");
                         }
                       }
-
-                      if (saslServer.isComplete()) {
-                        System.out.println("Server: saslServer is complete.");
-                      }
-                      else {
-                        System.out.println("Server: saslServer is not complete.");
-                      }
-
-
                     }
-                    System.out.println("Finished authenticated client!");
-                    System.out.println(" authorization id: " + saslServer.getAuthorizationID());
-
-                    //                    outStream.writeInt(saslToken.length);
+                    System.out.println("Finished authenticated client: authorization id: " + saslServer.getAuthorizationID());
                   }
                   catch (Exception e) {
                     System.err.println("Error authenticating client.");
                     e.printStackTrace();
                   }
-                  return null;
+                  return saslServer;
                 }
                 
               });
@@ -234,26 +220,16 @@ public class SASLizedServer {
       System.out.println("ServerCallbackHandler::handle()");
       AuthorizeCallback ac = null;
       for (Callback callback : callbacks) {
-        System.out.println("IN CALLBACK FOR LOOP.");
         if (callback instanceof AuthorizeCallback) {
-          System.out.println("IN AUTHORIZECALLBACK");
           ac = (AuthorizeCallback) callback;
         } else {
-          System.out.println("IN ELSE CALLBACK");
           throw new UnsupportedCallbackException(callback,
               "Unrecognized SASL GSSAPI Callback");
         }
       }
-      if (ac == null) {
-        System.out.println("AuthorizeCallback is NULL.");
-      }
       if (ac != null) {
-        System.out.println("AuthorizeCallback is not NULL.");
         String authid = ac.getAuthenticationID();
         String authzid = ac.getAuthorizationID();
-
-        System.out.println("authid: " + authid);
-        System.out.println("authzid: " + authzid);
 
         if (authid.equals(authzid)) {
           ac.setAuthorized(true);
@@ -263,7 +239,7 @@ public class SASLizedServer {
             ac.setAuthorized(true);
           }
           else {
-            //          ac.setAuthorized(false);
+            ac.setAuthorized(false);
           }
         }
         if (ac.isAuthorized()) {
