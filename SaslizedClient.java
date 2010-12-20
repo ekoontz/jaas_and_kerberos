@@ -192,6 +192,10 @@ public class SASLizedClient {
                 return null;
               }
             });
+
+        int payload = inStream.readInt();
+        System.out.println("Read payload: " + payload);
+
       }
       catch (Exception e) {
         e.printStackTrace();
