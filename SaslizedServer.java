@@ -70,6 +70,7 @@ public class SASLizedServer {
     try {
       // Login to the KDC.
       LoginContext loginCtx = null;
+      System.out.println("Authenticating using '" + SERVICE_SECTION_OF_JAAS_CONF_FILE + "' section of '" + JAAS_CONF_FILE_NAME + "'.");
       loginCtx = new LoginContext(SERVICE_SECTION_OF_JAAS_CONF_FILE);
       loginCtx.login();
       subject = loginCtx.getSubject();
