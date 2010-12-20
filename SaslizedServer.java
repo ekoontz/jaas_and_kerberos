@@ -130,7 +130,7 @@ public class SASLizedServer {
                             byte[] saslToken = new byte[length];
                             inStream.readFully(saslToken,0,length);
                             System.out.println("Server: response token read of length " + saslToken.length);
-                            byte[] challengeToken = new byte[4096];
+                            byte[] challengeToken;
                             try {
                               challengeToken = saslServer.evaluateResponse(saslToken);
                             }
