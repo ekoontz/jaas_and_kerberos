@@ -56,7 +56,7 @@ killsaslizedserver:
 saslizedclient: SASLizedClient.class Hexdump.class
 	java -cp . SASLizedClient client.properties localhost 4567
 
-testsasl: killsaslizedserver saslizedserver SASLizedServer.class
+testsasl: killsaslizedserver saslizedserver SASLizedServer.class SASLizedClient.class
 	for i in 1 2 3 4 5 6 7 8 9 10; \
 	do \
 		java -cp . SASLizedClient client.properties localhost 4567; \
