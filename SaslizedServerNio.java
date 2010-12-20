@@ -13,18 +13,24 @@ import javax.security.auth.login.LoginException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+
 import java.io.IOException;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
-public class SASLizedServer {
+import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
+import java.nio.channels.spi.SelectorProvider;
+
+public class SASLizedServerNio {
   
   public static void main(String[] args) throws SaslException {
-    new SASLizedServer().start();
-  }
-  
-  private void start() throws SaslException {
     
     byte[] challenge;
     byte[] response;
@@ -48,8 +54,7 @@ public class SASLizedServer {
 
     final String KEY_TAB_FILE_NAME = "testserver.keytab"; // The file that holds the service's credentials.
 
-    final Integer serverPort = Integer.parseInt(args[1]); // Port that the server will listen on.
-
+    final Integer serverPort = Integer.parseInt(args[0]); // Port that the server will listen on.
 
     // </Constants>
 
@@ -67,7 +72,6 @@ public class SASLizedServer {
     //   principal="$SERVICE_NAME/$HOST_NAME";
     // };
 
-
     System.setProperty( "java.security.auth.login.config", JAAS_CONF_FILE_NAME);
 
     final Subject subject;
@@ -78,175 +82,36 @@ public class SASLizedServer {
       loginCtx.login();
       subject = loginCtx.getSubject();
 
-
-      ServerSocket serverListenSocket = null;
+      // <1. NIO>
       try {
-        serverListenSocket = new ServerSocket(serverPort);
+        Selector selector = SelectorProvider.provider().openSelector();
+      
+        // Create a new non-blocking server socket channel
+        ServerSocketChannel serverChannel = ServerSocketChannel.open();
+        serverChannel.configureBlocking(false);
+        
+        // Bind the server socket to the specified address and port
+        int localPort = Integer.parseInt(args[0]);
+        
+        InetSocketAddress isa = new InetSocketAddress("localhost",localPort);
+        serverChannel.socket().bind(isa);
+        
+        // Register the server socket channel, indicating an interest in 
+        // accepting new connections
+        serverChannel.register(selector, SelectionKey.OP_ACCEPT);
+        // </1. NIO>
       }
       catch (IOException e) {
-        System.err.println("new ServerSocket() failure : " + e);
-        System.exit(-1);
+        System.err.println("openSelector() failed.");
         e.printStackTrace();
+
       }
-
-      int clientConnectionNumber = 0;
-
-      while(true) {
-        System.out.println("WAITING FOR CONNECTIONS...");
-        
-
-        Socket clientConnectionSocket = null;
-        
-        try {
-          clientConnectionSocket = serverListenSocket.accept();
-        }
-        catch (IOException e) {
-          System.err.println("sock.accept() failure : " + e);
-          System.exit(-1);
-          e.printStackTrace();
-          if (clientConnectionSocket != null) {
-            try {
-              clientConnectionSocket.close();
-            }
-            catch (Exception ex) {
-              System.out.println("Error closing clientConnectionSocket().");
-            }
-          }
-        }
-        
-        try {
-          final DataInputStream inStream = new DataInputStream(clientConnectionSocket.getInputStream());
-          final DataOutputStream outStream = new DataOutputStream(clientConnectionSocket.getOutputStream());
-          
-          System.out.println("CONNECTED.");
-          
-          System.out.println("DOING SASL AUTHENTICATION.");
-          
-          try {
-            SaslServer saslServer =
-              Subject.doAs(subject,new PrivilegedExceptionAction<SaslServer>() {
-                  public SaslServer run() {
-                    System.out.println("run() starting..");
-                    SaslServer saslServer = null;
-
-                    try {
-                      saslServer = Sasl.createSaslServer("GSSAPI",
-                                                         SERVICE_PRINCIPAL_NAME,
-                                                         HOST_NAME,
-                                                         null,
-                                                         new ServerCallbackHandler());
-                      
-                      System.out.println("DONE CREATING SERVER.");
-                      
-                      // Perform authentication steps until done
-                      while (!saslServer.isComplete()) {
-                        System.out.println("");
-                        System.out.println("");
-                        try {
-                          int length = inStream.readInt();
-                          System.out.println("Server: read integer: " + length);
-                          byte[] saslToken = new byte[length];
-                          inStream.readFully(saslToken,0,length);
-                          System.out.println("Server: response token read of length " + saslToken.length);
-                          byte[] challengeToken = new byte[4096];
-                          try {
-                            challengeToken = saslServer.evaluateResponse(saslToken);
-                          }
-                          catch (SaslException e) {
-                            System.err.println("Oops: attempt to evaluate response caused a SaslException: closing connection with this client.");
-                            e.printStackTrace();
-                            return null;
-                          }
-                          
-                          if (challengeToken != null) {
-                            if (challengeToken.length > 0) {
-                              outStream.writeInt(challengeToken.length);
-                              outStream.write(challengeToken,0,challengeToken.length);
-                              outStream.flush();
-                              System.out.println("Wrote token of length: " + challengeToken.length);
-                            }
-                            else {
-                              outStream.writeInt(0);
-                              System.out.println("Challenge length is 0: not sending (just sending integer 0 length).");
-                            }
-                          }
-                        }
-                        catch (IOException e) {
-                          System.err.println("Failed to read integer from client.");
-                          e.printStackTrace();
-                          return null;
-                        }
-                      }
-                      System.out.println("Finished authenticated client: authorization id: " + saslServer.getAuthorizationID());
-                      return saslServer;
-                    }
-                    catch (SaslException e) {
-                      System.err.println("Error authenticating client.");
-                      e.printStackTrace();
-                    }
-                    return saslServer;
-                  }
-                });
-                
-                System.out.println("Writing actual message payload after authentication.");
-                outStream.writeInt(clientConnectionNumber);
-                clientNumber++;
-          }
-          catch (Exception e) {
-            System.err.println("Caught exception:");
-            e.printStackTrace();
-          }
-          System.out.println("Closing client connection.");
-          //        saslServer.dispose();
-          clientConnectionSocket.close();
-        }
-        catch (Exception ioe) {
-          System.err.println("Caught exception:");
-          ioe.printStackTrace();
-        }
-      }      
     }
     catch (LoginException e) {
       System.err.println("Kerberos login failure : " + e);
       System.exit(-1);
     }
     
-  }
-  
-  private static class ServerCallbackHandler implements CallbackHandler {
-    @Override
-    public void handle(Callback[] callbacks) throws
-        UnsupportedCallbackException {
-      System.out.println("ServerCallbackHandler::handle()");
-      AuthorizeCallback ac = null;
-      for (Callback callback : callbacks) {
-        if (callback instanceof AuthorizeCallback) {
-          ac = (AuthorizeCallback) callback;
-        } else {
-          throw new UnsupportedCallbackException(callback,
-              "Unrecognized SASL GSSAPI Callback");
-        }
-      }
-      if (ac != null) {
-        String authid = ac.getAuthenticationID();
-        String authzid = ac.getAuthorizationID();
-
-        if (authid.equals(authzid)) {
-          ac.setAuthorized(true);
-        } else {
-          if (true) {
-            System.out.println("authid != authzid; setting to authorized anyway.");
-            ac.setAuthorized(true);
-          }
-          else {
-            ac.setAuthorized(false);
-          }
-        }
-        if (ac.isAuthorized()) {
-          ac.setAuthorizedID(authzid);
-        }
-      }
-    }
   }
 
 }
