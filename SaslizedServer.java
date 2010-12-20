@@ -78,7 +78,7 @@ public class SASLizedServer {
 
 
       ServerSocket serverListenSocket = null;
-      try { // Z
+      try {
         serverListenSocket = new ServerSocket(serverPort);
       }
       catch (IOException e) {
@@ -99,53 +99,39 @@ public class SASLizedServer {
             final DataOutputStream outStream = new DataOutputStream(clientConnectionSocket.getOutputStream());
             System.out.println("CONNECTED.");
             System.out.println("DOING SASL AUTHENTICATION.");
-            try {
-              SaslServer saslServer =
-                Subject.doAs(subject,new PrivilegedExceptionAction<SaslServer>() {
-                    public SaslServer run() {
-                      SaslServer saslServer = null;
-                      try {
-                        saslServer = Sasl.createSaslServer("GSSAPI",
-                                                           SERVICE_PRINCIPAL_NAME,
-                                                           HOST_NAME,
-                                                           null,
-                                                           new ServerCallbackHandler());
-                        System.out.println("DONE CREATING SERVER.");
-                      }
-                      catch (SaslException e) {
-                        System.err.println("Error authenticating client.");
-                        e.printStackTrace();
-                      }
-                      return saslServer;
-                    }
-                  }
-                  );
 
-              // Perform authentication steps until authentication process is finished.
-              while (!saslServer.isComplete()) {
-                try {
-                  exchangeTokens(saslServer,inStream,outStream);
-                }
-                catch (SaslException e) {
-                  System.err.println("Error authenticating client in the midst of exchanging authentication tokens.");
-                  e.printStackTrace();
-                  throw e;
-                }
+            SaslServer saslServer = createSaslServer(subject, "GSSAPI",SERVICE_PRINCIPAL_NAME,HOST_NAME);
+
+            // Perform authentication steps until authentication process is finished.
+            while (!saslServer.isComplete()) {
+              try {
+                exchangeTokens(saslServer,inStream,outStream);
               }
-              System.out.println("Finished authenticated client: authorization id: " + saslServer.getAuthorizationID());
-
-              System.out.println("Writing actual message payload after authentication.");
-              outStream.writeInt(clientConnectionNumber);
-              clientConnectionNumber++;
+              catch (SaslException e) {
+                System.err.println("Error authenticating client in the midst of exchanging authentication tokens.");
+                e.printStackTrace();
+                // Shutdown client connection: since authentication failed, 
+                // we don't want to have anything more to do with this client.
+                if (clientConnectionSocket != null) {
+                  try {
+                    clientConnectionSocket.close();
+                    throw e;
+                  }
+                  catch (Exception ex) {
+                    System.out.println("Error closing clientConnectionSocket().");
+                  }
+                }
+                break;
+              }
             }
-            catch (SaslException e) {
-              System.err.println("Error creating SaslServer object using service principal " + SERVICE_PRINCIPAL_NAME);
-              e.printStackTrace();
-            }
+            System.out.println("Finished authenticated client: authorization id: " + saslServer.getAuthorizationID());
+            System.out.println("Writing actual message payload after authentication.");
+            outStream.writeInt(clientConnectionNumber);
+            clientConnectionNumber++;
           }
-          catch (PrivilegedActionException e) {
-              System.err.println("Error creating SaslServer object while calling doAs((principal='" + SERVICE_PRINCIPAL_NAME + "'),..)");
-              e.printStackTrace();
+          catch (SaslException e) {
+            System.err.println("Error creating SaslServer object using service principal " + SERVICE_PRINCIPAL_NAME);
+            e.printStackTrace();
           }
         }
         catch (IOException e) { // serverListenSocket.accept() failed.
@@ -168,6 +154,31 @@ public class SASLizedServer {
       System.exit(-1);
     }
     
+  }
+
+  private static SaslServer createSaslServer(final Subject subject, final String mech,final String principalName,final String hostName) {
+    try {
+      return Subject.doAs(subject,new PrivilegedExceptionAction<SaslServer>() {
+          public SaslServer run() {
+            SaslServer saslServer = null;
+            try {
+              saslServer = Sasl.createSaslServer(mech,principalName,hostName,null,new ServerCallbackHandler());
+              System.out.println("DONE CREATING SERVER.");
+            }
+            catch (SaslException e) {
+              System.err.println("Error creating SaslServer.");
+              e.printStackTrace();
+            }
+            return saslServer;
+          }
+        }
+        );
+    }
+    catch (PrivilegedActionException e) {
+      System.err.println("Error creating SaslServer object while calling doAs((principal='" + principalName + "'),..)");
+      e.printStackTrace();
+    }
+    return null;
   }
 
   private static void exchangeTokens(SaslServer saslServer, DataInputStream inStream, DataOutputStream outStream) throws SaslException {
