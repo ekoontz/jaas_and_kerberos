@@ -60,14 +60,14 @@ saslizedclient: SASLizedClient.class Hexdump.class
 	java -cp . SASLizedClient client.properties localhost 4567
 
 testsasl: killsaslizedserver saslizedserver SASLizedServer.class SASLizedClient.class
-	for i in 1 2 3 4 5 6 7 8 9 10; \
-	do \
-		java -cp . SASLizedClient client.properties localhost 4567; \
-	done
-	make killsaslizedserver
+	java -cp . SASLizedClient client.properties localhost 4567 &
+	java -cp . SASLizedClient client.properties localhost 4567 &
+	java -cp . SASLizedClient client.properties localhost 4567 &
+	java -cp . SASLizedClient client.properties localhost 4567 &
+	java -cp . SASLizedClient client.properties localhost 4567 &
+	java -cp . SASLizedClient client.properties localhost 4567 &
 
 testsasl_nio: killsaslizedserver saslizedserver_nio SASLizedServerNio.class SASLizedClient.class
-	for i in 1 2 3 4 5 6 7 8 9 10; \
 	do \
 		java -cp . SASLizedClient client.properties localhost 4567; \
 	done
