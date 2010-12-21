@@ -19,13 +19,19 @@ import java.io.IOException;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class SASLizedServer {
+
+  private ExecutorService executors = Executors.newFixedThreadPool(10);
   
   public static void main(String[] args) throws SaslException {
+    new SASLizedServer().launch(Integer.parseInt(args[0]));
+  }
     
-    byte[] challenge;
-    byte[] response;
-    
+  public void launch(final int serverPort) {
+
     // Lots of diagnostics.
     //    System.setProperty("sun.security.krb5.debug", "true");
     System.setProperty("javax.security.sasl.level","FINEST");
@@ -63,19 +69,13 @@ public class SASLizedServer {
     //   principal="$SERVICE_NAME/$HOST_NAME";
     // };
 
-
-
-    final Integer serverPort = Integer.parseInt(args[0]); // Port that the server will listen on.
-
-    final Subject subject;
     try {
       // Login to the KDC.
       LoginContext loginCtx = null;
       System.out.println("Authenticating using '" + SERVICE_SECTION_OF_JAAS_CONF_FILE + "' section of '" + JAAS_CONF_FILE_NAME + "'.");
       loginCtx = new LoginContext(SERVICE_SECTION_OF_JAAS_CONF_FILE);
       loginCtx.login();
-      subject = loginCtx.getSubject();
-
+      Subject subject = loginCtx.getSubject();
 
       ServerSocket serverListenSocket = null;
       try {
@@ -94,34 +94,64 @@ public class SASLizedServer {
         Socket clientConnectionSocket = null;
 
         clientConnectionSocket = serverListenSocket.accept();
+        executors.execute(new Worker(clientConnectionSocket,subject,SERVICE_PRINCIPAL_NAME, HOST_NAME,clientConnectionNumber++));
+      }
+    }
+    catch (Exception e) {
+      System.err.println("Launch Exception: " + e);
+      e.printStackTrace();
+      System.exit(-1);
+    }
+  }
 
+  private class Worker implements Runnable {
+    private Socket clientConnectionSocket;
+    private Subject serverSubject;
+    private String SERVICE_PRINCIPAL_NAME;
+    private String HOST_NAME;
+    private int clientConnectionNumber;
+
+    Worker(Socket s, Subject subj, String servicePrincipalName, String hostName, int clientConnectionNum) {
+      clientConnectionSocket = s;
+      serverSubject = subj;
+      SERVICE_PRINCIPAL_NAME = servicePrincipalName;
+      HOST_NAME = hostName;
+      clientConnectionNumber = clientConnectionNum;
+    }
+
+    public void run() {
+      try {
         final DataInputStream inStream = new DataInputStream(clientConnectionSocket.getInputStream());
         final DataOutputStream outStream = new DataOutputStream(clientConnectionSocket.getOutputStream());
         System.out.println("Server: Connected.");
         System.out.println("Server: Doing SASL authentication.");
         
-        SaslServer saslServer = createSaslServer(subject, "GSSAPI",SERVICE_PRINCIPAL_NAME,HOST_NAME);
+        SaslServer saslServer = createSaslServer(serverSubject, "GSSAPI",SERVICE_PRINCIPAL_NAME,HOST_NAME);
         
         // Perform authentication steps until authentication process is finished.
         while (!saslServer.isComplete()) {
           exchangeTokens(saslServer,inStream,outStream);
         }
-
+        
         System.out.println("Server: Successfully authenticated client with authorization id: " + saslServer.getAuthorizationID());
         System.out.println("Server: Writing actual message payload after authentication.");
         outStream.writeInt(clientConnectionNumber);
-        System.out.println("Server: Finished writing to client: closing client session.");
-        clientConnectionSocket.close();
-
-        clientConnectionNumber++;
+        System.out.println("Server: Finished writing to client.");
+      }
+      catch (Exception e) {
+        System.err.println("Worker Exception: " + e);
+        e.printStackTrace();
+      }
+      finally {
+        try {
+          clientConnectionSocket.close();
+        }
+        catch (Exception e) {
+          System.err.println("Worker Exception closing client connection socket: " + e);
+          e.printStackTrace();
+        }
       }
     }
-    catch (Exception e) {
-      System.err.println("Exception: " + e);
-      e.printStackTrace();
-      System.exit(-1);
-    }
-    
   }
 
   private static SaslServer createSaslServer(final Subject subject, final String mech,final String principalName,final String hostName) {
