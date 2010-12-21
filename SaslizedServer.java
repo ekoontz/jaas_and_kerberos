@@ -90,67 +90,35 @@ public class SASLizedServer {
       int clientConnectionNumber = 0;
 
       while(true) {
-        System.out.println("WAITING FOR CONNECTIONS...");
+        System.out.println("Server: Waiting for connections..");
         Socket clientConnectionSocket = null;
-        try { 
-          clientConnectionSocket = serverListenSocket.accept();
-          try { 
-            final DataInputStream inStream = new DataInputStream(clientConnectionSocket.getInputStream());
-            final DataOutputStream outStream = new DataOutputStream(clientConnectionSocket.getOutputStream());
-            System.out.println("CONNECTED.");
-            System.out.println("DOING SASL AUTHENTICATION.");
 
-            SaslServer saslServer = createSaslServer(subject, "GSSAPI",SERVICE_PRINCIPAL_NAME,HOST_NAME);
+        clientConnectionSocket = serverListenSocket.accept();
 
-            // Perform authentication steps until authentication process is finished.
-            while (!saslServer.isComplete()) {
-              try {
-                exchangeTokens(saslServer,inStream,outStream);
-              }
-              catch (SaslException e) {
-                System.err.println("Error authenticating client in the midst of exchanging authentication tokens.");
-                e.printStackTrace();
-                // Shutdown client connection: since authentication failed, 
-                // we don't want to have anything more to do with this client.
-                if (clientConnectionSocket != null) {
-                  try {
-                    clientConnectionSocket.close();
-                    throw e;
-                  }
-                  catch (Exception ex) {
-                    System.out.println("Error closing clientConnectionSocket().");
-                  }
-                }
-                break;
-              }
-            }
-            System.out.println("Finished authenticated client: authorization id: " + saslServer.getAuthorizationID());
-            System.out.println("Writing actual message payload after authentication.");
-            outStream.writeInt(clientConnectionNumber);
-            clientConnectionNumber++;
-          }
-          catch (SaslException e) {
-            System.err.println("Error creating SaslServer object using service principal " + SERVICE_PRINCIPAL_NAME);
-            e.printStackTrace();
-          }
+        final DataInputStream inStream = new DataInputStream(clientConnectionSocket.getInputStream());
+        final DataOutputStream outStream = new DataOutputStream(clientConnectionSocket.getOutputStream());
+        System.out.println("Server: Connected.");
+        System.out.println("Server: Doing SASL authentication.");
+        
+        SaslServer saslServer = createSaslServer(subject, "GSSAPI",SERVICE_PRINCIPAL_NAME,HOST_NAME);
+        
+        // Perform authentication steps until authentication process is finished.
+        while (!saslServer.isComplete()) {
+          exchangeTokens(saslServer,inStream,outStream);
         }
-        catch (IOException e) { // serverListenSocket.accept() failed.
-          System.err.println("Could not accept connections: sock.accept() failure : " + e);
-          System.exit(-1);
-          e.printStackTrace();
-          if (clientConnectionSocket != null) {
-            try {
-              clientConnectionSocket.close();
-            }
-            catch (Exception ex) {
-              System.out.println("Error closing clientConnectionSocket().");
-            }
-          }
-        }
+
+        System.out.println("Server: Successfully authenticated client with authorization id: " + saslServer.getAuthorizationID());
+        System.out.println("Server: Writing actual message payload after authentication.");
+        outStream.writeInt(clientConnectionNumber);
+        System.out.println("Server: Finished writing to client: closing client session.");
+        clientConnectionSocket.close();
+
+        clientConnectionNumber++;
       }
     }
-    catch (LoginException e) {
-      System.err.println("Kerberos login failure : " + e);
+    catch (Exception e) {
+      System.err.println("Exception: " + e);
+      e.printStackTrace();
       System.exit(-1);
     }
     
