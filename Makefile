@@ -1,14 +1,14 @@
 .PHONY: all clean test compile killserver waitforkill \
  start_server_socket start_server_nio start_client \
  run_server test_socket test_nio fred saslizedserver \
- saslizedclient testsasl killsaslizedserver
+ saslizedclient testsasl killsaslizedserver io
 
 all: compile README.html
 
 compile: GSSizedServer.class GSSizedServerNio.class GSSizedClient.class Hexdump.class FredSasl.class
 
 clean: 
-	-rm *.class README.html
+	-rm *.class io/*.class README.html
 
 killserver:
 	echo "killing GSSizedServer java processes.."
@@ -67,7 +67,9 @@ testsasl: killsaslizedserver saslizedserver SASLizedServer.class SASLizedClient.
 	java -cp . SASLizedClient client.properties localhost 4567 &
 	java -cp . SASLizedClient client.properties localhost 4567 &
 
-testsasl_nio: killsaslizedserver saslizedserver_nio SASLizedServerNio.class SASLizedClient.class
+io: io/AcceptSelectorHandler.class io/CallbackErrorHandler.class io/ConnectorSelectorHandler.class io/ProtocolDecoder.class io/ReadWriteSelectorHandler.class io/SelectorHandler.class io/SelectorThread.class
+
+testsasl_nio: killsaslizedserver saslizedserver_nio SASLizedServerNio.class SASLizedClient.class io
 	do \
 		java -cp . SASLizedClient client.properties localhost 4567; \
 	done

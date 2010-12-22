@@ -29,15 +29,29 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
 
+import java.util.List;
+import java.util.ArrayList;
+
+// Nuno Santos' selector handler package.
+import io.SelectorHandler;
+import io.SelectorThread;
+
+
 //import java.util.HashMap; // GSSContext
 import java.util.Iterator;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+
 public class SASLizedServerNio {
+  private ExecutorService executors = Executors.newFixedThreadPool(10);
+
   public static void main(String[] args) throws SaslException {
-    
-    byte[] challenge;
-    byte[] response;
-    
+    new SASLizedServerNio().launch(Integer.parseInt(args[0]));
+  }
+
+  public void launch(final int serverPort) {
+
     // Lots of diagnostics.
     //    System.setProperty("sun.security.krb5.debug", "true");
     System.setProperty("javax.security.sasl.level","FINEST");
@@ -82,20 +96,21 @@ public class SASLizedServerNio {
 
       // 1. Login to Kerberos.
       LoginContext loginCtx = null;
-      System.out.println("Authenticating using '" + SERVICE_SECTION_OF_JAAS_CONF_FILE + "' section of '" + JAAS_CONF_FILE_NAME + "'.");
+      System.out.println("Authenticating using '" + SERVICE_SECTION_OF_JAAS_CONF_FILE + "' section of '" + JAAS_CONF_FILE_NAME + "'...");
       loginCtx = new LoginContext(SERVICE_SECTION_OF_JAAS_CONF_FILE);
       loginCtx.login();
       subject = loginCtx.getSubject();
+
+      System.out.println("..authenticated.");
 
 
       // 1.5 NIO Setup
 
       // TODO: Convert from GSSAPI to SASL
       //      GSSContext clientContext = null;
-      final Integer serverPort = Integer.parseInt(args[0]); // Port that the server will listen on.
 
       Selector selector = SelectorProvider.provider().openSelector();
-      
+
       // Create a new non-blocking server socket channel
       ServerSocketChannel serverChannel = ServerSocketChannel.open();
       serverChannel.configureBlocking(false);
@@ -116,7 +131,8 @@ public class SASLizedServerNio {
       int clientConnectionNumber = 0;
       // 2. Process client connections.
       while(true) {
-        System.out.println("WAITING FOR CONNECTIONS...");
+
+        System.out.println("Waiting for connections from clients..");
 
         selector.select();
         Iterator selectedKeys = selector.selectedKeys().iterator();
@@ -129,7 +145,6 @@ public class SASLizedServerNio {
             continue;
           }
           
-
           // Obtain the interest of the key
           int readyOps = sk.readyOps();
           // Disable the interest for the operation
@@ -138,20 +153,41 @@ public class SASLizedServerNio {
           sk.interestOps(
                          sk.interestOps() & ~readyOps);
     
+          /*          // Retrieve the handler associated with 
+          // this key
+          SelectorHandler handler = 
+            (SelectorHandler) sk.attachment();   
+          */
           // Check what event is available and deal with it according to its abilities.
           if (sk.isAcceptable()) {
             System.out.println("accepting connection from client.");
 
+
             // For an accept to be pending the channel must be a server socket channel.
             ServerSocketChannel serverSocketChannel = (ServerSocketChannel) sk.channel();
-            
+
             // Accept the connection and make it non-blocking
-            SocketChannel socketChannel = serverSocketChannel.accept();
-            socketChannel.configureBlocking(false);
-            
-            // Register the new SocketChannel with our Selector, indicating
-            // we'd like to be notified when there's data waiting to be read
-            socketChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+            SocketChannel clientChannel = serverSocketChannel.accept();
+
+            if (true) {
+              System.out.println("closing client right away (for now).");
+              clientChannel.close();
+            }
+            else {              
+              clientChannel.configureBlocking(false);
+              
+              // Register the new SocketChannel with our Selector, indicating
+              // we'd like to be notified when there's data waiting to be read
+              clientChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+
+
+              System.out.println("Attaching read/write handler to this key...");
+              sk.attach(new Worker(clientChannel,subject,SERVICE_PRINCIPAL_NAME, HOST_NAME,clientConnectionNumber++));
+              System.out.println("attached.");
+              
+            }
+
+
           } else {
             if (sk.isReadable()) {
               System.out.println("client is readable.");
@@ -163,7 +199,7 @@ public class SASLizedServerNio {
           }
 
             // 2.1. Create Sasl Server.
-            SaslServer saslServer = createSaslServer(subject, "GSSAPI",SERVICE_PRINCIPAL_NAME,HOST_NAME);
+          //            SaslServer saslServer = createSaslServer(subject, "GSSAPI",SERVICE_PRINCIPAL_NAME,HOST_NAME);
 
             /*            // 2.2. Perform authentication steps until authentication process is finished.
             while (!saslServer.isComplete()) {
@@ -176,7 +212,8 @@ public class SASLizedServerNio {
             outStream.writeInt(clientConnectionNumber);
             */
         }
-         
+        
+        System.out.println("end of while(true) loop; continuing at top.");
           
       }
 
@@ -211,14 +248,66 @@ public class SASLizedServerNio {
     }
   }
 
+
+  private class Worker implements Runnable {
+    private Socket clientConnectionSocket;
+    private Subject serverSubject;
+    private String SERVICE_PRINCIPAL_NAME;
+    private String HOST_NAME;
+    private int clientConnectionNumber;
+
+    Worker(SocketChannel s, Subject subj, String servicePrincipalName, String hostName, int clientConnectionNum) {
+      clientConnectionSocket = s.socket();
+      serverSubject = subj;
+      SERVICE_PRINCIPAL_NAME = servicePrincipalName;
+      HOST_NAME = hostName;
+      clientConnectionNumber = clientConnectionNum;
+    }
+
+    public void run() {
+      try {
+        final DataInputStream inStream = new DataInputStream(clientConnectionSocket.getInputStream());
+        final DataOutputStream outStream = new DataOutputStream(clientConnectionSocket.getOutputStream());
+        System.out.println("Server: Connected.");
+        System.out.println("Server: Doing SASL authentication.");
+        
+        SaslServer saslServer = createSaslServer(serverSubject, "GSSAPI",SERVICE_PRINCIPAL_NAME,HOST_NAME);
+        
+        // Perform authentication steps until authentication process is finished.
+        while (!saslServer.isComplete()) {
+          exchangeTokens(saslServer,inStream,outStream);
+        }
+        
+        System.out.println("Server: Successfully authenticated client with authorization id: " + saslServer.getAuthorizationID());
+        System.out.println("Server: Writing actual message payload after authentication.");
+        outStream.writeInt(clientConnectionNumber);
+        System.out.println("Server: Finished writing to client.");
+      }
+      catch (Exception e) {
+        System.err.println("Worker Exception: " + e);
+        e.printStackTrace();
+      }
+      finally {
+        try {
+          clientConnectionSocket.close();
+        }
+        catch (Exception e) {
+          System.err.println("Worker Exception closing client connection socket: " + e);
+          e.printStackTrace();
+        }
+      }
+    }
+  }
+
   private static SaslServer createSaslServer(final Subject subject, final String mech,final String principalName,final String hostName) {
     try {
       return Subject.doAs(subject,new PrivilegedExceptionAction<SaslServer>() {
           public SaslServer run() {
             SaslServer saslServer = null;
             try {
+              System.out.println("creating SaslServer with service subject..");
               saslServer = Sasl.createSaslServer(mech,principalName,hostName,null,new ServerCallbackHandler());
-              System.out.println("DONE CREATING SERVER.");
+              System.out.println("..done.");
             }
             catch (SaslException e) {
               System.err.println("Error creating SaslServer.");
