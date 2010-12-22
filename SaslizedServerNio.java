@@ -129,6 +129,15 @@ public class SASLizedServerNio {
             continue;
           }
           
+
+          // Obtain the interest of the key
+          int readyOps = sk.readyOps();
+          // Disable the interest for the operation
+          // that is ready. This prevents the same 
+          // event from being raised multiple times.
+          sk.interestOps(
+                         sk.interestOps() & ~readyOps);
+    
           // Check what event is available and deal with it according to its abilities.
           if (sk.isAcceptable()) {
             System.out.println("accepting connection from client.");
@@ -143,11 +152,15 @@ public class SASLizedServerNio {
             // Register the new SocketChannel with our Selector, indicating
             // we'd like to be notified when there's data waiting to be read
             socketChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
-          } else if (sk.isReadable()) {
-            System.out.println("client is readable.");
-          } else if (sk.isWritable()) {
-            System.out.println("client is writable.");
-            final SocketChannel socketChannel = (SocketChannel) sk.channel();
+          } else {
+            if (sk.isReadable()) {
+              System.out.println("client is readable.");
+            }
+            if (sk.isWritable()) {
+              System.out.println("client is writable.");
+              final SocketChannel socketChannel = (SocketChannel) sk.channel();
+            }
+          }
 
             // 2.1. Create Sasl Server.
             SaslServer saslServer = createSaslServer(subject, "GSSAPI",SERVICE_PRINCIPAL_NAME,HOST_NAME);
@@ -162,11 +175,10 @@ public class SASLizedServerNio {
             System.out.println("Writing actual message payload after authentication.");
             outStream.writeInt(clientConnectionNumber);
             */
-
-          }
+        }
          
           
-        }
+      }
 
         /*
 
@@ -185,8 +197,7 @@ public class SASLizedServerNio {
 
 
 
-        clientConnectionNumber++;
-      }
+      //        clientConnectionNumber++;
     }
     catch (IOException e) {
       System.err.println("IOException: : " + e);
