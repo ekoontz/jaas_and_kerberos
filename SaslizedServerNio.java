@@ -160,6 +160,9 @@ public class SASLizedServerNio {
           */
           // Check what event is available and deal with it according to its abilities.
           if (sk.isAcceptable()) {
+            
+            // FIXME: move to worker.
+
             System.out.println("accepting connection from client.");
 
 
@@ -169,24 +172,16 @@ public class SASLizedServerNio {
             // Accept the connection and make it non-blocking
             SocketChannel clientChannel = serverSocketChannel.accept();
 
-            if (true) {
-              System.out.println("closing client right away (for now).");
-              clientChannel.close();
-            }
-            else {              
-              clientChannel.configureBlocking(false);
-              
-              // Register the new SocketChannel with our Selector, indicating
-              // we'd like to be notified when there's data waiting to be read
-              clientChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
-
-
-              System.out.println("Attaching read/write handler to this key...");
-              sk.attach(new Worker(clientChannel,subject,SERVICE_PRINCIPAL_NAME, HOST_NAME,clientConnectionNumber++));
-              System.out.println("attached.");
-              
-            }
-
+            clientChannel.configureBlocking(false);
+            
+            // Register the new SocketChannel with our Selector, indicating
+            // we'd like to be notified when there's data waiting to be read
+            clientChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+            
+            
+            System.out.println("Attaching read/write handler to this key...");
+            sk.attach(new ClientWorker(clientChannel,subject,SERVICE_PRINCIPAL_NAME, HOST_NAME,clientConnectionNumber++));
+            System.out.println("attached.");
 
           } else {
             if (sk.isReadable()) {
@@ -213,8 +208,6 @@ public class SASLizedServerNio {
             */
         }
         
-        System.out.println("end of while(true) loop; continuing at top.");
-          
       }
 
         /*
@@ -249,19 +242,24 @@ public class SASLizedServerNio {
   }
 
 
-  private class Worker implements Runnable {
+  private class ClientWorker implements Runnable {
     private Socket clientConnectionSocket;
     private Subject serverSubject;
     private String SERVICE_PRINCIPAL_NAME;
     private String HOST_NAME;
     private int clientConnectionNumber;
 
-    Worker(SocketChannel s, Subject subj, String servicePrincipalName, String hostName, int clientConnectionNum) {
+    ClientWorker(SocketChannel s, Subject subj, String servicePrincipalName, String hostName, int clientConnectionNum) {
+
+      System.out.println("ClientWorker(): initializing.");
+
       clientConnectionSocket = s.socket();
       serverSubject = subj;
       SERVICE_PRINCIPAL_NAME = servicePrincipalName;
       HOST_NAME = hostName;
       clientConnectionNumber = clientConnectionNum;
+
+      System.out.println("ClientWorker(): initialized.");
     }
 
     public void run() {
@@ -284,7 +282,7 @@ public class SASLizedServerNio {
         System.out.println("Server: Finished writing to client.");
       }
       catch (Exception e) {
-        System.err.println("Worker Exception: " + e);
+        System.err.println("ClientWorker Exception: " + e);
         e.printStackTrace();
       }
       finally {
@@ -292,7 +290,7 @@ public class SASLizedServerNio {
           clientConnectionSocket.close();
         }
         catch (Exception e) {
-          System.err.println("Worker Exception closing client connection socket: " + e);
+          System.err.println("ClientWorker Exception closing client connection socket: " + e);
           e.printStackTrace();
         }
       }
