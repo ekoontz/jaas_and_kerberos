@@ -1,14 +1,14 @@
 .PHONY: all clean test compile killserver waitforkill \
  start_server_socket start_server_nio start_client \
  run_server test_socket test_nio fred saslizedserver \
- saslizedclient testsasl killsaslizedserver io
+ saslizedclient testsasl killsaslizedserver nio_server
 
 all: compile README.html
 
-compile: GSSizedServer.class GSSizedServerNio.class GSSizedClient.class Hexdump.class FredSasl.class
+compile: GSSizedServer.class GSSizedServerNio.class GSSizedClient.class Hexdump.class 
 
 clean: 
-	-rm *.class io/*.class README.html
+	-rm *.class README.html
 
 killserver:
 	echo "killing GSSizedServer java processes.."
@@ -18,6 +18,9 @@ waitforkill:
 
 %.class: %.java
 	javac -Xlint:unchecked $< 
+
+nio_server: NIOServer.class
+	java NIOServer 4567
 
 test: clean
 	make test_socket && sleep 5 && make test_nio
@@ -67,9 +70,7 @@ testsasl: killsaslizedserver saslizedserver SASLizedServer.class SASLizedClient.
 	java -cp . SASLizedClient client.properties localhost 4567 &
 	java -cp . SASLizedClient client.properties localhost 4567 &
 
-io: io/AcceptSelectorHandler.class io/CallbackErrorHandler.class io/ConnectorSelectorHandler.class io/ProtocolDecoder.class io/ReadWriteSelectorHandler.class io/SelectorHandler.class io/SelectorThread.class
-
-testsasl_nio: killsaslizedserver saslizedserver_nio SASLizedServerNio.class SASLizedClient.class io
+testsasl_nio: killsaslizedserver saslizedserver_nio SASLizedServerNio.class SASLizedClient.class
 	do \
 		java -cp . SASLizedClient client.properties localhost 4567; \
 	done
