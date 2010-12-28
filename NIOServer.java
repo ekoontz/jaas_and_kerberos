@@ -12,6 +12,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
+import java.nio.channels.CancelledKeyException;
 
 import java.security.PrivilegedAction;
 
@@ -77,12 +78,13 @@ public class NIOServer {
     clientToHandler = new HashMap<SelectionKey,Integer>();
 
     Integer clientSerialNum = 0;
-
+    String clientMessage = "";
 
     System.out.println("start main listen loop..");
     while(true) {
 
       selector.select();
+
       Iterator selectedKeys = selector.selectedKeys().iterator();
       while (selectedKeys.hasNext()) {
         final SelectionKey sk = (SelectionKey) selectedKeys.next();
@@ -112,58 +114,85 @@ public class NIOServer {
           socketChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
           
 
-        } else if (sk.isReadable()) {
+        } else { 
+          if (sk.isReadable()) {
 
-          if (clientToHandler.get(sk) == null) {
-            clientToHandler.put(sk,clientSerialNum++);
-          }
-
-          System.out.println("Reading input from client #" + clientToHandler.get(sk));
-
-          final SocketChannel socketChannel = (SocketChannel) sk.channel();
-
-          ByteBuffer readBuffer = ByteBuffer.allocate(8192);
-          readBuffer.clear();
-          
-          // Attempt to read off the channel
-          int numRead = 0;
-          try {
-            numRead = socketChannel.read(readBuffer);
-            if (numRead != -1) {
-              readBuffer.flip();
-              System.out.println("read: " + numRead + " bytes.");
-              byte[] bytes = new byte[8192];
-              readBuffer.get(bytes,0,numRead);
-              Hexdump.hexdump(System.out,bytes,0,numRead);
-              ShowClients();
+            if (clientToHandler.get(sk) == null) {
+              clientToHandler.put(sk,clientSerialNum++);
             }
-          } catch (IOException e) {
-            System.err.println("IOEXCEPTION: GIVING UP ON THIS CLIENT.");
-            // The remote forcibly closed the connection, cancel
-            // the selection key and close the channel.
-            clientToHandler.remove(sk);
-            sk.cancel();
+            
+            System.out.println("Reading input from client #" + clientToHandler.get(sk));
+            
+            final SocketChannel socketChannel = (SocketChannel) sk.channel();
+            
+            ByteBuffer readBuffer = ByteBuffer.allocate(8192);
+            readBuffer.clear();
+            
+            // Attempt to read off the channel
+            int numRead = 0;
             try {
-              sk.channel().close();
+              numRead = socketChannel.read(readBuffer);
+              if (numRead != -1) {
+                readBuffer.flip();
+                System.out.println("read: " + numRead + " bytes.");
+                byte[] bytes = new byte[8192];
+                readBuffer.get(bytes,0,numRead);
+                Hexdump.hexdump(System.out,bytes,0,numRead);
+                ShowClients();
+                clientMessage = new String(bytes);
+              }
+            } catch (IOException e) {
+              System.err.println("IOEXCEPTION: GIVING UP ON THIS CLIENT.");
+              // The remote forcibly closed the connection, cancel
+              // the selection key and close the channel.
+              clientToHandler.remove(sk);
+              sk.cancel();
+              try {
+                sk.channel().close();
+              }
+              catch (IOException ioe) {
+                System.err.println("IoException trying to close socket.");
+                ioe.printStackTrace();
+              }
             }
-            catch (IOException ioe) {
-              System.err.println("IoException trying to close socket.");
-              ioe.printStackTrace();
+            
+            if (numRead == -1) {
+              // Remote entity shut the socket down cleanly. Do the
+              // same from our end and cancel the channel.
+              
+              System.out.println("Nothing left to read from client. Closing client connection: " + clientToHandler.get(sk));
+              try {
+                clientToHandler.remove(sk);
+                sk.channel().close();
+                
+                // dump current client->context mapping to console.
+                ShowClients();
+                
+              }
+              catch (IOException ioe) {
+                System.err.println("IoException trying to close socket.");
+                ioe.printStackTrace();
+              }                            
+              sk.cancel();
             }
           }
-                      
-          if (numRead == -1) {
-            // Remote entity shut the socket down cleanly. Do the
-            // same from our end and cancel the channel.
+          
+          boolean isWritable = false;
+          try {
+            isWritable = sk.isWritable();
+          }
+          catch (CancelledKeyException e) {
+            System.out.println("CancelledKeyException: maybe client closed.");
+            e.printStackTrace();
 
-            System.out.println("Nothing left to read from client. Closing client connection: " + clientToHandler.get(sk));
+            System.out.println("Closing client connection: " + clientToHandler.get(sk));
             try {
               clientToHandler.remove(sk);
               sk.channel().close();
-
+              
               // dump current client->context mapping to console.
               ShowClients();
-
+              
             }
             catch (IOException ioe) {
               System.err.println("IoException trying to close socket.");
@@ -171,8 +200,24 @@ public class NIOServer {
             }                            
             sk.cancel();
           }
-        }
 
+          if (isWritable) {
+            ByteBuffer writeBuffer = ByteBuffer.allocate(8192);
+            writeBuffer.clear();
+
+            if (!(clientMessage.equals(""))) {
+
+              final String response = "Someone said: " + clientMessage;
+              System.out.println("writing message: " + response);
+              
+              writeBuffer.put(response.getBytes(),0,8192);
+              writeBuffer.flip();
+              ((SocketChannel)sk.channel()).write(writeBuffer);
+            }
+
+          }
+          
+        }
       }
     }
   }
