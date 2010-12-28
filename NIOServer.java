@@ -1,9 +1,4 @@
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.IOException;
-
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
 import java.nio.ByteBuffer;
@@ -14,19 +9,11 @@ import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
 import java.nio.channels.CancelledKeyException;
 
-import java.security.PrivilegedAction;
-
 import java.util.Iterator;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.Properties;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
-
-import javax.security.auth.Subject;
-import javax.security.auth.login.LoginContext;
-import javax.security.auth.login.LoginException;
 
 public class NIOServer {
   // selection key => handler map (start with Integer; later use callbacks of some kind.
