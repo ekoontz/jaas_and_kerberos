@@ -32,34 +32,11 @@ import org.ietf.jgss.Oid;
 public class NIOServer {
   
   public static void main(String[] args) 
-    throws IOException, GSSException {
-    // 1. Prepare to authenticate with Kerberos.
-    
-    // 1.1. Oid mechanism = use Kerberos V5 as the security mechanism.
-    Oid krb5Oid = new Oid( "1.2.840.113554.1.2.2");
-    
-    // 1.2 Set Kerberos Properties
-    System.setProperty( "sun.security.krb5.debug", "true");
-    System.setProperty( "java.security.auth.login.config", "./jaas.conf");
-    System.setProperty( "javax.security.auth.useSubjectCredsOnly", "true");
-    
-    // 2. Login to the KDC.
-    LoginContext loginCtx = null;
-    // "Server" refers to a section of the JAAS configuration in the jaas.conf file.
-    Subject subject = null;
-    try {
-      loginCtx = new LoginContext( "Server");
-      loginCtx.login();
-      subject = loginCtx.getSubject();
-    }
-    catch (LoginException e) {
-      System.err.println("Login failure : " + e);
-      System.exit(-1);
-    }
+    throws IOException {
     // Obtain the command-line arguments and parse the port number
     
     if (args.length != 1) {
-      System.err.println("Usage: java <options> GSSizedServer <localPort>");
+      System.err.println("Usage: java <options> NIOServer <localPort>");
       System.exit(-1);
     }
     
@@ -83,10 +60,9 @@ public class NIOServer {
     serverChannel.register(selector, SelectionKey.OP_ACCEPT);
     // </1. NIO>
 
-    GSSContext clientContext = null;
+    // selection key => handler map (start with Integer; later use callbacks of some kind.
+    final HashMap<SelectionKey,Integer> clientToHandler = new HashMap<SelectionKey,Integer>();
 
-    // selection key => context map.
-    final HashMap<SelectionKey,GSSContext> clientToContext = new HashMap<SelectionKey,GSSContext>();
 
     System.out.println("start main listen loop..");
     while(true) {
@@ -117,107 +93,65 @@ public class NIOServer {
           // we'd like to be notified when there's data waiting to be read
           socketChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
         } else if (sk.isReadable()) {
-          System.out.println("reading context from channel.");
+          System.out.println("reading input from client..");
           final SocketChannel socketChannel = (SocketChannel) sk.channel();
+
+          ByteBuffer readBuffer = ByteBuffer.allocate(8192);
+          readBuffer.clear();
           
-          clientContext =
-            Subject.doAs( subject, new PrivilegedAction<GSSContext>() {
-                public GSSContext run() {
-                  try {
-                    GSSManager manager = GSSManager.getInstance();
-                    GSSContext context = manager.createContext( (GSSCredential) null);
-                    while (!context.isEstablished()) {
-                      System.out.println("GSSizedServer: context not yet established: accepting from client.");
-                      
-                      ByteBuffer readBuffer = ByteBuffer.allocate(8192);
-                      readBuffer.clear();
-                      
-                      // Attempt to read off the channel
-                      int numRead = 0;
-                      try {
-                        numRead = socketChannel.read(readBuffer);
-                        if (numRead != -1) {
-                          readBuffer.flip();
-                          System.out.println("read: " + numRead + " bytes.");
-                          byte[] bytes = new byte[8192];
-                          readBuffer.get(bytes,0,numRead);
-                          Hexdump.hexdump(System.out,bytes,0,numRead);
-                          context.acceptSecContext(bytes,0,numRead);
-                        }
-                      } catch (IOException e) {
-                        System.err.println("IOEXCEPTION: GIVING UP ON THIS CLIENT.");
-                        // The remote forcibly closed the connection, cancel
-                        // the selection key and close the channel.
-                        clientToContext.remove(sk);
-                        sk.cancel();
-                        try {
-                          sk.channel().close();
-                        }
-                        catch (IOException ioe) {
-                          System.err.println("IoException trying to close socket.");
-                          ioe.printStackTrace();
-                        }
-                        return null;
-                      }
-                      
-                      if (numRead == -1) {
-                        // Remote entity shut the socket down cleanly. Do the
-                        // same from our end and cancel the channel.
-                        System.out.println("Nothing left to read from client: removing selection key from clientToContext.");
-                        clientToContext.remove(sk);
-                        try {
-                          sk.channel().close();
-                        }
-                        catch (IOException ioe) {
-                          System.err.println("IoException trying to close socket.");
-                          ioe.printStackTrace();
-                        }                            
-                        sk.cancel();
-                        return null;
-                      }
-                    }
-                    System.out.println("returning context now.");
-                    return context;
-                  }
-                  catch (GSSException e) {
-                    System.err.println("GSS EXCEPTION: GIVING UP ON THIS CLIENT.");
-                    e.printStackTrace();
-                    clientToContext.remove(sk);
-                    try {
-                      sk.channel().close();
-                    }
-                    catch (IOException ioe) {
-                      System.err.println("IoException trying to close socket.");
-                      ioe.printStackTrace();
-                    }
-                    sk.cancel();
-                    return null;
-                  }
-                }
-              }
-              );
-          System.out.println("done with client context-acceptance.");
-          if (clientContext != null) {
-            clientToContext.put(sk,clientContext);
-            System.out.println("GSSizedServer: Client authenticated: (principal: " + clientContext.getSrcName() + ")");
-            // ..conduct business with client since it's authenticated and optionally encrypted too..            
-          }
-          
-          // dump current client->context mapping to console.
-          System.out.println("===<current clients>===");
-          for (SelectionKey each : clientToContext.keySet()) {
-            GSSContext eachContext = null;
-            if ((eachContext = clientToContext.get(each)) != null) {
-              System.out.println("client principal: " + eachContext.getSrcName());
+          // Attempt to read off the channel
+          int numRead = 0;
+          try {
+            numRead = socketChannel.read(readBuffer);
+            if (numRead != -1) {
+              readBuffer.flip();
+              System.out.println("read: " + numRead + " bytes.");
+              byte[] bytes = new byte[8192];
+              readBuffer.get(bytes,0,numRead);
+              Hexdump.hexdump(System.out,bytes,0,numRead);
+            }
+          } catch (IOException e) {
+            System.err.println("IOEXCEPTION: GIVING UP ON THIS CLIENT.");
+            // The remote forcibly closed the connection, cancel
+            // the selection key and close the channel.
+            sk.cancel();
+            try {
+              sk.channel().close();
+            }
+            catch (IOException ioe) {
+              System.err.println("IoException trying to close socket.");
+              ioe.printStackTrace();
             }
           }
-          System.out.println("===</current clients>===");
-        } else if (sk.isWritable()) {
-          //    .. write to client ..
+                      
+          if (numRead == -1) {
+            // Remote entity shut the socket down cleanly. Do the
+            // same from our end and cancel the channel.
+
+            // dump current client->context mapping to console.
+            System.out.println("===<current clients>===");
+            for (SelectionKey each : clientToHandler.keySet()) {
+              Integer eachHandler;
+              if ((eachHandler = clientToHandler.get(each)) != null) {
+                System.out.println("client handler: " + eachHandler);
+              }
+            }
+            System.out.println("===</current clients>===");
+
+            System.out.println("Nothing left to read from client. Closing client connection.");
+            try {
+              sk.channel().close();
+            }
+            catch (IOException ioe) {
+              System.err.println("IoException trying to close socket.");
+              ioe.printStackTrace();
+            }                            
+            sk.cancel();
+          }
         }
+
       }
     }
-
   }
-
 }
+
