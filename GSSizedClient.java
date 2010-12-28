@@ -91,7 +91,7 @@ public class GSSizedClient {
       outStream = new DataOutputStream(socket.getOutputStream());
 
       // 4. Authenticate with service.
-      String servicePrincipalName = props.getProperty("service.principal.name");
+      final String servicePrincipalName = props.getProperty("service.principal.name");
       GSSManager manager = GSSManager.getInstance();
       GSSName serverName = null;
 
@@ -126,19 +126,15 @@ public class GSSizedClient {
                 return context;
               }
               catch (GSSException e) {
+                System.out.println("Client failed to obtain service ticket for service. To diagnose, look at /var/log/auth.log and grep for the last occurrence of UNKNOWN_SERVER. In this log line, Check the IP shown after the service principalName '" + servicePrincipalName + "'. For example, if the line reads: '...testclient@FOOFERS.ORG for testserver/192.168.0.102@FOOFERS.ORG...', the IP is 192.168.0.102. Make sure that the hostname (on which you are running the server) resolves to this IP : run 'host (IP)' where (IP) is the IP. Fixing your systems hostname resolution (DNS or /etc/hosts) will help if the host is not found.");
                 e.printStackTrace();
-                return null;
+                System.exit(-1);
               }
+              return null;
             }
           });
 
-        if (serviceTicket != null) {
-          System.out.println("Client obtained service ticket for service : " + servicePrincipalName);
-        }
-        else {
-          System.out.println("Client failed to obtain service ticket for service : " + servicePrincipalName);
-          System.exit(-1);
-        }
+        System.out.println("Client obtained service ticket for service : " + servicePrincipalName);
       }
       catch (GSSException e) {
         e.printStackTrace();
