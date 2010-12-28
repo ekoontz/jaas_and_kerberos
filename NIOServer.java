@@ -46,7 +46,7 @@ public class NIOServer {
   }
 
   public static void ShowClients() {
-    System.out.println("Total clients: " + clientNick.size());
+    System.out.println("Connected clients: " + clientNick.size());
   }
 
   public static void main(String[] args) 
@@ -70,7 +70,7 @@ public class NIOServer {
     serverChannel.configureBlocking(false);
     
     // Bind the server socket to the specified address and port
-    InetSocketAddress isa = new InetSocketAddress("localhost",localPort);
+    InetSocketAddress isa = new InetSocketAddress("192.168.56.1",localPort);
     serverChannel.socket().bind(isa);
     
     // Register the server socket channel, indicating an interest in 
@@ -130,13 +130,11 @@ public class NIOServer {
             System.out.println("Reading input from " + clientNick.get(sk));
             
             final SocketChannel socketChannel = (SocketChannel) sk.channel();
-            
-            ByteBuffer readBuffer = ByteBuffer.allocate(8192);
-            readBuffer.clear();
-            
-            // Attempt to read from the client.
             int numRead = 0;
+            // Attempt to read from the client.
             try {
+              ByteBuffer readBuffer = ByteBuffer.allocate(8192);
+              readBuffer.clear();
               numRead = socketChannel.read(readBuffer);
               if (numRead != -1) {
                 readBuffer.flip();
@@ -226,6 +224,11 @@ public class NIOServer {
           try {
             if (sk.isWritable()) {
 
+              // initialize client nickname if necessary.
+              if (clientNick.get(sk) == null) {
+                clientNick.put(sk,"client #"+clientSerialNum++);
+              }
+
               // initialize message queue for this client if necessary.
               if (inbox.get(sk) == null) {
                 inbox.put(sk,new LinkedList<String>());
@@ -239,10 +242,8 @@ public class NIOServer {
                   ByteBuffer writeBuffer = ByteBuffer.allocate(8192);
                   writeBuffer.clear();
                   
-                  System.out.println("writing message: " + messageForClient + " to client: " + clientNick.get(sk));
+                  System.out.println("writing " + messageForClient.getBytes().length + " bytes to client: " + clientNick.get(sk) + "\n");
                 
-                  System.out.println("number of bytes is: " + messageForClient.getBytes().length);
-
                   writeBuffer.put(messageForClient.getBytes(),0,Math.min(messageForClient.getBytes().length,8192));
                   writeBuffer.flip();
                   try {
