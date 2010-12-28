@@ -95,8 +95,7 @@ public class NIOServer {
         
         // Check what event is available and deal with it.
         if (sk.isAcceptable()) {
-          System.out.println("Accepting connection from client.");
-          clientToHandler.put(sk,clientSerialNum++);
+          System.out.println("Accepting connection from client with accept key : " + sk);
 
           ShowClients();
 
@@ -114,7 +113,12 @@ public class NIOServer {
           
 
         } else if (sk.isReadable()) {
-          System.out.println("Reading input from client: " + sk + " : =>" + clientToHandler.get(sk));
+
+          if (clientToHandler.get(sk) == null) {
+            clientToHandler.put(sk,clientSerialNum++);
+          }
+
+          System.out.println("Reading input from client #" + clientToHandler.get(sk));
 
           final SocketChannel socketChannel = (SocketChannel) sk.channel();
 
@@ -152,13 +156,14 @@ public class NIOServer {
             // Remote entity shut the socket down cleanly. Do the
             // same from our end and cancel the channel.
 
-            // dump current client->context mapping to console.
-            ShowClients();
-
-            System.out.println("Nothing left to read from client. Closing client connection: " + sk);
+            System.out.println("Nothing left to read from client. Closing client connection: " + clientToHandler.get(sk));
             try {
               clientToHandler.remove(sk);
               sk.channel().close();
+
+              // dump current client->context mapping to console.
+              ShowClients();
+
             }
             catch (IOException ioe) {
               System.err.println("IoException trying to close socket.");
