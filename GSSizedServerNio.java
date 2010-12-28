@@ -59,7 +59,7 @@ public class GSSizedServerNio {
     // Obtain the command-line arguments and parse the port number
     
     if (args.length != 1) {
-      System.err.println("Usage: java <options> GSSizedServer <localPort>");
+      System.err.println("Usage: java <options> GSSizedServerNio <localPort>");
       System.exit(-1);
     }
     
