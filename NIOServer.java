@@ -46,14 +46,7 @@ public class NIOServer {
   }
 
   public static void ShowClients() {
-    System.out.println("===<current clients>===");
-    for (SelectionKey each : clientNick.keySet()) {
-      String eachHandler;
-      if ((eachHandler = clientNick.get(each)) != null) {
-        System.out.println("key : " + each  + " => client handler: " + eachHandler);
-      }
-    }
-    System.out.println("===</current clients>===");
+    System.out.println("Total clients: " + clientNick.size());
   }
 
   public static void main(String[] args) 
@@ -109,8 +102,6 @@ public class NIOServer {
         // Check what event is available and deal with it.
         if (sk.isAcceptable()) {
           System.out.println("Accepting connection from client with accept key : " + sk);
-
-          ShowClients();
 
           // For an accept to be pending the channel must be a server socket channel.
           ServerSocketChannel serverSocketChannel = (ServerSocketChannel) sk.channel();
