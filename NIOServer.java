@@ -108,7 +108,8 @@ public class NIOServer {
           
 
         } else if (sk.isReadable()) {
-          System.out.println("Reading input from client.." + clientToHandler.get(sk));
+          System.out.println("Reading input from client: " + sk + " : =>" + clientToHandler.get(sk));
+
           final SocketChannel socketChannel = (SocketChannel) sk.channel();
 
           ByteBuffer readBuffer = ByteBuffer.allocate(8192);
@@ -124,11 +125,23 @@ public class NIOServer {
               byte[] bytes = new byte[8192];
               readBuffer.get(bytes,0,numRead);
               Hexdump.hexdump(System.out,bytes,0,numRead);
+
+              System.out.println("===<current clients>===");
+              for (SelectionKey each : clientToHandler.keySet()) {
+                Integer eachHandler;
+                if ((eachHandler = clientToHandler.get(each)) != null) {
+                  System.out.println("key : " + each  + " => client handler: " + eachHandler);
+                }
+              }
+              System.out.println("===</current clients>===");
+
+
             }
           } catch (IOException e) {
             System.err.println("IOEXCEPTION: GIVING UP ON THIS CLIENT.");
             // The remote forcibly closed the connection, cancel
             // the selection key and close the channel.
+            clientToHandler.remove(sk);
             sk.cancel();
             try {
               sk.channel().close();
@@ -153,8 +166,9 @@ public class NIOServer {
             }
             System.out.println("===</current clients>===");
 
-            System.out.println("Nothing left to read from client. Closing client connection.");
+            System.out.println("Nothing left to read from client. Closing client connection: " + sk);
             try {
+              clientToHandler.remove(sk);
               sk.channel().close();
             }
             catch (IOException ioe) {
