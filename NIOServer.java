@@ -63,6 +63,8 @@ public class NIOServer {
     // selection key => handler map (start with Integer; later use callbacks of some kind.
     final HashMap<SelectionKey,Integer> clientToHandler = new HashMap<SelectionKey,Integer>();
 
+    Integer clientSerialNum = 0;
+
 
     System.out.println("start main listen loop..");
     while(true) {
@@ -80,10 +82,21 @@ public class NIOServer {
         
         // Check what event is available and deal with it
         if (sk.isAcceptable()) {
-          System.out.println("accepting connection from client.");
+          System.out.println("Accepting connection from client.");
+          clientToHandler.put(sk,clientSerialNum++);
+
+          System.out.println("===<current clients>===");
+          for (SelectionKey each : clientToHandler.keySet()) {
+            Integer eachHandler;
+            if ((eachHandler = clientToHandler.get(each)) != null) {
+              System.out.println("key : " + each  + " => client handler: " + eachHandler);
+            }
+          }
+          System.out.println("===</current clients>===");
 
           // For an accept to be pending the channel must be a server socket channel.
           ServerSocketChannel serverSocketChannel = (ServerSocketChannel) sk.channel();
+
           
           // Accept the connection and make it non-blocking
           SocketChannel socketChannel = serverSocketChannel.accept();
@@ -92,8 +105,10 @@ public class NIOServer {
           // Register the new SocketChannel with our Selector, indicating
           // we'd like to be notified when there's data waiting to be read
           socketChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+          
+
         } else if (sk.isReadable()) {
-          System.out.println("reading input from client..");
+          System.out.println("Reading input from client.." + clientToHandler.get(sk));
           final SocketChannel socketChannel = (SocketChannel) sk.channel();
 
           ByteBuffer readBuffer = ByteBuffer.allocate(8192);
