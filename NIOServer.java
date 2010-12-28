@@ -30,7 +30,20 @@ import org.ietf.jgss.GSSManager;
 import org.ietf.jgss.Oid;
 
 public class NIOServer {
+  // selection key => handler map (start with Integer; later use callbacks of some kind.
+  static HashMap<SelectionKey,Integer> clientToHandler;
   
+  public static void ShowClients() {
+    System.out.println("===<current clients>===");
+    for (SelectionKey each : clientToHandler.keySet()) {
+      Integer eachHandler;
+      if ((eachHandler = clientToHandler.get(each)) != null) {
+        System.out.println("key : " + each  + " => client handler: " + eachHandler);
+      }
+    }
+    System.out.println("===</current clients>===");
+  }
+
   public static void main(String[] args) 
     throws IOException {
     // Obtain the command-line arguments and parse the port number
@@ -61,7 +74,7 @@ public class NIOServer {
     // </1. NIO>
 
     // selection key => handler map (start with Integer; later use callbacks of some kind.
-    final HashMap<SelectionKey,Integer> clientToHandler = new HashMap<SelectionKey,Integer>();
+    clientToHandler = new HashMap<SelectionKey,Integer>();
 
     Integer clientSerialNum = 0;
 
@@ -80,19 +93,12 @@ public class NIOServer {
           continue;
         }
         
-        // Check what event is available and deal with it
+        // Check what event is available and deal with it.
         if (sk.isAcceptable()) {
           System.out.println("Accepting connection from client.");
           clientToHandler.put(sk,clientSerialNum++);
 
-          System.out.println("===<current clients>===");
-          for (SelectionKey each : clientToHandler.keySet()) {
-            Integer eachHandler;
-            if ((eachHandler = clientToHandler.get(each)) != null) {
-              System.out.println("key : " + each  + " => client handler: " + eachHandler);
-            }
-          }
-          System.out.println("===</current clients>===");
+          ShowClients();
 
           // For an accept to be pending the channel must be a server socket channel.
           ServerSocketChannel serverSocketChannel = (ServerSocketChannel) sk.channel();
@@ -125,17 +131,7 @@ public class NIOServer {
               byte[] bytes = new byte[8192];
               readBuffer.get(bytes,0,numRead);
               Hexdump.hexdump(System.out,bytes,0,numRead);
-
-              System.out.println("===<current clients>===");
-              for (SelectionKey each : clientToHandler.keySet()) {
-                Integer eachHandler;
-                if ((eachHandler = clientToHandler.get(each)) != null) {
-                  System.out.println("key : " + each  + " => client handler: " + eachHandler);
-                }
-              }
-              System.out.println("===</current clients>===");
-
-
+              ShowClients();
             }
           } catch (IOException e) {
             System.err.println("IOEXCEPTION: GIVING UP ON THIS CLIENT.");
@@ -157,14 +153,7 @@ public class NIOServer {
             // same from our end and cancel the channel.
 
             // dump current client->context mapping to console.
-            System.out.println("===<current clients>===");
-            for (SelectionKey each : clientToHandler.keySet()) {
-              Integer eachHandler;
-              if ((eachHandler = clientToHandler.get(each)) != null) {
-                System.out.println("client handler: " + eachHandler);
-              }
-            }
-            System.out.println("===</current clients>===");
+            ShowClients();
 
             System.out.println("Nothing left to read from client. Closing client connection: " + sk);
             try {
