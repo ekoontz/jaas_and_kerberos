@@ -19,20 +19,18 @@ import java.security.PrivilegedAction;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.List;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 import javax.security.auth.Subject;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
-import org.ietf.jgss.GSSContext;
-import org.ietf.jgss.GSSCredential;
-import org.ietf.jgss.GSSException;
-import org.ietf.jgss.GSSManager;
-import org.ietf.jgss.Oid;
-
 public class NIOServer {
   // selection key => handler map (start with Integer; later use callbacks of some kind.
   static HashMap<SelectionKey,Integer> clientToHandler;
+  static HashMap<SelectionKey,LinkedList<String>> inbox;
   
   public static void ShowClients() {
     System.out.println("===<current clients>===");
@@ -76,6 +74,8 @@ public class NIOServer {
 
     // selection key => handler map (start with Integer; later use callbacks of some kind.
     clientToHandler = new HashMap<SelectionKey,Integer>();
+    inbox = new HashMap<SelectionKey,LinkedList<String>>();
+    
 
     Integer clientSerialNum = 0;
     String clientMessage = "";
@@ -120,6 +120,11 @@ public class NIOServer {
             if (clientToHandler.get(sk) == null) {
               clientToHandler.put(sk,clientSerialNum++);
             }
+
+            // initialize message queue if necessary.
+            if (inbox.get(sk) == null) {
+              inbox.put(sk,new LinkedList<String>());
+            }
             
             System.out.println("Reading input from client #" + clientToHandler.get(sk));
             
@@ -128,7 +133,7 @@ public class NIOServer {
             ByteBuffer readBuffer = ByteBuffer.allocate(8192);
             readBuffer.clear();
             
-            // Attempt to read off the channel
+            // Attempt to read from the client.
             int numRead = 0;
             try {
               numRead = socketChannel.read(readBuffer);
@@ -139,6 +144,20 @@ public class NIOServer {
                 readBuffer.get(bytes,0,numRead);
                 Hexdump.hexdump(System.out,bytes,0,numRead);
                 ShowClients();
+
+                // Broadcast this client's message to all (other) clients.
+                String nickName = "client " + clientToHandler.get(sk);
+                String message = nickName + " said: " + new String(bytes);
+                for (List<String> each : inbox.values()) {
+                  
+                  // Don't loop back a message to the same client
+                  // sending the message: no point in doing that.
+                  if (each != inbox.get(sk)) {
+                    each.add(message);
+                  }
+
+                }
+
                 clientMessage = new String(bytes);
               }
             } catch (IOException e) {
@@ -177,15 +196,40 @@ public class NIOServer {
             }
           }
           
-          boolean isWritable = false;
           try {
-            isWritable = sk.isWritable();
+            if (sk.isWritable()) {
+
+              // initialize message queue for this client if necessary.
+              if (inbox.get(sk) == null) {
+                inbox.put(sk,new LinkedList<String>());
+              }
+
+              // check inbox queue for this client: send all messages in queue.
+              try {
+                while(true) {
+                  String messageForClient = inbox.get(sk).removeFirst();
+
+                  ByteBuffer writeBuffer = ByteBuffer.allocate(8192);
+                  writeBuffer.clear();
+                  
+                  System.out.println("writing message: " + messageForClient + " to client: " + clientToHandler.get(sk));
+                
+                  writeBuffer.put(messageForClient.getBytes(),0,8192);
+                  writeBuffer.flip();
+                  ((SocketChannel)sk.channel()).write(writeBuffer);
+                }
+              }
+              catch (NoSuchElementException e) {
+                // done writing to this client.
+              }
+            }
           }
           catch (CancelledKeyException e) {
             System.out.println("CancelledKeyException: maybe client closed.");
             e.printStackTrace();
 
-            System.out.println("Closing client connection: " + clientToHandler.get(sk));
+            // clean up data structures.
+            System.out.println("Cancelled Key: closing client connection: " + clientToHandler.get(sk));
             try {
               clientToHandler.remove(sk);
               sk.channel().close();
@@ -199,22 +243,6 @@ public class NIOServer {
               ioe.printStackTrace();
             }                            
             sk.cancel();
-          }
-
-          if (isWritable) {
-            ByteBuffer writeBuffer = ByteBuffer.allocate(8192);
-            writeBuffer.clear();
-
-            if (!(clientMessage.equals(""))) {
-
-              final String response = "Someone said: " + clientMessage;
-              System.out.println("writing message: " + response);
-              
-              writeBuffer.put(response.getBytes(),0,8192);
-              writeBuffer.flip();
-              ((SocketChannel)sk.channel()).write(writeBuffer);
-            }
-
           }
           
         }
