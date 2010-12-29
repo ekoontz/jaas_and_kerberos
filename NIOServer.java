@@ -37,7 +37,7 @@ public class NIOServer {
     }
   }
 
-  private void WriteToClient(SelectionKey sk, AtomicInteger clientSerialNum) {
+  protected void WriteToClient(SelectionKey sk, AtomicInteger clientSerialNum) {
 
     // put sk on the read queue so that the Write worker(s) 
     // can see it.
@@ -88,7 +88,11 @@ public class NIOServer {
     }
   }
 
-  private void ReadFromClient(SelectionKey sk, AtomicInteger clientSerialNum) {
+  protected void ReadFromClient(SelectionKey sk, 
+                              AtomicInteger clientSerialNum) {
+
+    // add to read queue.
+
 
     // initialize client nickname if necessary.
     if (clientNick.get(sk) == null) {
@@ -192,20 +196,6 @@ public class NIOServer {
       sk.cancel();
     }
     
-  }
-  
-
-  private class ReadWorker implements Runnable {
-    public void run() {
-      return;
-    }
-  }
-  
-
-  private class WriteWorker implements Runnable {
-    public void run() {
-      return;
-    }
   }
 
   public void ShowClients() {

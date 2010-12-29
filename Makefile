@@ -1,7 +1,8 @@
 .PHONY: all clean test compile killserver waitforkill \
  start_server_socket start_server_nio start_client \
  run_server test_socket test_nio fred saslizedserver \
- saslizedclient testsasl killsaslizedserver nio_server
+ saslizedclient testsasl killsaslizedserver nio_server \
+ nio_server_multi
 
 all: compile README.html
 
@@ -21,6 +22,9 @@ waitforkill:
 
 nio_server: NIOServer.class
 	java NIOServer 4567
+
+nio_server_multi: NIOServerMultiThread.class
+	java NIOServerMultiThread 5678
 
 test: clean
 	make test_socket && sleep 5 && make test_nio
