@@ -23,7 +23,7 @@ waitforkill:
 nio_server: NIOServer.class
 	java NIOServer 4567
 
-nio_server_multi: NIOServerMultiThread.class
+nio_server_multi: NIOServerMultiThread.class NIOServer.class
 	java NIOServerMultiThread 5678
 
 test: clean
