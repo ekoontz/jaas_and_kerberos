@@ -39,7 +39,11 @@ public class NIOServer {
     }
   }
 
-  protected void WriteToClient(SelectionKey sk, AtomicInteger clientSerialNum) {
+  protected void WriteToClient(SelectionKey sk) {
+    WriteToClientLowLevel(sk);
+  }
+
+  protected void WriteToClientLowLevel(SelectionKey sk) {
 
     // put sk on the read queue so that the Write worker(s) 
     // can see it.
@@ -295,7 +299,7 @@ public class NIOServer {
           
           try {
             if (sk.isWritable()) {
-              WriteToClient(sk,clientSerialNum);
+              WriteToClient(sk);
             }  
           }
           catch (CancelledKeyException e) {
