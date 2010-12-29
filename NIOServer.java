@@ -45,10 +45,10 @@ public class NIOServer {
   }
 
   protected void WriteToClient(SelectionKey sk, String message) {
-    WriteToClientLowLevel(sk,message);
+    WriteToClientByNetwork(sk,message);
   }
 
-  protected void WriteToClientLowLevel(SelectionKey sk, String message) {
+  protected void WriteToClientByNetwork(SelectionKey sk, String message) {
     // initialize client nickname if necessary.
     if (clientNick.get(sk) == null) {
       clientNick.put(sk,"client #"+clientSerialNum.incrementAndGet());
@@ -80,10 +80,10 @@ public class NIOServer {
   }
 
   protected void ReadFromClient(SelectionKey sk) {
-    ReadFromClientLowLevel(sk);
+    ReadFromClientByNetwork(sk);
   }
 
-  protected void ReadFromClientLowLevel(SelectionKey sk) {
+  protected void ReadFromClientByNetwork(SelectionKey sk) {
 
     // initialize client nickname if necessary.
     if (clientNick.get(sk) == null) {
