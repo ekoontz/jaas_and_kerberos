@@ -21,76 +21,61 @@ public class NIOServer {
   // nickname table
   ConcurrentHashMap<SelectionKey,String> clientNick;
 
-  // message queue inbox table
-  ConcurrentHashMap<SelectionKey,LinkedList<String>> inbox;
-
   AtomicInteger clientSerialNum;
+
+  // send a message to a client.
+  protected void Send(String message, SelectionKey recipient) {
+    System.out.println("writing message: " + message + " to " + recipient);
+
+    WriteToClient(recipient,message);
+  }
 
   // send a message to all clients (except sender, if non-null).
   private void Broadcast(String message, SelectionKey sender) {
-    // If sender is supplied, caller doesn't want a client to get 
-    // a message from itself. 
-    for (List<String> each : inbox.values()) {
+    // If sender is supplied, sender will not receive a
+    // message from itself. 
+    for (SelectionKey recipient: clientNick.keySet()) {
       if ((sender == null)
           ||
-          (each != inbox.get(sender))) { 
-        each.add(message);
+          (recipient != sender)) {
+        System.out.println("Send(): " + message + " to " + recipient);
+        Send(message,recipient);
       }
     }
   }
 
-  protected void WriteToClient(SelectionKey sk) {
-    WriteToClientLowLevel(sk);
+  protected void WriteToClient(SelectionKey sk, String message) {
+    WriteToClientLowLevel(sk,message);
   }
 
-  protected void WriteToClientLowLevel(SelectionKey sk) {
-
-    // put sk on the read queue so that the Write worker(s) 
-    // can see it.
-    
+  protected void WriteToClientLowLevel(SelectionKey sk, String message) {
     // initialize client nickname if necessary.
     if (clientNick.get(sk) == null) {
       clientNick.put(sk,"client #"+clientSerialNum.incrementAndGet());
     }
     
-    // initialize message queue for this client if necessary.
-    if (inbox.get(sk) == null) {
-      inbox.put(sk,new LinkedList<String>());
-    }
+    String messageForClient = message.trim() + "\n";
+    ByteBuffer writeBuffer = ByteBuffer.allocate(8192);
+    writeBuffer.clear();
+    System.out.println("writing " + messageForClient.getBytes().length + " bytes to client: " + clientNick.get(sk) + "\n");
     
-    // Send each message in this client's inbox queue to the client.
-    // NoSuchElementException will be thrown when queue is emptied.
+    writeBuffer.put(messageForClient.getBytes(),0,Math.min(messageForClient.getBytes().length,8192));
+    writeBuffer.flip();
     try {
-      while(true) {
-        String messageForClient = inbox.get(sk).removeFirst().trim() + "\n";
-        
-        ByteBuffer writeBuffer = ByteBuffer.allocate(8192);
-        writeBuffer.clear();
-        
-        System.out.println("writing " + messageForClient.getBytes().length + " bytes to client: " + clientNick.get(sk) + "\n");
-        
-        writeBuffer.put(messageForClient.getBytes(),0,Math.min(messageForClient.getBytes().length,8192));
-        writeBuffer.flip();
-        try {
-          ((SocketChannel)sk.channel()).write(writeBuffer);
-        }
-        catch (IOException e) {
-          System.err.println("IOException when trying to write: closing this client.");
-          e.printStackTrace();
-          clientNick.remove(sk);
-          sk.cancel();
-          try {
-            sk.channel().close();
-          }
-          catch (IOException ioe) {
-            System.err.println("IoException trying to close socket.");
-            ioe.printStackTrace();
-          }
-        }
-      }
+      ((SocketChannel)sk.channel()).write(writeBuffer);
     }
-    catch (NoSuchElementException e) {
-      // Finished writing to this client: no more messages in its inbox.
+    catch (IOException e) {
+      System.err.println("IOException when trying to write: closing this client.");
+      e.printStackTrace();
+      clientNick.remove(sk);
+      sk.cancel();
+      try {
+        sk.channel().close();
+      }
+      catch (IOException ioe) {
+        System.err.println("IoException trying to close socket.");
+        ioe.printStackTrace();
+      }
     }
   }
 
@@ -103,11 +88,6 @@ public class NIOServer {
     // initialize client nickname if necessary.
     if (clientNick.get(sk) == null) {
       clientNick.put(sk,"client #"+clientSerialNum.incrementAndGet());
-    }
-    
-    // initialize message queue if necessary.
-    if (inbox.get(sk) == null) {
-      inbox.put(sk,new LinkedList<String>());
     }
     
     System.out.println("Reading input from " + clientNick.get(sk));
@@ -146,14 +126,16 @@ public class NIOServer {
             userList = userList + "===Clients===";
             for (String nick: clientNick.values()) {
               userList = userList + "\n" + nick;
+              if (clientNick.get(sk).equals(nick)) {
+                userList = userList + " <= you";
+              }
             }
             userList = userList + "\n\n";
-            
-            inbox.get(sk).add(userList);
+            Send(userList,sk);
           }                    
           
           if (clientMessage.substring(0,7).equals("/whoami")) {
-            inbox.get(sk).add(new String("You are : " + clientNick.get(sk)));
+            Send("You are : " + clientNick.get(sk),sk);
           }                    
           
         }
@@ -162,6 +144,7 @@ public class NIOServer {
           // that is all clients except sk.
           String nickName = clientNick.get(sk);
           String message = nickName + ": " + clientMessage + "\n";
+          System.out.println("broadcasting message: " + message);
           Broadcast(message,sk);
         }
         
@@ -250,9 +233,6 @@ public class NIOServer {
     // Initialize client nickname table.
     clientNick = new ConcurrentHashMap<SelectionKey,String>();
 
-    // Initialize client inbox table.
-    inbox = new ConcurrentHashMap<SelectionKey,LinkedList<String>>();
-
     clientSerialNum = new AtomicInteger(0);
 
     System.out.println("starting main listen loop..");
@@ -262,7 +242,6 @@ public class NIOServer {
 
       Iterator selectedKeys = selector.selectedKeys().iterator();
       while (selectedKeys.hasNext()) {
-
 
         final SelectionKey sk = (SelectionKey) selectedKeys.next();
         selectedKeys.remove();
@@ -287,36 +266,11 @@ public class NIOServer {
           
           // Register the new SocketChannel with our Selector, indicating
           // we'd like to be notified when there's data waiting to be read
-          socketChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
-          
+          socketChannel.register(selector, SelectionKey.OP_READ);
 
         } else { 
           if (sk.isReadable()) {
-            // put sk on the read queue so that the Read worker(s) 
-            // can see it.
             ReadFromClient(sk);
-          }
-          
-          try {
-            if (sk.isWritable()) {
-              WriteToClient(sk);
-            }  
-          }
-          catch (CancelledKeyException e) {
-            System.out.println("CancelledKeyException: maybe client closed.");
-            
-            // clean up data structures.
-            System.out.println("Cancelled Key: closing client connection: " + clientNick.get(sk));
-            try {
-              clientNick.remove(sk);
-              sk.channel().close();
-              ShowClients();
-            }
-            catch (IOException ioe) {
-              System.err.println("IOException trying to close socket.");
-              ioe.printStackTrace();
-            }
-            sk.cancel();
           }
         }
       }
