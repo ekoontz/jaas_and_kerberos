@@ -24,6 +24,8 @@ public class NIOServer {
   // message queue inbox table
   ConcurrentHashMap<SelectionKey,LinkedList<String>> inbox;
 
+  AtomicInteger clientSerialNum;
+
   // send a message to all clients (except sender, if non-null).
   private void Broadcast(String message, SelectionKey sender) {
     // If sender is supplied, caller doesn't want a client to get 
@@ -88,11 +90,11 @@ public class NIOServer {
     }
   }
 
-  protected void ReadFromClient(SelectionKey sk, 
-                              AtomicInteger clientSerialNum) {
+  protected void ReadFromClient(SelectionKey sk) {
+    ReadFromClientLowLevel(sk);
+  }
 
-    // add to read queue.
-
+  protected void ReadFromClientLowLevel(SelectionKey sk) {
 
     // initialize client nickname if necessary.
     if (clientNick.get(sk) == null) {
@@ -247,7 +249,7 @@ public class NIOServer {
     // Initialize client inbox table.
     inbox = new ConcurrentHashMap<SelectionKey,LinkedList<String>>();
 
-    AtomicInteger clientSerialNum = new AtomicInteger(0);
+    clientSerialNum = new AtomicInteger(0);
 
     System.out.println("starting main listen loop..");
     while(true) {
@@ -256,8 +258,12 @@ public class NIOServer {
 
       Iterator selectedKeys = selector.selectedKeys().iterator();
       while (selectedKeys.hasNext()) {
+
+
         final SelectionKey sk = (SelectionKey) selectedKeys.next();
         selectedKeys.remove();
+
+        //        System.out.println("iterating through keys: current key: " + sk.toString());
 
         if (!sk.isValid()) {
           System.out.println("key is not valid; continuing.");
@@ -284,7 +290,7 @@ public class NIOServer {
           if (sk.isReadable()) {
             // put sk on the read queue so that the Read worker(s) 
             // can see it.
-            ReadFromClient(sk,clientSerialNum);
+            ReadFromClient(sk);
           }
           
           try {
