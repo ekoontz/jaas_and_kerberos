@@ -35,10 +35,8 @@ public class NIOServerMultiThread extends NIOServer {
 
       while(true) {
         // blocks waiting for items to appear on the read queue.
+        System.out.println("ReadWorker.run(): waiting for keys to read.");
         SelectionKey readFromMe = main.takeFromReadQueue();
-
-        System.out.println("ReadWorker took key from queue: " + readFromMe);
-        
         String message = ReadFromClientByNetwork(readFromMe);
                 
         if (message == null) {
@@ -47,10 +45,11 @@ public class NIOServerMultiThread extends NIOServer {
         }
         else {
           if (message.trim().length() == 0) {
-            System.out.println("ReadWorker: message is effectively empty.");
+            // FIXME: happens after we've just read a message
+            // from readFromMe, but still readFromMe is added to queue.
           }
           else {
-            System.out.println("readworker read key : " + readFromMe + " and got message: [" + message + "].");
+            System.out.println("ReadWorker:run(): read key : " + readFromMe + " and got message: [" + message + "].");
             ProcessClientMessage(readFromMe,message);
           }
         }
@@ -65,10 +64,12 @@ public class NIOServerMultiThread extends NIOServer {
 
     public void run() {
       while(true) {
+        System.out.println("WriteWorker.run(): waiting for keys to write.");
         // blocks waiting for items to appear on the write queue.
         Pair<SelectionKey,String> messageTuple = main.takeFromWriteQueue();
         SelectionKey writeToMe = messageTuple.first;
         String message = messageTuple.second;
+        System.out.println("WriteWorker:run(): writing message: '" + message +"' to " + main.clientNick.get(writeToMe));
         main.WriteToClientByNetwork(writeToMe,message);
       }
     }
