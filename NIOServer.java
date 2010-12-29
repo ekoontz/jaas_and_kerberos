@@ -107,50 +107,12 @@ public class NIOServer {
         Hexdump.hexdump(System.out,bytes,0,numRead);
         
         String clientMessage = new String(bytes);
-        
-        if (clientMessage.substring(0,1).equals("/")) {
-          // Client used the "/" prefix to send the server a command: 
-          // interpret the command.
-          if (clientMessage.substring(0,6).equals("/nick ")) {
-            String oldNick = clientNick.get(sk);
-            String newNick = clientMessage.substring(6,clientMessage.length() - 6).trim();
-            System.out.println("changing nickname to: " + newNick);
-            clientNick.put(sk,newNick);
-            Broadcast(oldNick + " is now known as " + newNick + ".\n",null);
-          }
-          
-          if (clientMessage.substring(0,6).equals("/users")) {
-            // Construct a human-readable list of users 
-            // and send to client.
-            String userList = "";
-            userList = userList + "===Clients===";
-            for (String nick: clientNick.values()) {
-              userList = userList + "\n" + nick;
-              if (clientNick.get(sk).equals(nick)) {
-                userList = userList + " <= you";
-              }
-            }
-            userList = userList + "\n\n";
-            Send(userList,sk);
-          }                    
-          
-          if (clientMessage.substring(0,7).equals("/whoami")) {
-            Send("You are : " + clientNick.get(sk),sk);
-          }                    
-          
-        }
-        else {
-          // Broadcast this client's message to all (other) clients:
-          // that is all clients except sk.
-          String nickName = clientNick.get(sk);
-          String message = nickName + ": " + clientMessage + "\n";
-          System.out.println("broadcasting message: " + message);
-          Broadcast(message,sk);
-        }
-        
-        clientMessage = new String(bytes);
+
+        ProcessClientMessage(sk,clientMessage);
+
       }
-    } catch (IOException e) {
+    }
+    catch (IOException e) {
       System.err.println("IOEXCEPTION: GIVING UP ON THIS CLIENT.");
       // The remote forcibly closed the connection, cancel
       // the selection key and close the channel.
@@ -164,27 +126,46 @@ public class NIOServer {
         ioe.printStackTrace();
       }
     }
-    
-    if (numRead == -1) {
-      // Remote entity shut the socket down cleanly. Do the
-      // same from our end and cancel the channel.
-      
-      System.out.println("Nothing left to read from client. Closing client connection: " + clientNick.get(sk));
-      try {
-        clientNick.remove(sk);
-        sk.channel().close();
-        
-        // dump current client->context mapping to console.
-        ShowClients();
-        
+  }
+
+  protected void ProcessClientMessage(SelectionKey sk,String clientMessage) {
+    if (clientMessage.substring(0,1).equals("/")) {
+      // Client used the "/" prefix to send the server a command: 
+      // interpret the command.
+      if (clientMessage.substring(0,6).equals("/nick ")) {
+        String oldNick = clientNick.get(sk);
+        String newNick = clientMessage.substring(6,clientMessage.length() - 6).trim();
+        System.out.println("changing nickname to: " + newNick);
+        clientNick.put(sk,newNick);
+        Broadcast(oldNick + " is now known as " + newNick + ".\n",null);
       }
-      catch (IOException ioe) {
-        System.err.println("IoException trying to close socket.");
-        ioe.printStackTrace();
-      }                            
-      sk.cancel();
+      
+      if (clientMessage.substring(0,6).equals("/users")) {
+        // Construct a human-readable list of users 
+        // and send to client.
+        String userList = "";
+        userList = userList + "===Clients===";
+        for (String nick: clientNick.values()) {
+          userList = userList + "\n" + nick;
+          if (clientNick.get(sk).equals(nick)) {
+            userList = userList + " <= you";
+          }
+        }
+        userList = userList + "\n\n";
+        Send(userList,sk);
+      }
+      if (clientMessage.substring(0,7).equals("/whoami")) {
+        Send("You are : " + clientNick.get(sk),sk);
+      }
     }
-    
+    else {
+      // Broadcast this client's message to all (other) clients:
+      // that is all clients except sk.
+      String nickName = clientNick.get(sk);
+      String message = nickName + ": " + clientMessage + "\n";
+      System.out.println("broadcasting message: " + message);
+      Broadcast(message,sk);
+    }
   }
 
   public void ShowClients() {
