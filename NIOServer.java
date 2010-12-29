@@ -139,7 +139,8 @@ public class NIOServer {
     }
   }
 
-  protected void ProcessClientMessage(SelectionKey sk,String clientMessage) {
+  // return false if a non-recognized command was received; true otherwise.
+  protected boolean ProcessClientMessage(SelectionKey sk,String clientMessage) {
     if (clientMessage.substring(0,1).equals("/")) {
       // Client used the "/" prefix to send the server a command: 
       // interpret the command.
@@ -149,6 +150,7 @@ public class NIOServer {
         System.out.println("changing nickname to: " + newNick);
         clientNick.put(sk,newNick);
         Broadcast(oldNick + " is now known as " + newNick + ".\n",null);
+        return true;
       }
       
       if (clientMessage.substring(0,6).equals("/users")) {
@@ -164,10 +166,14 @@ public class NIOServer {
         }
         userList = userList + "\n\n";
         Send(userList,sk);
+        return true;
       }
       if (clientMessage.substring(0,7).equals("/whoami")) {
         Send("You are : " + clientNick.get(sk),sk);
+        return true;
       }
+      // unmatched command.
+      return false;
     }
     else {
       // Broadcast this client's message to all (other) clients:
@@ -176,6 +182,7 @@ public class NIOServer {
       String message = nickName + ": " + clientMessage + "\n";
       System.out.println("broadcasting message: " + message);
       Broadcast(message.trim(),sk);
+      return true;
     }
   }
 
@@ -230,8 +237,6 @@ public class NIOServer {
     System.out.println("starting main listen loop..");
     while(true) {
 
-      System.out.println("master: in main loop..");
-
       try {
         selector.select();
       }
@@ -239,8 +244,6 @@ public class NIOServer {
         System.err.println("KEY CANCELLED.");
         continue;
       }
-
-      System.out.println("master: done selecting.");
 
       Iterator selectedKeys = selector.selectedKeys().iterator();
       while (selectedKeys.hasNext()) {

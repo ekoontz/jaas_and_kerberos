@@ -169,9 +169,11 @@ public class NIOServerMultiThread extends NIOServer {
     // main thread.
     run(localPort);
   }
-  
 
-  
+  protected boolean ProcessClientMessage(SelectionKey sk,String clientMessage) {
+    boolean result = super.ProcessClientMessage(sk,clientMessage);
+    return result;
+  }
 
 }
 
