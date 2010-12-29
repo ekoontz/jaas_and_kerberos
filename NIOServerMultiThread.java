@@ -7,8 +7,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class NIOServerMultiThread extends NIOServer {
 
+  private class Pair<A,B> {
+    public A first;
+    public B second;
+    
+    public Pair(A first, B second) {
+      super();
+      this.first = first;
+      this.second = second;
+    }
+
+  }
+  
+
   protected BlockingQueue<SelectionKey> readFromThese;
-  protected BlockingQueue<SelectionKey> writeToThese;
+  protected BlockingQueue<Pair<SelectionKey,String >> writeToThese;
 
   protected NIOServerMultiThread main;
 
@@ -21,12 +34,26 @@ public class NIOServerMultiThread extends NIOServer {
       System.out.println("starting ReadWorker..");
 
       while(true) {
+        // blocks waiting for items to appear on the read queue.
         SelectionKey readFromMe = main.takeFromReadQueue();
-        System.out.println("reader got read selection key: " + readFromMe.toString());
-        main.ReadFromClientLowLevel(readFromMe);
+
+        System.out.println("ReadWorker took key from queue: " + readFromMe);
         
-        System.out.println("readworker finished key : " + readFromMe.toString());
-        
+        String message = ReadFromClientByNetwork(readFromMe);
+                
+        if (message == null) {
+          System.out.println("ReadWorker: message is null: assuming client hung up.");
+          CancelClient(readFromMe);
+        }
+        else {
+          if (message.trim().length() == 0) {
+            System.out.println("ReadWorker: message is effectively empty.");
+          }
+          else {
+            System.out.println("readworker read key : " + readFromMe + " and got message: [" + message + "].");
+            ProcessClientMessage(readFromMe,message);
+          }
+        }
       }
     }
   }
@@ -38,94 +65,70 @@ public class NIOServerMultiThread extends NIOServer {
 
     public void run() {
       while(true) {
-        SelectionKey writeToMe = main.takeFromWriteQueue();
-        //        System.out.println("writer got write selection key: " + writeToMe.toString());
-        main.WriteToClientLowLevel(writeToMe);
-        
-        //        System.out.println("writeworker finished key : " + writeToMe.toString());
+        // blocks waiting for items to appear on the write queue.
+        Pair<SelectionKey,String> messageTuple = main.takeFromWriteQueue();
+        SelectionKey writeToMe = messageTuple.first;
+        String message = messageTuple.second;
+        main.WriteToClientByNetwork(writeToMe,message);
       }
     }
   }
 
   protected SelectionKey takeFromReadQueue() {
-    // note: blocking: only should be called from non-main threads
-    // like readWorkers.
-    //System.out.println("takeFromReadQueue() start.");
     while(true) {
       try {
-        System.out.println("takeFromReadQueue() of size: " + readFromThese.size());
-        
-        SelectionKey readFromMe = readFromThese.take();
-        System.out.println("takeFromReadQueue got key: " + readFromMe.toString());
-        System.out.println("takeFromReadQueue() is now size: " + readFromThese.size());
-        return readFromMe;
+        return readFromThese.take();
       }
       catch (InterruptedException e) {
-        System.out.println("takeFromReadQueue ignoring InterruptedException and continuing.");
-      }
-      System.out.println("takeFromReadQueue() end of while loop.");    
-    }
-  }
-
-  protected SelectionKey takeFromWriteQueue() {
-    // note: blocking: only should be called from non-main threads
-    // like readWorkers.
-    //    System.out.println("takeFromWriteQueue() start.");
-    while(true) {
-      try {
-        //        System.out.println("takeFromWriteQueue() of size: " + writeToThese.size());
-        
-        SelectionKey writeToMe = writeToThese.take();
-        //        System.out.println("takeFromWriteQueue got key: " + writeToMe.toString());
-        //        System.out.println("takeFromWriteQueue() is now size: " + writeToThese.size());
-        return writeToMe;
-      }
-      catch (InterruptedException e) {
-        System.out.println("takeFromWriteQueue ignoring InterruptedException and continuing.");
+        System.out.println("takeFromReadQueue(): ignoring InterruptedException and continuing.");
       }
     }
   }
 
-  protected void ReadFromClient(SelectionKey sk) {
+  protected Pair<SelectionKey,String> takeFromWriteQueue() {
+    while(true) {
+      try {
+        return writeToThese.take();
+      }
+      catch (InterruptedException e) {
+        System.out.println("takeFromWriteQueue(): ignoring InterruptedException and continuing.");
+      }
+    }
+  }
+
+  protected synchronized void ReadFromClient(SelectionKey sk) {
     // overrides parent ReadFromClient().
-    // add to queue.
+    // add to read worker(s)' queue.
 
     if (readFromThese.contains(sk) == false) {
-      // FIXME: this is blocking and therefore should not be in main thread.
+      System.out.println("Multi: ReadFromClient(): enqueing sk on read queue.");
+      System.out.println("read queue is now size: " + readFromThese.size());
+      
+      
       try {
-        //        System.out.println("adding new client message selection key: " + sk.toString() + " to read queue.");
-        
         readFromThese.put(sk);
       }
       catch (InterruptedException e) {
         System.out.println("ReadFromClient: interrupted and giving up on put() to read queue.");
       }
     }
-    else {
-      //      System.out.println("not re-adding existing key to queue.");
-    }
     
   }
 
-  protected void WriteToClient(SelectionKey sk) {
+  protected void WriteToClient(SelectionKey sk, String message) {
     // overrides parent WriteToClient().
-    // add to queue.
+    // add to write worker(s)' queue.
 
-    if (writeToThese.contains(sk) == false) {
-      // FIXME: this is blocking and therefore should not be in main thread.
-      try {
-        //        System.out.println("adding new client message selection key: " + sk.toString() + " to write queue.");
-        
-        writeToThese.put(sk);
-      }
-      catch (InterruptedException e) {
-        System.out.println("ReadFromClient: interrupted and giving up on put() to write queue.");
-      }
+    System.out.println("Multi: WriteToClient(): message: " + message);
+
+    try {
+      Pair<SelectionKey,String> messageInfo = new Pair<SelectionKey,String>(sk,message);
+      
+      writeToThese.put(messageInfo);
     }
-    else {
-      //      System.out.println("not re-adding existing key to queue.");
+    catch (InterruptedException e) {
+      System.out.println("WriteToClient: interrupted and giving up on put() to write queue.");
     }
-    
   }
  
   public static void main(String[] args) 
@@ -155,7 +158,8 @@ public class NIOServerMultiThread extends NIOServer {
     readFromThese = new LinkedBlockingQueue<SelectionKey>();
     ReadWorker reader = new ReadWorker(this);
 
-    writeToThese = new LinkedBlockingQueue<SelectionKey>();
+    writeToThese = new LinkedBlockingQueue<Pair<SelectionKey,String>>();
+    
     WriteWorker writer = new WriteWorker(this);
     
     new Thread(reader).start();

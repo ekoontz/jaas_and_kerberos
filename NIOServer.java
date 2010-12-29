@@ -30,6 +30,11 @@ public class NIOServer {
     WriteToClient(recipient,message);
   }
 
+  // send a message to all clients from the system.
+  private void BroadcastSystem(String message) {
+    Broadcast("** " + message,null);
+  }
+
   // send a message to all clients (except sender, if non-null).
   private void Broadcast(String message, SelectionKey sender) {
     // If sender is supplied, sender will not receive a
@@ -51,13 +56,15 @@ public class NIOServer {
   protected void WriteToClientByNetwork(SelectionKey sk, String message) {
     // initialize client nickname if necessary.
     if (clientNick.get(sk) == null) {
-      clientNick.put(sk,"client #"+clientSerialNum.incrementAndGet());
+      System.out.println("WriteToClientByNetwork(): REFUSING TO WRITE TO UNREGISTERED KEY: " + sk);
+      return;
     }
     
     String messageForClient = message.trim() + "\n";
     ByteBuffer writeBuffer = ByteBuffer.allocate(8192);
     writeBuffer.clear();
     System.out.println("writing " + messageForClient.getBytes().length + " bytes to client: " + clientNick.get(sk) + "\n");
+    Hexdump.hexdump(System.out,messageForClient.getBytes(),0,messageForClient.getBytes().length);
     
     writeBuffer.put(messageForClient.getBytes(),0,Math.min(messageForClient.getBytes().length,8192));
     writeBuffer.flip();
@@ -65,31 +72,21 @@ public class NIOServer {
       ((SocketChannel)sk.channel()).write(writeBuffer);
     }
     catch (IOException e) {
-      System.err.println("IOException when trying to write: closing this client.");
-      e.printStackTrace();
-      clientNick.remove(sk);
-      sk.cancel();
-      try {
-        sk.channel().close();
-      }
-      catch (IOException ioe) {
-        System.err.println("IoException trying to close socket.");
-        ioe.printStackTrace();
-      }
+      System.err.println("WriteToClientByNetwork(): IOException when trying to write: closing this client.");
+      CancelClient(sk);
     }
   }
 
   protected void ReadFromClient(SelectionKey sk) {
-    ReadFromClientByNetwork(sk);
+    String message = ReadFromClientByNetwork(sk);
+    if (message != null) {
+      ProcessClientMessage(sk,message);
+    }
   }
 
-  protected void ReadFromClientByNetwork(SelectionKey sk) {
+  protected String ReadFromClientByNetwork(SelectionKey sk) {
 
-    // initialize client nickname if necessary.
-    if (clientNick.get(sk) == null) {
-      clientNick.put(sk,"client #"+clientSerialNum.incrementAndGet());
-    }
-    
+    // initialize client nickname if necessary.    
     System.out.println("Reading input from " + clientNick.get(sk));
     
     final SocketChannel socketChannel = (SocketChannel) sk.channel();
@@ -108,14 +105,27 @@ public class NIOServer {
         
         String clientMessage = new String(bytes);
 
-        ProcessClientMessage(sk,clientMessage);
+        if (clientNick.get(sk) == null) {
+          clientNick.put(sk,"client #"+clientSerialNum.incrementAndGet());
+          BroadcastSystem(clientNick.get(sk) + " joined the chat.");
+        }
+
+        return clientMessage;
 
       }
     }
     catch (IOException e) {
-      System.err.println("IOEXCEPTION: GIVING UP ON THIS CLIENT.");
-      // The remote forcibly closed the connection, cancel
+      System.err.println("ReadFromClientByNetwork(): GIVING UP ON THIS CLIENT.");
+      // The remote closed the connection. Cancel
       // the selection key and close the channel.
+      CancelClient(sk);
+    }
+    return null;
+  }
+
+  protected void CancelClient(SelectionKey sk) {
+    String nickname = clientNick.get(sk);
+    if (nickname != null) {
       clientNick.remove(sk);
       sk.cancel();
       try {
@@ -125,6 +135,7 @@ public class NIOServer {
         System.err.println("IoException trying to close socket.");
         ioe.printStackTrace();
       }
+      BroadcastSystem(nickname + " hung up.");
     }
   }
 
@@ -164,7 +175,7 @@ public class NIOServer {
       String nickName = clientNick.get(sk);
       String message = nickName + ": " + clientMessage + "\n";
       System.out.println("broadcasting message: " + message);
-      Broadcast(message,sk);
+      Broadcast(message.trim(),sk);
     }
   }
 
@@ -219,7 +230,17 @@ public class NIOServer {
     System.out.println("starting main listen loop..");
     while(true) {
 
-      selector.select();
+      System.out.println("master: in main loop..");
+
+      try {
+        selector.select();
+      }
+      catch (CancelledKeyException e) {
+        System.err.println("KEY CANCELLED.");
+        continue;
+      }
+
+      System.out.println("master: done selecting.");
 
       Iterator selectedKeys = selector.selectedKeys().iterator();
       while (selectedKeys.hasNext()) {
