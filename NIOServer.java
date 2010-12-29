@@ -17,14 +17,16 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 public class NIOServer {
+
   // nickname table
-  static ConcurrentHashMap<SelectionKey,String> clientNick;
+  ConcurrentHashMap<SelectionKey,String> clientNick;
 
   // message queue inbox table
-  static ConcurrentHashMap<SelectionKey,LinkedList<String>> inbox;
+  ConcurrentHashMap<SelectionKey,LinkedList<String>> inbox;
+
 
   // send a message to all clients (except sender, if non-null).
-  private static void Broadcast(String message, SelectionKey sender) {
+  private void Broadcast(String message, SelectionKey sender) {
     // If sender is supplied, caller doesn't want a client to get 
     // a message from itself. 
     for (List<String> each : inbox.values()) {
@@ -36,7 +38,7 @@ public class NIOServer {
     }
   }
 
-  private static void WriteToClient(SelectionKey sk, AtomicInteger clientSerialNum) {
+  private void WriteToClient(SelectionKey sk, AtomicInteger clientSerialNum) {
 
     // put sk on the read queue so that the Write worker(s) 
     // can see it.
@@ -87,7 +89,7 @@ public class NIOServer {
     }
   }
 
-  private static void ReadFromClient(SelectionKey sk, AtomicInteger clientSerialNum) {
+  private void ReadFromClient(SelectionKey sk, AtomicInteger clientSerialNum) {
 
     // initialize client nickname if necessary.
     if (clientNick.get(sk) == null) {
@@ -207,8 +209,7 @@ public class NIOServer {
     }
   }
 
-
-  public static void ShowClients() {
+  public void ShowClients() {
     System.out.println("Connected clients: " + clientNick.size());
   }
 
@@ -223,6 +224,18 @@ public class NIOServer {
     
     int localPort = Integer.parseInt(args[0]);
 
+    NIOServer instance = new NIOServer();
+    try {
+      instance.run(localPort);
+    }
+    catch (IOException e) {
+      throw e;
+    }
+    
+  }
+  
+  public void run(int localPort) 
+    throws IOException {
     // <NIO Setup>
     Selector selector = SelectorProvider.provider().openSelector();
     
