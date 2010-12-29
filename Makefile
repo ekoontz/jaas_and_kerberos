@@ -26,6 +26,9 @@ nio_server: NIOServer.class
 nio_server_multi: NIOServerMultiThread.class NIOServer.class
 	java NIOServerMultiThread 5678
 
+nio_server_sasl: NIOServerSASL.class NIOServerMultiThread.class NIOServer.class
+	java NIOServerSASL 6789
+
 test: clean
 	make test_socket && sleep 5 && make test_nio
 
