@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.NoSuchElementException;
 
 public class NIOServerMultiThread extends NIOServer {
@@ -9,15 +10,23 @@ public class NIOServerMultiThread extends NIOServer {
   protected BlockingQueue<SelectionKey> writeToThese;
 
   private class ReadWorker implements Runnable {
-    public void run() {
 
+    BlockingQueue<SelectionKey> readFromTheseInner;
+
+    public ReadWorker(BlockingQueue<SelectionKey> usereadFromThese) {
+      readFromTheseInner = usereadFromThese;
+    }
+    
+    public void run() {
       System.out.println("starting ReadWorker..");
 
-      // iterate through readFromMe until it's empty.
+      // iterate through readFromThese if it's not empty; 
+      // if it's empty, block in take().
       // NoSuchElementException will be thrown when readFromMe is emptied.
       while(true) {
         try {
-          SelectionKey readFromMe = readFromThese.take();
+          SelectionKey readFromMe = readFromTheseInner.take();
+          System.out.println("Readworker got key: " + readFromMe.toString());
         }
         catch (InterruptedException e) {
           // Finished writing to this client: no more messages in its inbox.
@@ -25,10 +34,10 @@ public class NIOServerMultiThread extends NIOServer {
           
         }
       }
-        
     }
+
   }
- 
+   
   private class WriteWorker implements Runnable {
     public void run() {
 
@@ -52,8 +61,9 @@ public class NIOServerMultiThread extends NIOServer {
     int localPort = Integer.parseInt(args[0]);
 
     NIOServerMultiThread instance = new NIOServerMultiThread();
+
     try {
-      instance.run(localPort);
+      instance.StartThreadsAndRun(localPort);
     }
     catch (IOException e) {
       throw e;
@@ -61,5 +71,17 @@ public class NIOServerMultiThread extends NIOServer {
     
   }
   
+  public void StartThreadsAndRun(int localPort) 
+    throws IOException {
+    ReadWorker reader = new ReadWorker(readFromThese);
+    new Thread(reader).start();
+
+    // main thread.
+    run(localPort);
+  }
+  
+
+  
+
 }
 

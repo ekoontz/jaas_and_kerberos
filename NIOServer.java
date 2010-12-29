@@ -249,7 +249,7 @@ public class NIOServer {
 
     AtomicInteger clientSerialNum = new AtomicInteger(0);
 
-    System.out.println("start main listen loop..");
+    System.out.println("starting main listen loop..");
     while(true) {
 
       selector.select();
