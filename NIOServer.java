@@ -24,7 +24,6 @@ public class NIOServer {
   // message queue inbox table
   ConcurrentHashMap<SelectionKey,LinkedList<String>> inbox;
 
-
   // send a message to all clients (except sender, if non-null).
   private void Broadcast(String message, SelectionKey sender) {
     // If sender is supplied, caller doesn't want a client to get 
@@ -305,7 +304,6 @@ public class NIOServer {
           }
           catch (CancelledKeyException e) {
             System.out.println("CancelledKeyException: maybe client closed.");
-            e.printStackTrace();
             
             // clean up data structures.
             System.out.println("Cancelled Key: closing client connection: " + clientNick.get(sk));
@@ -315,7 +313,7 @@ public class NIOServer {
               ShowClients();
             }
             catch (IOException ioe) {
-              System.err.println("IoException trying to close socket.");
+              System.err.println("IOException trying to close socket.");
               ioe.printStackTrace();
             }
             sk.cancel();
