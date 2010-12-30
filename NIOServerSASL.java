@@ -21,6 +21,7 @@ import javax.security.auth.login.LoginException;
 
 public class NIOServerSASL extends NIOServerMultiThread {
 
+
   public void authenticateServer() {
     // Should be called only once, at server startup time.
     
@@ -69,7 +70,7 @@ public class NIOServerSASL extends NIOServerMultiThread {
       loginCtx.login();
       subject = loginCtx.getSubject();
 
-      System.out.println("..authenticated.");
+      System.out.println("..authenticated successfully.");
     }
     catch (LoginException e) {
       System.err.println("LoginException: : " + e);
