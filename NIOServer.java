@@ -149,7 +149,7 @@ public class NIOServer {
         String newNick = clientMessage.substring(6,clientMessage.length() - 6).trim();
         System.out.println("changing nickname to: " + newNick);
         clientNick.put(sk,newNick);
-        Broadcast(oldNick + " is now known as " + newNick + ".\n",null);
+        BroadcastSystem(oldNick + " is now known as " + newNick + ".\n");
         return true;
       }
       
@@ -234,50 +234,52 @@ public class NIOServer {
 
     clientSerialNum = new AtomicInteger(0);
 
-    System.out.println("starting main listen loop..");
+    System.out.println("starting main listen loop.");
     while(true) {
 
       try {
+        System.out.println("NIOServer:waiting on select().");
         selector.select();
+
+        Iterator selectedKeys = selector.selectedKeys().iterator();
+        while (selectedKeys.hasNext()) {
+          
+          final SelectionKey sk = (SelectionKey) selectedKeys.next();
+          selectedKeys.remove();
+          
+          //        System.out.println("iterating through keys: current key: " + sk.toString());
+          
+          if (!sk.isValid()) {
+            System.out.println("key is not valid; continuing.");
+            continue;
+          }
+          
+          // Check what event is available and deal with it.
+          
+          if (sk.isAcceptable()) {
+            System.out.println("Accepting connection from client with accept key : " + sk);
+            
+            // For an accept to be pending the channel must be a server socket channel.
+            ServerSocketChannel serverSocketChannel = (ServerSocketChannel) sk.channel();
+            
+            // Accept the connection and make it non-blocking
+            SocketChannel socketChannel = serverSocketChannel.accept();
+            socketChannel.configureBlocking(false);
+            
+            // Register the new SocketChannel with our Selector, indicating
+            // we'd like to be notified when there's data waiting to be read
+            socketChannel.register(selector, SelectionKey.OP_READ);
+            
+          } else { 
+            if (sk.isReadable()) {
+              ReadFromClient(sk);
+            }
+          }
+        }
       }
       catch (CancelledKeyException e) {
         System.err.println("KEY CANCELLED.");
         continue;
-      }
-
-      Iterator selectedKeys = selector.selectedKeys().iterator();
-      while (selectedKeys.hasNext()) {
-
-        final SelectionKey sk = (SelectionKey) selectedKeys.next();
-        selectedKeys.remove();
-
-        //        System.out.println("iterating through keys: current key: " + sk.toString());
-
-        if (!sk.isValid()) {
-          System.out.println("key is not valid; continuing.");
-          continue;
-        }
-        
-        // Check what event is available and deal with it.
-        if (sk.isAcceptable()) {
-          System.out.println("Accepting connection from client with accept key : " + sk);
-
-          // For an accept to be pending the channel must be a server socket channel.
-          ServerSocketChannel serverSocketChannel = (ServerSocketChannel) sk.channel();
-          
-          // Accept the connection and make it non-blocking
-          SocketChannel socketChannel = serverSocketChannel.accept();
-          socketChannel.configureBlocking(false);
-          
-          // Register the new SocketChannel with our Selector, indicating
-          // we'd like to be notified when there's data waiting to be read
-          socketChannel.register(selector, SelectionKey.OP_READ);
-
-        } else { 
-          if (sk.isReadable()) {
-            ReadFromClient(sk);
-          }
-        }
       }
     }
   }
