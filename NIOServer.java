@@ -27,7 +27,7 @@ public class NIOServer {
   protected void Send(String message, SelectionKey recipient) {
     System.out.println("writing message: " + message + " to " + recipient);
 
-    WriteToClient(recipient,message);
+    WriteToClient(recipient,message + "\n");
   }
 
   // send a message to all clients from the system.
@@ -60,7 +60,7 @@ public class NIOServer {
       return;
     }
     
-    String messageForClient = message.trim() + "\n";
+    String messageForClient = message;
     ByteBuffer writeBuffer = ByteBuffer.allocate(8192);
     writeBuffer.clear();
     System.out.println("writing " + messageForClient.getBytes().length + " bytes to client: " + clientNick.get(sk) + "\n");
@@ -115,7 +115,7 @@ public class NIOServer {
       }
     }
     catch (IOException e) {
-      System.err.println("ReadFromClientByNetwork(): GIVING UP ON THIS CLIENT.");
+      System.err.println("ReadFromClientByNetwork() Exception: Canceling this client.");
       // The remote closed the connection. Cancel
       // the selection key and close the channel.
       CancelClient(sk);
@@ -149,7 +149,7 @@ public class NIOServer {
         String newNick = clientMessage.substring(6,clientMessage.length() - 6).trim();
         System.out.println("changing nickname to: " + newNick);
         clientNick.put(sk,newNick);
-        BroadcastSystem(oldNick + " is now known as " + newNick + ".\n");
+        BroadcastSystem(oldNick + " is now known as " + newNick + ".");
         return true;
       }
       
@@ -164,7 +164,6 @@ public class NIOServer {
             userList = userList + " <= you";
           }
         }
-        userList = userList + "\n\n";
         Send(userList,sk);
         return true;
       }
@@ -174,6 +173,11 @@ public class NIOServer {
         Send("goodbye, " + nick + ".",sk);
         BroadcastSystem(nick + " has left the chatroom.");
         CancelClient(sk);
+        return true;
+      }
+
+      if (clientMessage.substring(0,5).equals("/help")) {
+        Send(ShowCommands(),sk);
         return true;
       }
 
@@ -193,6 +197,16 @@ public class NIOServer {
       Broadcast(message.trim(),sk);
       return true;
     }
+  }
+
+  public String ShowCommands() {
+    String retval = "\n";
+    retval += "All commands are prefixed with a forward slash (/).\n";
+    retval += "/help - show all commands.\n";
+    retval += "/quit - disconnect from server.\n";
+    retval += "/users - show all connected clients.\n";
+    retval += "/nick <name> - change your nick to <name>.\n";
+    return retval;
   }
 
   public void ShowClients() {

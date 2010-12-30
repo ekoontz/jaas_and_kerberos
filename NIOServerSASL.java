@@ -121,5 +121,11 @@ public class NIOServerSASL extends NIOServerMultiThread {
     return false;
   }
 
+  public String ShowCommands() {
+    String retval = super.ShowCommands();
+    retval += "/auth - authenticate using SASL.\n";
+    return retval;
+  }
+
 }
 
