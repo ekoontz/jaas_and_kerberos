@@ -168,6 +168,15 @@ public class NIOServer {
         Send(userList,sk);
         return true;
       }
+
+      if (clientMessage.substring(0,5).equals("/quit")) {
+        String nick = clientNick.get(sk);
+        Send("goodbye, " + nick + ".",sk);
+        BroadcastSystem(nick + " has left the chatroom.");
+        CancelClient(sk);
+        return true;
+      }
+
       if (clientMessage.substring(0,7).equals("/whoami")) {
         Send("You are : " + clientNick.get(sk),sk);
         return true;
