@@ -155,18 +155,37 @@ public class SASLizedChatClient {
                     System.out.println("");
                     System.out.println("<client challenge/response loop>");
                     System.out.println("writing response of length: " + saslToken.length);
-                    //                    outStream.writeInt(saslToken.length);
-                    outStream.write(saslToken, 0, saslToken.length);
+                    // <corrupt bytes to test server response..>
+                    /*                    saslToken[5] = (byte)0;
+                    saslToken[6] = (byte)1;
+                    saslToken[7] = (byte)2;
+                    saslToken[8] = (byte)3;*/
+                    // </corrupt bytes to test server response..>
+
+                    if (saslToken.length == 0) {
+                      String nomsg = new String("(nomsg)");
+                      outStream.write(nomsg.getBytes(),0,nomsg.getBytes().length);
+                    }
+                    else {
+                      outStream.write(saslToken, 0, saslToken.length);
+                    }
                     outStream.flush();
                     System.out.println("wrote response.");
 
-                    System.out.println("reading challenge length.");
-                    int length = inStream.readInt();
-                    System.out.println("challenge token length is: " + length);
-                    saslToken = new byte[length];
+                    int length;
+                    saslToken = new byte[8192];
+                    System.out.println("reading challenge...");
+                    length = inStream.read(saslToken);
+
+                    String testMessage = new String(saslToken);
+                    if (testMessage.trim().equals("(nomsg)")) {
+                      length = 0;
+                      saslToken = new byte[0];
+                    }
+
                     if (length > 0) {
-                      inStream.readFully(saslToken,0,length);
-                      System.out.println("read challenge: saslToken length: " + saslToken.length);
+                      System.out.println("**read challenge: saslToken length: " + saslToken.length);
+                      Hexdump.hexdump(System.out,saslToken,0,saslToken.length);
                     }
                     else {
                       System.out.println("zero-length challenge: nothing to read from server.");

@@ -44,6 +44,7 @@ public class NIOServerSASL extends NIOServerMultiThread {
 
   // client state table
   public ConcurrentHashMap<SelectionKey,ClientState> clientStates;
+  public ConcurrentHashMap<SelectionKey,SaslServer> saslServers;
 
   @Override 
     protected synchronized void ReadFromClient(SelectionKey sk) {
@@ -55,8 +56,8 @@ public class NIOServerSASL extends NIOServerMultiThread {
 
   public void initializeClientStates() {
     // Should be called only once, at server startup time.
-
     clientStates = new ConcurrentHashMap<SelectionKey,ClientState>();
+    saslServers = new ConcurrentHashMap<SelectionKey,SaslServer>();
   }
 
   public void authenticateServer() {
@@ -125,9 +126,7 @@ public class NIOServerSASL extends NIOServerMultiThread {
 
     try {
       authenticateServer();
-
       initializeClientStates();
-
       setupQueues();
 
       AuthReadWorker reader = new AuthReadWorker(this);
@@ -148,9 +147,10 @@ public class NIOServerSASL extends NIOServerMultiThread {
   protected boolean ProcessClientMessage(SelectionKey sk,String clientMessage) {
     boolean result = super.ProcessClientMessage(sk,clientMessage);
     if (result == false) {
-      // try SASL-specific processing.
+      // try SASL-specific command processing.
       if (clientMessage.substring(0,5).equals("/auth")) {
         clientStates.put(sk,ClientState.Authenticating);
+        saslServers.put(sk,CreateSaslServer(chatServerSubject, "GSSAPI",SERVICE_PRINCIPAL_NAME,HOST_NAME));
         return true;
       }
       else {
@@ -182,36 +182,26 @@ public class NIOServerSASL extends NIOServerMultiThread {
     return false;
   }
 
+  // send a message to all clients (except sender, if non-null).
+  // Also, don't send messages which are in 'Authenticating' state.
+  protected void Broadcast(String message, SelectionKey sender) {
+    // If sender is supplied, sender will not receive a
+    // message from itself. 
+    for (SelectionKey recipient: clientNick.keySet()) {
+      if (clientStates.get(recipient) == ClientState.Authenticating) {
+        if ((sender == null) || (recipient != sender)) {
+          System.out.println("Send(): " + message + " to " + recipient);
+          Send(message,recipient);
+        }
+      }
+    }
+  }
+
   public String ShowCommands() {
     String retval = super.ShowCommands();
     retval += "/auth - authenticate using SASL.\n";
     retval += "/status - show authentication status for all clients.\n";
     return retval;
-  }
-
-  protected boolean DoAuthentication(SelectionKey sk) {
-
-    SaslServer saslServer = CreateSaslServer(chatServerSubject, "GSSAPI",SERVICE_PRINCIPAL_NAME,HOST_NAME);
-
-    if (saslServer == null) {
-      return false;
-    }
-    while (!saslServer.isComplete()) {
-      try {
-        exchangeTokens(saslServer,sk);
-        if (true) {
-          // break out early for now.
-          break;
-        }
-      }
-      catch (SaslException e) {
-        System.err.println("authentication with client failed: closing client connection.");
-        CancelClient(sk);
-        return false;
-      }
-    }
-
-    return true;
   }
 
   public static SaslServer CreateSaslServer(final Subject subject, final String mech,final String principalName,final String hostName) {
@@ -241,44 +231,6 @@ public class NIOServerSASL extends NIOServerMultiThread {
     return null;
   }
 
-  private void exchangeTokens(SaslServer saslServer, SelectionKey sk) throws SaslException {
-
-    // move client to token-exchange state.
-    String test = "foobar";
-
-    System.out.println("Server:exchangeTokens(): read string: "+test);
-
-    return;
-
-    /*      try {
-      int length = ReadIntFromClientByNetwork(sk);
-      System.out.println("Server:exchangeTokens(): read integer value: " + length);
-      
-
-      byte[] saslToken = ReadBytesFromClientByNetwork(sk);
-      System.out.println("Server:exchangeTokens(): response token read of length " + saslToken.length);
-
-      saslToken = saslServer.evaluateResponse(saslToken);
-      if (saslToken != null) {
-        if (saslToken.length > 0) {
-          WriteBytesToClientByNetwork(sk,saslToken);
-          System.out.println("Wrote token of length: " + saslToken.length);
-        }
-        else {
-          //              outStream.writeInt(0);
-          System.out.println("Challenge length is 0: not sending (just sending integer 0 length).");
-        }
-      }
-      else {
-        System.out.println("evaluateResponse() returned a null token: continuing without writing anything to client.");
-      }
-    }
-    catch (IOException e) {
-      System.err.println("Failed to exchange token with client.");
-      e.printStackTrace();
-      CancelClient(sk);
-      }*/
-    }
 }
 
 class ServerCallbackHandler implements CallbackHandler {
@@ -317,46 +269,3 @@ class ServerCallbackHandler implements CallbackHandler {
   }
 }
 
-/*
-class AuthWorker implements Runnable {
-    public AuthWorker(NIOServerSASL mainObject) {
-      main = mainObject;
-    }
-    
-    public void run() {
-      System.out.println("starting AuthWorker..");
-
-      while(true) {
-        // blocks waiting for items to appear on the read queue.
-        System.out.println("AuthWorker.run(): waiting for a client to appear in the auth queue.");
-        SelectionKey readFromMe = main.takeFromAuthQueue();
-        String message = ReadFromClientByNetwork(readFromMe);
-                
-        if (message == null) {
-          System.out.println("AuthWorker: message is null: assuming client hung up.");
-          CancelClient(readFromMe);
-        }
-        else {
-          if (message.trim().length() == 0) {
-            // FIXME: happens after we've just read a message
-            // from readFromMe, but still readFromMe is added to queue.
-          }
-          else {
-            System.out.println("AuthWorker:run(): read key : " + readFromMe + " and got message: [" + message + "].");
-            ProcessClientMessage(readFromMe,message);
-          }
-        }
-      }
-    }
-  }
-
-
-        boolean auth_result = DoAuthentication(sk);
-        if (auth_result == true) {
-          Send("You are now authenticated.",sk);
-        }
-        else {
-          Send("You are NOT authenticated.",sk);
-        }
-
-*/

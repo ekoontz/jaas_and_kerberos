@@ -31,12 +31,12 @@ public class NIOServer {
   }
 
   // send a message to all clients from the system.
-  private void BroadcastSystem(String message) {
+  protected void BroadcastSystem(String message) {
     Broadcast("** " + message,null);
   }
 
   // send a message to all clients (except sender, if non-null).
-  private void Broadcast(String message, SelectionKey sender) {
+  protected void Broadcast(String message, SelectionKey sender) {
     // If sender is supplied, sender will not receive a
     // message from itself. 
     for (SelectionKey recipient: clientNick.keySet()) {
@@ -101,8 +101,8 @@ public class NIOServer {
       numRead = socketChannel.read(readBuffer);
       if (numRead != -1) {
         readBuffer.flip();
-        System.out.println("read: " + numRead + " bytes.");
-        byte[] bytes = new byte[8192];
+        System.out.println("ReadBytesFromClientByNetwork() read: " + numRead + " bytes.");
+        byte[] bytes = new byte[numRead+1];
         readBuffer.get(bytes,0,numRead);
         Hexdump.hexdump(System.out,bytes,0,numRead);
         return bytes;
@@ -261,7 +261,7 @@ public class NIOServer {
     while(true) {
 
       try {
-        System.out.println("NIOServer:waiting on select().");
+        //        System.out.println("NIOServer:waiting on select().");
         selector.select();
 
         Iterator selectedKeys = selector.selectedKeys().iterator();
