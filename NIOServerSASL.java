@@ -156,7 +156,7 @@ public class NIOServerSASL extends NIOServerMultiThread {
       else {
         if (clientMessage.substring(0,7).equals("/status")) {
 
-          // FIXME: (only authenticated clients can use this).
+          // FIXME: (only authenticated clients should be allowed to this).
 
           // Construct a human-readable table of clients and their states
           // and send to client.

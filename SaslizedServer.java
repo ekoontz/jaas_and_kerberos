@@ -188,7 +188,9 @@ public class SaslizedServer {
       inStream.readFully(saslToken,0,length);
       System.out.println("Server: response token read of length " + saslToken.length);
       try {
+        System.out.println("Server: evaluating response..");
         saslToken = saslServer.evaluateResponse(saslToken);
+        System.out.println("Server: evaluated response.");
         if (saslToken != null) {
           if (saslToken.length > 0) {
             outStream.writeInt(saslToken.length);

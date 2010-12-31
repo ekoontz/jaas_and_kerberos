@@ -24,9 +24,16 @@ class AuthReadWorker extends ReadWorker {
       System.out.println("AuthReadWorker client state is : " + ((NIOServerSASL)main).clientStates.get(readFromMe));
 
       if (clientState == NIOServerSASL.ClientState.Authenticating) {
+
+        // 4 bytes for integer of token length.
+        //        byte[] tokenLength = main.ReadBytesFromClientByNetwork(readFromMe);
+        //        System.out.println("tokenLength read: " + tokenLength.length);
+
         byte[] saslToken = main.ReadBytesFromClientByNetwork(readFromMe);
+        System.out.println("just read sasl token from client: " + saslToken.length);
 
         String testMessage = new String(saslToken);
+        System.out.println("raw test message from client: " + testMessage);
         if (testMessage.trim().length() == 0) {
           // FIXME: happens after we've just read a message
           // from readFromMe, but still readFromMe is added to queue.
@@ -41,9 +48,31 @@ class AuthReadWorker extends ReadWorker {
           ((NIOServerSASL)main).clientStates.put(readFromMe,NIOServerSASL.ClientState.Authenticated);
         }
         else {
+          System.out.println("AuthReadWorker: Auth not complete; continuing.");
           byte[] response = null;
           try {
+            
+            if (testMessage.trim().equals("(C:nomsg)")) {
+              System.out.println("AuthReadWorker: OK: it's nomsg.");
+            }
+            else {
+              System.out.println("AuthReadWorker: WTF: " + testMessage + " is not nomsg.");
+            }
+
+            if (testMessage.trim().equals("(C:nomsg)")) {
+              System.out.println("AuthReadWorker: evaluating response: using empty saslToken");
+              saslToken = new byte[0];
+            }
             response = saslServer.evaluateResponse(saslToken);
+
+            String sendMessage = new String(response);
+            if (response.length == 0) {
+              sendMessage = "(S:nomsg)";
+            }
+            System.out.println("sending SASL token to client: " + sendMessage);
+            main.WriteToClient(readFromMe,sendMessage);
+
+
           }
           catch (SaslException e) {
             System.err.println("authentication with client failed: closing client connection.");
@@ -52,12 +81,6 @@ class AuthReadWorker extends ReadWorker {
           if (saslServer.isComplete()) {
             System.out.println("COMPLETE!!! YAHOO!!!");
           }
-          String sendMessage = new String(response);
-          if (response.length == 0) {
-            sendMessage = "(nomsg)";
-          }
-          System.out.println("sending SASL token to client: " + sendMessage);
-          main.WriteToClient(readFromMe,sendMessage);
          }
         System.out.println("AuthReadWorker: processed client authentication message; client state is : " + ((NIOServerSASL)main).clientStates.get(readFromMe));
       }

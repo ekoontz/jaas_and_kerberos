@@ -143,7 +143,7 @@ public class SASLizedChatClient {
                   byte[] saslToken = new byte[0];
 
                   if (saslClient.hasInitialResponse()) {
-                    System.out.println("evaluating initial response..");
+                    System.out.println("evaluating initial response:");
                     saslToken = saslClient.evaluateChallenge(saslToken);
                     System.out.println("evaluateChallenge(): response has length : " + saslToken.length);
                     Hexdump.hexdump(System.out,saslToken,0,saslToken.length);
@@ -161,9 +161,11 @@ public class SASLizedChatClient {
                     saslToken[7] = (byte)2;
                     saslToken[8] = (byte)3;*/
                     // </corrupt bytes to test server response..>
+                    //                    outStream.writeInt(saslToken.length);
+                    //                    outStream.flush();
 
                     if (saslToken.length == 0) {
-                      String nomsg = new String("(nomsg)");
+                      String nomsg = new String("(C:nomsg)");
                       outStream.write(nomsg.getBytes(),0,nomsg.getBytes().length);
                     }
                     else {
@@ -178,7 +180,8 @@ public class SASLizedChatClient {
                     length = inStream.read(saslToken);
 
                     String testMessage = new String(saslToken);
-                    if (testMessage.trim().equals("(nomsg)")) {
+                    if (testMessage.trim().equals("(S:nomsg)")) {
+                      System.out.println("Just read a 'nomsg' response from server.");
                       length = 0;
                       saslToken = new byte[0];
                     }
