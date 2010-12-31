@@ -15,34 +15,17 @@ class AuthReadWorker extends ReadWorker {
     System.out.println("starting AuthReadWorker..");
     
     while(true) {
-      // blocks waiting for items to appear on the read queue.
       System.out.println("AuthReadWorker.run(): waiting for a client to appear in the read queue.");
       SelectionKey readFromMe = main.takeFromReadQueue();
 
-      String message = main.ReadFromClientByNetwork(readFromMe);
-
       NIOServerSASL.ClientState clientState = ((NIOServerSASL)main).clientStates.get(readFromMe);
-      
-      // FIXME: message should be a byte array, not a string.
       if (clientState == NIOServerSASL.ClientState.Authenticating) {
-        byte[] messageBytes = message.getBytes();
-        System.out.println("AuthReadWorker: processing client authentication message of length: " + messageBytes.length);
+        byte[] message = main.ReadBytesFromClientByNetwork(readFromMe);
+        System.out.println("AuthReadWorker: processing client authentication message of length: " + message.length);
       }
       else {
-        if (message == null) {
-          System.out.println("AuthReadWorker: message is null: assuming client hung up.");
-          main.CancelClient(readFromMe);
-        }
-        else {
-          if (message.trim().length() == 0) {
-            // FIXME: happens after we've just read a message
-            // from readFromMe, but still readFromMe is added to queue.
-          }
-          else {
-            System.out.println("AuthReadWorker:run(): read key : " + readFromMe + " and got message: [" + message + "].");
-            main.ProcessClientMessage(readFromMe,message);
-          }
-        }
+        // non-authentication case.
+        ReadClientMessage(readFromMe);
       }
     }
   }
