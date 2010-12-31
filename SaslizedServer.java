@@ -22,12 +22,12 @@ import java.io.DataOutputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class SASLizedServer {
+public class SaslizedServer {
 
   private ExecutorService executors = Executors.newFixedThreadPool(10);
   
   public static void main(String[] args) throws SaslException {
-    new SASLizedServer().launch(Integer.parseInt(args[0]));
+    new SaslizedServer().launch(Integer.parseInt(args[0]));
   }
     
   public void launch(final int serverPort) {
