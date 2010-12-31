@@ -51,14 +51,6 @@ class AuthReadWorker extends ReadWorker {
           System.out.println("AuthReadWorker: Auth not complete; continuing.");
           byte[] response = null;
           try {
-            
-            if (testMessage.trim().equals("(C:nomsg)")) {
-              System.out.println("AuthReadWorker: OK: it's nomsg.");
-            }
-            else {
-              System.out.println("AuthReadWorker: WTF: " + testMessage + " is not nomsg.");
-            }
-
             if (testMessage.trim().equals("(C:nomsg)")) {
               System.out.println("AuthReadWorker: evaluating response: using empty saslToken");
               saslToken = new byte[0];
