@@ -54,7 +54,6 @@ public class NIOServer {
   }
 
   protected void WriteToClientByNetwork(SelectionKey sk, String message) {
-    // initialize client nickname if necessary.
     if (clientNick.get(sk) == null) {
       System.out.println("WriteToClientByNetwork(): REFUSING TO WRITE TO UNREGISTERED KEY: " + sk);
       return;
