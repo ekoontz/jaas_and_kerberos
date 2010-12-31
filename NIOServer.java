@@ -83,10 +83,14 @@ public class NIOServer {
     }
   }
 
-  protected String ReadFromClientByNetwork(SelectionKey sk) {
-
+  protected byte[] ReadBytesFromClientByNetwork(SelectionKey sk) {
     // initialize client nickname if necessary.    
     System.out.println("Reading input from " + clientNick.get(sk));
+
+    if (clientNick.get(sk) == null) {
+      clientNick.put(sk,"client #"+clientSerialNum.incrementAndGet());
+      BroadcastSystem(clientNick.get(sk) + " joined the chat.");
+    }
     
     final SocketChannel socketChannel = (SocketChannel) sk.channel();
     int numRead = 0;
@@ -101,16 +105,7 @@ public class NIOServer {
         byte[] bytes = new byte[8192];
         readBuffer.get(bytes,0,numRead);
         Hexdump.hexdump(System.out,bytes,0,numRead);
-        
-        String clientMessage = new String(bytes);
-
-        if (clientNick.get(sk) == null) {
-          clientNick.put(sk,"client #"+clientSerialNum.incrementAndGet());
-          BroadcastSystem(clientNick.get(sk) + " joined the chat.");
-        }
-
-        return clientMessage;
-
+        return bytes;
       }
     }
     catch (IOException e) {
@@ -120,6 +115,12 @@ public class NIOServer {
       CancelClient(sk);
     }
     return null;
+  }
+
+  protected String ReadFromClientByNetwork(SelectionKey sk) {
+    byte[] bytes = ReadBytesFromClientByNetwork(sk);
+    String clientMessage = new String(bytes);
+    return clientMessage;
   }
 
   protected void CancelClient(SelectionKey sk) {
