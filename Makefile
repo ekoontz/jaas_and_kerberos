@@ -26,7 +26,7 @@ nio_server: NIOServer.class
 nio_server_multi: NIOServerMultiThread.class NIOServer.class ReadWorker.class WriteWorker.class Pair.class
 	java NIOServerMultiThread 5678
 
-nio_server_sasl: NIOServerSASL.class NIOServerMultiThread.class NIOServer.class ClientAuthWorker.class ReadWorker.class WriteWorker.class Pair.class
+nio_server_sasl: NIOServerSASL.class NIOServerMultiThread.class NIOServer.class ClientAuthWorker.class ReadWorker.class WriteWorker.class Pair.class AuthReadWorker.class AuthWriteWorker.class
 	java NIOServerSASL 6789
 
 test: clean
