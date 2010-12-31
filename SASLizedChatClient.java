@@ -207,7 +207,6 @@ public class SASLizedChatClient {
                     System.out.println("</client challenge/response loop>");
                   }
                   System.out.println("Done with authentication loop. Sending last token.");
-                  outStream.writeInt(saslToken.length);
                   outStream.write(saslToken, 0, saslToken.length);
                   outStream.flush();
 
@@ -221,9 +220,6 @@ public class SASLizedChatClient {
                 return null;
               }
             });
-
-        int payload = inStream.readInt();
-        System.out.println("Read payload: " + payload);
 
       }
       catch (Exception e) {

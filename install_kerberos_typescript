@@ -1,0 +1,2291 @@
+Script started on Thu 09 Dec 2010 10:31:34 AM PST
+]0;ekoontz@debian64-3: ~[01;32mekoontz@debian64-3[00m:[01;34m~[00m$ ntp-server
+ntp-server: command not found
+]0;ekoontz@debian64-3: ~[01;32mekoontz@debian64-3[00m:[01;34m~[00m$ apt-get install ntp-server
+E: Could not open lock file /var/lib/dpkg/lock - open (13: Permission denied)
+E: Unable to lock the administration directory (/var/lib/dpkg/), are you root?
+]0;ekoontz@debian64-3: ~[01;32mekoontz@debian64-3[00m:[01;34m~[00m$ apt-get install ntp-server[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ksudo bash
+[sudo] password for ekoontz: 
+]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# apt-get install ntp-server
+Reading package lists... 0%Reading package lists... 0%Reading package lists... 25%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree       
+Reading state information... 0%Reading state information... 1%Reading state information... Done
+Package ntp-server is not available, but is referred to by another package.
+This may mean that the package is missing, has been obsoleted, or
+is only available from another source
+E: Package ntp-server has no installation candidate
+]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# apt-get update
+0% [Working]            Hit http://us.archive.ubuntu.com lucid Release.gpg
+            5% [Connecting to security.ubuntu.com]                                      Ign http://us.archive.ubuntu.com/ubuntu/ lucid/main Translation-en_US
+                                      11% [Connecting to security.ubuntu.com]                                       Ign http://us.archive.ubuntu.com/ubuntu/ lucid/restricted Translation-en_US
+17% [Connecting to security.ubuntu.com]                                       Ign http://us.archive.ubuntu.com/ubuntu/ lucid/universe Translation-en_US
+23% [Connecting to security.ubuntu.com]                                       Ign http://us.archive.ubuntu.com/ubuntu/ lucid/multiverse Translation-en_US
+29% [Connecting to security.ubuntu.com]                                       Get:1 http://us.archive.ubuntu.com lucid-updates Release.gpg [198B]
+                                       2% [1 Release.gpg 0B/198B 0%] [Connecting to security.ubuntu.com]                                                                 94% [Connecting to security.ubuntu.com]                                       Ign http://us.archive.ubuntu.com/ubuntu/ lucid-updates/main Translation-en_US
+95% [Connecting to security.ubuntu.com]                                       Ign http://us.archive.ubuntu.com/ubuntu/ lucid-updates/restricted Translation-en_US
+95% [Connecting to security.ubuntu.com]                                       Ign http://us.archive.ubuntu.com/ubuntu/ lucid-updates/universe Translation-en_US
+                                       Ign http://us.archive.ubuntu.com/ubuntu/ lucid-updates/multiverse Translation-en_US
+                                       96% [Waiting for headers] [Connecting to security.ubuntu.com]                                                             Hit http://us.archive.ubuntu.com lucid Release
+96% [Waiting for headers] [Connecting to security.ubuntu.com]                                                             96% [Release gpgv 57.2kB] [Waiting for headers] [Connecting to security.ubuntu.                                                                               Get:2 http://us.archive.ubuntu.com lucid-updates Release [44.7kB]
+0% [Release gpgv 57.2kB] [2 Release 0B/44.7kB 0%] [Connecting to security.ubunt                                                                               22% [2 Release 9,741B/44.7kB 21%] [Connecting to security.ubuntu.com]83% [2 Release 37.3kB/44.7kB 83%] [Connecting to security.ubuntu.com]                                                                     99% [Connecting to security.ubuntu.com]                                       99% [2 Release gpgv 44.7kB] [Connecting to security.ubuntu.com]                                                               99% [Waiting for headers] [Connecting to security.ubuntu.com]                                                             Hit http://us.archive.ubuntu.com lucid/main Packages
+                                                             Hit http://us.archive.ubuntu.com lucid/restricted Packages
+99% [Waiting for headers] [Connecting to security.ubuntu.com]                                                             Hit http://us.archive.ubuntu.com lucid/main Sources
+                                                             Hit http://us.archive.ubuntu.com lucid/restricted Sources
+                                                             Hit http://us.archive.ubuntu.com lucid/universe Packages
+99% [Waiting for headers] [Connecting to security.ubuntu.com]                                                             Hit http://us.archive.ubuntu.com lucid/universe Sources
+                                                             Hit http://us.archive.ubuntu.com lucid/multiverse Packages
+                                                             Hit http://us.archive.ubuntu.com lucid/multiverse Sources
+99% [Waiting for headers] [Connecting to security.ubuntu.com]                                                             Get:3 http://us.archive.ubuntu.com lucid-updates/main Packages [362kB]
+                                                             11% [3 Packages 0B/362kB 0%] [Connecting to security.ubuntu.com]                                                                36% [3 Packages 105kB/362kB 29%] [Connecting to security.ubuntu.com]61% [3 Packages 207kB/362kB 57%] [Connecting to security.ubuntu.com]79% [3 Packages 278kB/362kB 76%] [Connecting to security.ubuntu.com]                                                                    99% [Connecting to security.ubuntu.com]                                       Get:4 http://us.archive.ubuntu.com lucid-updates/restricted Packages [3,267B]
+                                       Get:5 http://us.archive.ubuntu.com lucid-updates/main Sources [140kB]
+                                       76% [5 Sources 13.2kB/140kB 9%] [Connecting to security.ubuntu.com]                                                                   76% [3 Packages bzip2 0B] [5 Sources 13.2kB/140kB 9%] [Connecting to security.u                                                                               86% [5 Sources 68.2kB/140kB 48%] [Connecting to security.ubuntu.com]                                                                    86% [4 Packages bzip2 0B] [5 Sources 68.2kB/140kB 48%] [Connecting to security.                                                                               90% [5 Sources 87.0kB/140kB 62%] [Connecting to security.ubuntu.com]                                                                    99% [Connecting to security.ubuntu.com]                                       99% [5 Sources bzip2 0B] [Connecting to security.ubuntu.com]                                                            Get:6 http://us.archive.ubuntu.com lucid-updates/restricted Sources [1,443B]
+                                                            99% [5 Sources bzip2 0B] [6 Sources 0B/1,443B 0%] [Connecting to security.ubunt                                                                               99% [5 Sources bzip2 0B] [Connecting to security.ubuntu.com]                                                            Get:7 http://us.archive.ubuntu.com lucid-updates/universe Packages [155kB]
+                                                            78% [5 Sources bzip2 0B] [7 Packages 0B/155kB 0%] [Connecting to security.ubunt                                                                               79% [7 Packages 11.5kB/155kB 7%] [Connecting to security.ubuntu.com]                                                                    79% [6 Sources bzip2 0B] [7 Packages 11.5kB/155kB 7%] [Connecting to security.u                                                                               80% [7 Packages 14.4kB/155kB 9%] [Connecting to security.ubuntu.com]93% [7 Packages 111kB/155kB 71%] [Connecting to security.ubuntu.com]                                                                    99% [Connecting to security.ubuntu.com]                                       99% [7 Packages bzip2 0B] [Connecting to security.ubuntu.com]                                                             Get:8 http://us.archive.ubuntu.com lucid-updates/universe Sources [59.1kB]
+                                                             92% [7 Packages bzip2 0B] [8 Sources 0B/59.1kB 0%] [Connecting to security.ubun                                                                               95% [8 Sources 22.7kB/59.1kB 38%] [Connecting to security.ubuntu.com]                                                                     99% [Connecting to security.ubuntu.com]                                       99% [8 Sources bzip2 0B] [Connecting to security.ubuntu.com]                                                            Get:9 http://us.archive.ubuntu.com lucid-updates/multiverse Packages [7,289B]
+                                                            99% [8 Sources bzip2 0B] [9 Packages 0B/7,289B 0%] [Connecting to security.ubun                                                                               99% [8 Sources bzip2 0B] [Connecting to security.ubuntu.com]                                                            Get:10 http://us.archive.ubuntu.com lucid-updates/multiverse Sources [3,677B]
+                                                            99% [8 Sources bzip2 0B] [10 Sources 0B/3,677B 0%] [Connecting to security.ubun                                                                               99% [8 Sources bzip2 0B] [Connecting to security.ubuntu.com]                                                            99% [Connecting to security.ubuntu.com]                                       99% [9 Packages bzip2 0B] [Connecting to security.ubuntu.com]                                                             99% [Connecting to security.ubuntu.com]                                       99% [10 Sources bzip2 0B] [Connecting to security.ubuntu.com]                                                             99% [Connecting to security.ubuntu.com]                                       99% [Connecting to security.ubuntu.com]                              122kB/s 0s99% [Connecting to security.ubuntu.com]                              122kB/s 0s99% [Connecting to security.ubuntu.com]                              122kB/s 0s99% [Connecting to security.ubuntu.com]                              122kB/s 0s99% [Connecting to security.ubuntu.com]                              122kB/s 0s99% [Connecting to security.ubuntu.com]                              122kB/s 0s99% [Connecting to security.ubuntu.com]                              122kB/s 0s99% [Connecting to security.ubuntu.com]                              122kB/s 0s99% [Waiting for headers]                                            122kB/s 0s                                                                               Get:11 http://security.ubuntu.com lucid-security Release.gpg [198B]
+99% [11 Release.gpg 0B/198B 0%]                                      122kB/s 0s99% [Working]                                                        122kB/s 0s                                                                               Ign http://security.ubuntu.com/ubuntu/ lucid-security/main Translation-en_US
+99% [Working]                                                        122kB/s 0s                                                                               Ign http://security.ubuntu.com/ubuntu/ lucid-security/restricted Translation-en_US
+99% [Working]                                                        122kB/s 0s                                                                               Ign http://security.ubuntu.com/ubuntu/ lucid-security/universe Translation-en_US
+99% [Working]                                                        122kB/s 0s                                                                               Ign http://security.ubuntu.com/ubuntu/ lucid-security/multiverse Translation-en_US
+99% [Working]                                                        122kB/s 0s                                                                               Get:12 http://security.ubuntu.com lucid-security Release [38.5kB]
+95% [12 Release 0B/38.5kB 0%]                                        122kB/s 0s98% [12 Release 24.2kB/38.5kB 62%]                                   122kB/s 0s99% [Working]                                                        122kB/s 0s99% [12 Release gpgv 38.5kB]                                         122kB/s 0s99% [Working]                                                        122kB/s 0s                                                                               Get:13 http://security.ubuntu.com lucid-security/main Packages [109kB]
+88% [13 Packages 2,485B/109kB 2%]                                    122kB/s 0s99% [Working]                                                        122kB/s 0s99% [13 Packages bzip2 0B]                                           122kB/s 0s99% [Waiting for headers]                                            122kB/s 0s                                                                               Get:14 http://security.ubuntu.com lucid-security/restricted Packages [14B]
+                                                                               Get:15 http://security.ubuntu.com lucid-security/main Sources [37.7kB]
+96% [15 Sources 2,487B/37.7kB 6%]                                    122kB/s 0s96% [14 Packages bzip2 0B] [15 Sources 8,279B/37.7kB 21%]            122kB/s 0s                                                                               Get:16 http://security.ubuntu.com lucid-security/restricted Sources [14B]
+                                                                               Get:17 http://security.ubuntu.com lucid-security/universe Packages [50.0kB]
+95% [14 Packages bzip2 0B] [17 Packages 2,487B/50.0kB 4%]            122kB/s 0s97% [17 Packages 22.8kB/50.0kB 45%]                                  122kB/s 0s97% [15 Sources bzip2 0B] [17 Packages 22.8kB/50.0kB 45%]            122kB/s 0s97% [17 Packages 22.8kB/50.0kB 45%]                                  122kB/s 0s97% [16 Sources bzip2 0B] [17 Packages 22.8kB/50.0kB 45%]            122kB/s 0s97% [17 Packages 22.8kB/50.0kB 45%]                                  122kB/s 0s99% [Working]                                                        122kB/s 0s99% [17 Packages bzip2 0B]                                           122kB/s 0s                                                                               Get:18 http://security.ubuntu.com lucid-security/universe Sources [13.7kB]
+98% [17 Packages bzip2 0B] [18 Sources 0B/13.7kB 0%]                 122kB/s 0s99% [17 Packages bzip2 0B]                                           122kB/s 0s                                                                               Get:19 http://security.ubuntu.com lucid-security/multiverse Packages [1,874B]
+99% [17 Packages bzip2 0B] [19 Packages 0B/1,874B 0%]                122kB/s 0s99% [17 Packages bzip2 0B]                                           122kB/s 0s                                                                               Get:20 http://security.ubuntu.com lucid-security/multiverse Sources [660B]
+99% [17 Packages bzip2 0B] [20 Sources 0B/660B 0%]                   122kB/s 0s99% [17 Packages bzip2 0B]                                           122kB/s 0s99% [Working]                                                        122kB/s 0s99% [18 Sources bzip2 0B]                                            122kB/s 0s99% [Working]                                                        122kB/s 0s99% [19 Packages bzip2 0B]                                           122kB/s 0s99% [Working]                                                        122kB/s 0s99% [20 Sources bzip2 0B]                                            122kB/s 0s100% [Working]                                                       122kB/s 0s                                                                               Fetched 1,028kB in 12s (83.5kB/s)
+Reading package lists... 0%Reading package lists... 0%Reading package lists... 1%Reading package lists... 20%Reading package lists... 20%Reading package lists... 20%Reading package lists... 20%Reading package lists... 41%Reading package lists... 78%Reading package lists... 85%Reading package lists... 85%Reading package lists... 88%Reading package lists... 88%Reading package lists... 94%Reading package lists... 94%Reading package lists... 94%Reading package lists... 94%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 98%Reading package lists... 98%Reading package lists... 98%Reading package lists... 98%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done
+]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# apt-get updateinstall ntp-server
+Reading package lists... 0%Reading package lists... 100%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree       
+Reading state information... 0%Reading state information... 1%Reading state information... Done
+Package ntp-server is not available, but is referred to by another package.
+This may mean that the package is missing, has been obsoleted, or
+is only available from another source
+E: Package ntp-server has no installation candidate
+]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# apt-cache ntp[K[K[Ksearch ntp
+libcommons-net-java - internet protocol suite Java library
+libgnumail-java - free implementation of the javamail API
+lynx-cur - Text-mode WWW Browser with NLS support (development version)
+nagios-images - Collection of images and icons for the nagios system
+nagios-plugins - Plugins for the nagios network monitoring and management system
+nagios-plugins-basic - Plugins for the nagios network monitoring and management system
+nagios-plugins-standard - Plugins for the nagios network monitoring and management system
+nagios3 - A host/service/network monitoring and management system
+nagios3-cgi - cgi files for nagios3
+nagios3-common - support files for nagios3
+nagios3-core - A host/service/network monitoring and management system core files
+nagios3-dbg - debugging symbols and debug stuff for nagios3
+nagios3-doc - documentation for nagios3
+ntp - Network Time Protocol daemon and utility programs
+ntp-doc - Network Time Protocol documentation
+ntpdate - client for setting system time from NTP servers
+python-simpletal - Simple TAL, TALES and METAL implementation
+python-twisted-news - An NNTP protocol implementation with client and server
+rdate - sets the system's date from a remote host
+texlive-fonts-extra - TeX Live: Extra fonts
+x11proto-print-dev - X11 Printing extension (Xprint) wire protocol
+x11proto-xf86bigfont-dev - X11 Big Fonts extension wire protocol
+adjtimex - kernel time variables configuration utility
+aub - Assembles binary files from USENET
+awffull - web server log analysis program
+brag - Downloads and assembles multipart Usenet binaries
+chntpw - NT SAM password recovery utility
+chrony - Sets your computer's clock from time servers on the Net
+cone - COnsole Newsreader and Emailer
+cyrus-admin-2.2 - Cyrus mail system - administration tools
+cyrus-common-2.2 - Cyrus mail system - common files
+cyrus-doc-2.2 - Cyrus mail system - documentation files
+cyrus-imapd-2.2 - Cyrus mail system - IMAP support
+cyrus-nntpd-2.2 - Cyrus mail system (NNTP support)
+cyrus-pop3d-2.2 - Cyrus mail system - POP3 support
+ebox-ntp - eBox - NTP Service
+etpan-ng - console mail user agent based on libEtPan!
+flickrfs - virtual filesystem for flickr online photosharing service
+fuse-convmvfs - mirrors a whole filesystem tree from one charset to another
+gmountiso - This is Gmountiso, a PyGTK GUI to mount your cd images
+hobbit-plugins - plugins for the Xymon network monitor
+icecast-server - MPEG Layer III Streaming Server
+im - mail/news handling commands and Perl modules
+inn2-inews - NNTP client news injector, from InterNetNews (INN)
+innfeed - This is the INN feeder program `innfeed.'
+klibido - usenet binary grabber for KDE
+knews - Graphical threaded news reader
+leafnode - NNTP server for small sites
+libace-perl - Object-Oriented Access to ACEDB Databases
+libcommons-net2-java - internet protocol suite Java library
+libcommons-net2-java-doc - internet protocol suite Java library
+libdevel-cover-perl - Perl tool for determining code coverage metrics
+libetpan-dbg - debugging symbols for libetpan
+libetpan-dev - mail handling library - development files
+libetpan-doc - mail handling library - API documentation
+libetpan13 - mail handling library
+libgnumail-java-doc - free implementation of the javamail API (Javadocs)
+libnet-ntp-perl - Perl module to query NTP servers
+libnews-nntpclient-perl - News::NNTPClient, Perl support for accessing NNTP servers
+libnzb-dev - An nzb based Usenet binary grabber (development files)
+libnzb0c2a - An nzb based Usenet binary grabber (runtime library)
+libperl-metrics-simple-perl - Perl interface to count packages, subs, lines, etc. of many files
+libtinymail-1.0-0 - Framework for mobile applications with e-mail
+libtinymail-1.0-0-dbg - Framework for mobile applications with e-mail -- debug symbols
+libtinymail-camel-1.0-0 - Framework for mobile applications with e-mail -- Camel library
+libtinymail-camel-dev - Framework for mobile applications with e-mail -- Camel devel
+libtinymail-dev - Framework for mobile applications with e-mail -- devel
+libtinymail-gio-1.0-0 - Framework for mobile applications with e-mail -- GIO library
+libtinymail-gio-dev - Framework for mobile applications with e-mail -- GIO devel
+libtinymail-gnome-desktop-1.0-0 - Framework for mobile applications with e-mail - GNOME library
+libtinymail-gnome-desktop-dev - Framework for mobile applications with e-mail - GNOME devel
+libtinymail-gnomevfs-1.0-0 - Framework for mobile applications with e-mail -- GnomeVFS library
+libtinymail-gnomevfs-dev - Framework for mobile applications with e-mail -- GnomeVFS devel
+libtinymail-maemo-1.0-0 - Framework for mobile applications with e-mail - Maemo library
+libtinymail-maemo-dev - Framework for mobile applications with e-mail - Maemo devel
+libtinymailui-1.0-0 - Framework for mobile applications with e-mail - UI library
+libtinymailui-dev - Framework for mobile applications with e-mail - UI devel
+libtinymailui-gtk-1.0-0 - Framework for mobile applications with e-mail - GTK+ library
+libtinymailui-gtk-dev - Framework for mobile applications with e-mail - GTK+ devel
+libtinymailui-gtkhtml-1.0-0 - Framework for mobile applications with e-mail - gtkhtml library
+libtinymailui-gtkhtml-dev - Framework for mobile applications with e-mail - gtkhtml devel
+libxfontp-dev - X11 font rasterisation library with Xprint support (development headers)
+libxfontp1 - X11 font rasterisation library with Xprint support
+libxfontp1-dbg - X11 font rasterisation library with Xprint support (debug package)
+linkchecker - check websites and HTML documents for broken links
+linkchecker-gui - check websites and HTML documents for broken links (GUI client)
+lusernet.app - News Reader for GNUstep
+mew - mail reader supporting PGP/MIME for Emacs
+mew-beta - mail reader supporting PGP/MIME for Emacs (development version)
+monit - A utility for monitoring and managing daemons or similar programs
+mountpy - script for quick mounting of removable devices
+msntp - A very simple and portable SNTP client/server
+nagios-plugins-extra - Plugins for the nagios network monitoring and manegement system.
+netwox - networking utilities
+netwox-doc - documentation for netwox toolbox
+nget - auto-resuming command line NNTP file grabber
+nglister - Downloads information from NNTP server
+nn - Heavy-duty USENET news reader (curses-based client)
+nsca - Nagios service monitor agent
+openntpd - OpenBSD NTP daemon
+papercut - simple and extensible NNTP server
+picalib - Set of PICA helper scripts and configuration files
+postman - High performance web based IMAP and NNTP client
+postnews - Post Usenet articles via NNTP from the command line
+predict - Satellite Tracking Program with Optional Voice Output
+publib-dev - library of miscellaneous C functions
+pyg - Python Mail <-> News Gateway
+pysdm - Graphical Storage Device Manager
+python-yenc - yEnc encoding/decoding extension for Python
+python-zope.pagetemplate - Zope Page Templates
+radioclk - simple ntp refclock daemon for MSF/WWVB/DCF77 time signals
+rawdog - RSS Aggregator Without Delusions Of Grandeur
+rofs - Read-Only Filesystem for FUSE
+sinntp - tiny non-interactive NNTP client
+slrn - threaded news reader (fast for slow links)
+slrnpull - pulls a small newsfeed from an NNTP server
+sn - Small NNTP server for leaf sites
+speedy-cgi-perl - speed up perl scripts by making them persistent
+statnews - Extracts useful statistics out of a newsgroup or mailing list
+suck - small newsfeed from an NNTP server with standard NNTP commands
+svnmailer - extensible Subversion commit notification tool
+tcllib - the Standard Tcl Library
+tin - A full-screen easy to use Usenet newsreader
+turqstat - Fidonet and Usenet statistics program
+uqwk - Offline mail and news package creator (NNTP version)
+usbmount - automatically mount and unmount USB mass storage devices
+uucpsend - Alternative Frontend for UUCP Batching with INN
+uw-mailutils - c-client support programs
+wl - mail/news reader supporting IMAP for emacsen
+wl-beta - mail/news reader supporting IMAP for emacsen (development version)
+xbuffy - monitor mailboxes and/or newsgroups
+xturqstat - Fidonet and Usenet statistics program for X
+trn - Threaded USENET news reader, based on rn
+trn4 - Threaded USENET news reader, based on rn (4.0 beta test)
+collectd-core - statistics collection and monitoring daemon (core system)
+seamonkey-mailnews - Seamonkey Mail & Newsgroups and Address Book
+]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# apt-cache search ntpget install ntp-server[K[K[K[K[K[K[K
+Reading package lists... 0%Reading package lists... 100%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree       
+Reading state information... 0%Reading state information... 1%Reading state information... Done
+Suggested packages:
+  ntp-doc
+The following NEW packages will be installed:
+  ntp
+0 upgraded, 1 newly installed, 0 to remove and 68 not upgraded.
+Need to get 559kB of archives.
+After this operation, 1,450kB of additional disk space will be used.
+0% [Working]            Get:1 http://us.archive.ubuntu.com/ubuntu/ lucid/main ntp 1:4.2.4p8+dfsg-1ubuntu2 [559kB]
+            0% [1 ntp 0B/559kB 0%]                      3% [1 ntp 20.0kB/559kB 3%]                          15% [1 ntp 85.1kB/559kB 15%]                            27% [1 ntp 156kB/559kB 27%]45% [1 ntp 256kB/559kB 45%]61% [1 ntp 343kB/559kB 61%]77% [1 ntp 433kB/559kB 77%]94% [1 ntp 528kB/559kB 94%]                           100% [Working]              Fetched 559kB in 4s (136kB/s)
+Selecting previously deselected package ntp.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46118 files and directories currently installed.)
+Unpacking ntp (from .../ntp_1%3a4.2.4p8+dfsg-1ubuntu2_amd64.deb) ...
+Processing triggers for man-db ...
+Processing triggers for ureadahead ...
+ureadahead will be reprofiled on next reboot
+Setting up ntp (1:4.2.4p8+dfsg-1ubuntu2) ...
+ * Starting NTP server ntpd
+   ...done.
+
+]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# emacs -nw /etc/ntp.conf [K[K[K[K[K[K[K[K[K[K[K[K[K[K[K0[K[K[K[K[K[K[K[K[K[Kecho "using yeah[K[K[K[K[K http://www.alittletooquiet.net/text/kerberos-on-u buntu/ as reference for kerb setup"
+using http://www.alittletooquiet.net/text/kerberos-on-ubuntu/ as reference for kerb setup
+]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# emacs -nw /etc/ntp.conf 
+7[?47h7[?47h[?1h=[H[2J[23;1H[7m-=--:----F1  [m[m[7m[1m*scratch*   [m[m[7m   All L1     (Fundamental)----------------------------[m[m
+[A[H[H[2J[24;1H[K[?1l>[2J[?47l8[m7[?47h7[?47h[?1h=[24;1HLoading 00debian-vars...[K[H
+[24;1HNo /etc/mailname. Rev[4herting to default[H
+[4l[24;1HLoading 00debian-vars...done[K[H
+[>0c[24;1HLoading 00debian-vars...done[K[H[7mFile Edit Options Buffers Tools Lisp-Interaction Help                           [m[m
+[A
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[7m-UUU:----F1  [m[m[7m[1m*scratch*   [m[m[7m   All L1     (Lisp Interaction)-----------------------[m[m
+[A[H
+[24;1HFor information about GNU Emacs and the GNU system, type C-h C-a.[H
+[24;1HFor information about GNU Emacs and the GNU system, type C-h C-a.[K[H[7mFile Edit Options Buffers Tools Conf Help                                       [m[m
+[A
+[31m# /etc/ntp.conf, configuration for ntpd; see ntp.conf(5) for help               [m
+[A
+[K
+[33mdriftfile[m[m /var/lib/ntp/ntp.drift[K
+[K
+[K
+[31m# Enable this if you want statistics to be logged.                              [m
+[A
+[31m#statsdir /var/log/ntpstats/                                                    [m
+[A
+[K
+[33mstatistics[m[m loopstats peerstats clockstats[K
+[33mfilegen[m[m loopstats file loopstats type day enable[K
+[33mfilegen[m[m peerstats file peerstats type day enable[K
+[33mfilegen[m[m clockstats file clockstats type day enable[K
+[K
+[K
+[31m# You do need to talk to an NTP server or two (or three).                       [m
+[A
+[33mserver[m[m ntp.ubuntu.com[K
+[K
+[K
+[31m# Access control configuration; see /usr/share/doc/ntp-doc/html/accopt.html for[m[K
+[31m# details.  The web page <http://support.ntp.org/bin/view/Support/AccessRestric[m\
+[A
+[31mtions>                                                                          [m
+[A
+[7m-UU-:----F1  [m[m[7m[1mntp.conf    [m[m[7m   Top L1     (Conf[Space])----------------------------[m[m
+[A[H
+[24;1H[K[23;34H[7m2[m[m[H
+
+[23;34H[7m3[m[m[4;1H[23;34H[7m4[m[m[5;1H[23;34H[7m5[m[m[6;1H[23;34H[7m6[m[m[7;1H[23;34H[7m7[m[m[8;1H[23;34H[7m8[m[m[9;1H[23;34H[7m9[m[m[10;1H[23;34H[7m10[m[m[11;1H[23;35H[7m1[m[m[12;1H[23;35H[7m2[m[m[13;1H[23;35H[7m3[m[m[14;1H[23;35H[7m4[m[m[15;1H[23;35H[7m5[m[m[16;1H[23;35H[7m6[m[m[17;1H[23;35H[7m7[m[m[18;1H
+
+
+
+
+
+[34mI-search: [m[18;1H[23;52H[7m Isearch)[m[m[18;1H[24;11Hf[18;1H[20;21H[36m[45mf[m[23;35H[7m9[m[m[20;22H[24;12Ha[20;22H[H
+[K
+[31m# Access control configuration; see /usr/share/doc/ntp-doc/html/accopt.html for[m
+[31m# details.  The web page <http://support.ntp.org/bin/view/Support/AccessRestric[m\
+[31mtions>                                                                          [m
+[31m# might also be helpful.                                                        [m
+[7;3H[31m                                                [m
+[C[31m Note that "restrict" applies to both servers and clients, so a configuration[m
+[31m# that might be intended to block requests from certain clients could also end  [m
+[31m# up blocking replies from your own upstream servers.                           [m
+[K
+[31m# By de[m[36m[45mfa[m[31mult, exchange time with everybody, but don't allow configuration.      [m
+[33mrestrict[m[m -4 default kod notrap nomodify nopeer noquery
+[33mrestrict[m[m -6 default kod notrap nomodify nopeer noquery[16;3H[31mLocal users may interrogate the ntp server more closely.[m
+[33mrestrict[m[m 127.0.0.1[K
+[33mrestrict[m[m ::1[20;3H[31mClients from this (example!) subnet have unlimited access, but only if        [m
+[C[C[31mcryptographically authenticated.                                              [m
+[31m#restrict 192.168.123.0 mask 255.255.255.0 notrust[m[23;29H[7m28% L27[m[m[12;10H[24;13Hl[34mFailing I-search: [mfa[41ml[m[12;10H[24;22H[41ml[m[12;10H[24;1H[34mI-search backward: [mfall[34mFailing I-search backward: [mfa[41mll[m[12;10H[24;1H[K[12;10H[24;1HMark saved where search started[12;10H[24;7Het[K[12;10H[1;22r[3;1H[17L[1;24r[2;1H[31m# /etc/ntp.conf, configuration for ntpd; see ntp.conf(5) for help               [m
+[K
+[33mdriftfile[m[m /var/lib/ntp/ntp.drift[K
+[K
+[K
+[31m# Enable this if you want statistics to be logged.                              [m
+[A
+[31m#statsdir /var/log/ntpstats/                                                    [m
+[A
+[K
+[33mstatistics[m[m loopstats peerstats clockstats[K
+[33mfilegen[m[m loopstats file loopstats type day enable[K
+[33mfilegen[m[m peerstats file peerstats type day enable[K
+[33mfilegen[m[m clockstats file clockstats type day enable[K
+[K
+[K
+[31m# You do need to talk to an NTP server or two (or three).                       [m
+[A
+[33mserver[m[m ntp.ubuntu.com[K
+[K
+[K[23;29H[7mTop L1     (Conf[Space])--------[m[m[H
+[24;1H[K[23;34H[7m2[m[m[H
+
+[23;34H[7m3[m[m[4;1H[23;34H[7m4[m[m[5;1H[23;34H[7m5[m[m[6;1H[23;34H[7m6[m[m[7;1H[23;34H[7m7[m[m[8;1H[23;34H[7m8[m[m[9;1H[23;34H[7m9[m[m[10;1H[23;34H[7m10[m[m[11;1H[23;35H[7m1[m[m[12;1H[23;35H[7m2[m[m[13;1H[23;35H[7m3[m[m[14;1H[23;35H[7m4[m[m[15;1H[23;35H[7m5[m[m[16;1H[23;35H[7m6[m[m[17;1H[1;22r[17;1H[1L[1;24r[17;1H[K[23;6H[7m**--F1  [m[m[7m[1mntp.conf    [m[m[7m   Top L17[m[m[18;1H[23;35H[7m6[m[m[17;1H[33ms[m[m[33me[m[m[33mr[m[m[33mv[m[m[33me[m[m[33mr[m[m	pool.ntp.org[1;22r[19;1H[1L[1;24r[18;1H[K
+[33mserver[m[m ntp.ubuntu.com[K[23;35H[7m7[m[m[18;1H[33ms[m[m[33me[m[m[33mr[m[m[33mv[m[m[33me[m[m[33mr[m[m[K[K[K[K[K[K[1;22r[19;1H[1M[1;24r[18;1H[33mserver[m[m ntp.ubuntu.com
+
+
+
+[31m# details.  The web page <http://support.ntp.org/bin/view/Support/AccessRestric[m\
+[A[23;35H[7m6[m[m[17;20H[23;35H[7m7[m[m[18;20H[23;35H[7m8[m[m[19;1H[33ms[m[m[33me[m[m[33mr[m[m[33mv[m[m[33me[m[m[33mr[m[m	time.nist.gov[1;22r[21;1H[1L[1;24r[21;1H[K[23;35H[7m9[m[m[20;1H[33ms[m[m[33me[m[m[33mr[m[m[33mv[m[m[33me[m[m[33mr[m[m	127.127.10[K.0
+
+[K[23;34H[7m20[m[m[21;1H[33mf[m[m[33mu[m[m[33md[m[m[33mg[m[m[33me[m[m[C127.127.1.0[Cstratus[Km[C13
+
+
+Saving file /etc/ntp.conf...[21;29H
+
+
+Wrote /etc/ntp.conf[K[21;29H[23;6H[7m--[m[m[21;29H
+
+
+[34mI-search: [m[K[21;29H[23;52H[7m Isearch)[m[m[21;29H[24;11Hre[21;29H[1;21r[2;1H[11M[1;24r[11;1H[K
+[31m# Access control configuration; see /usr/sha[m[36m[45mre[m[31m/doc/ntp-doc/html/accopt.html for[m[K
+[31m# details.  The web page <http://support.ntp.org/bin/view/Support/AccessRestric[m\
+[A
+[31mtions>                                                                          [m
+[A
+[31m# might also be helpful.                                                        [m
+[A
+[31m#                                                                               [m
+[A
+[31m# Note that "restrict" applies to both servers and clients, so a configuration  [m
+[A
+[31m# that might be intended to block requests from certain clients could also end  [m
+[A
+[31m# up blocking replies from your own upstream servers.                           [m
+[A
+[K
+[31m# By default, exchange time with everybody, but don't allow configuration.      [m
+[A
+[33mrestrict[m[m -4 default kod notrap nomodify nopeer noquery[23;29H[7m19% L22[m[m[12;47H[24;13Hs[12;47H[31mre[m
+				[36m[45mRes[m[23;35H[7m3[m[m[13;76H[17;14H[31m[46mres[m
+
+
+
+
+[33m[46mres[m[m[13;76H[24;14Ht[13;76H[36m[45mt[m[17;14H[31mres[m
+
+
+
+
+[33mres[m[m[13;77H[17;14H[31m[46mrest[m
+
+
+
+
+[33m[46mrest[m[m[13;77H[24;15Hr[13;77H[36m[45mr[m[17;14H[31mrest[m
+
+
+
+
+[33mrest[m[m[13;78H[17;14H[31m[46mrestr[m
+
+
+
+
+[33m[46mrestr[m[m[13;78H[24;16Hi[13;78H[36m[45mi[m[17;14H[31mrestr[m
+
+
+
+
+[33mrestr[m[m[13;79H[24;17Hc[13;79H[36m[45mc[m
+[17;14H[31m[46mrestric[m
+
+
+
+
+[33m[46mrestric[m[m[14;1H[24;18H[14;1H[13;73H[31m[46mRestric[m[17;14H[36m[45mrestric[m[23;35H[7m6[m[m[17;21H[24;18H[17;21H[31m[46mrestric[m
+
+
+
+
+[36m[45mrestric[m[m[23;34H[7m31[m[m[22;8H[24;18H[22;8H[1;21r[2;1H[11M[1;24r[11;1H[33m[46mrestric[m[m[33mt[m[m -4 default kod notrap nomodify nopeer noquery[K
+[36m[45mrestric[m[m[33mt[m[m -6 default kod notrap nomodify nopeer noquery[K
+[K
+[31m# Local users may interrogate the ntp server more closely.                      [m
+[A
+[33mrestrict[m[m 127.0.0.1[K
+[33mrestrict[m[m ::1[K
+[K
+[31m# Clients from this (example!) subnet have unlimited access, but only if        [m
+[A
+[31m# cryptographically authenticated.                                              [m
+[A
+[31m#restrict 192.168.123.0 mask 255.255.255.0 notrust                              [m
+[A
+[K
+[K[23;29H[7m37% L32[m[m[12;8H[2;73H[31mRestric[m[6;14H[31mrestric[m
+
+
+
+
+[33mrestric[m[m
+[2;73H[31m[46mRestric[m[6;14H[31m[46mrestric[m
+
+
+
+
+[33m[46mrestric[m[m
+
+
+
+[33m[46mrestric[m[m
+[33m[46mrestric[m[m[20;2H[31m[46mrestric[m[12;8H[24;1HMark saved where search started[12;8H[2;73H[31mRestric[m[6;14H[31mrestric[m
+
+
+
+
+[33mrestric[m[m
+[33mrestric[m[m
+
+
+[33mrestric[m[m
+[33mrestric[m[m[20;2H[31mrestric[m[23;52H[7m)--------[m[m[12;1H[24;1H[K[23;35H[7m3[m[m[13;1H[23;35H[7m4[m[m[14;1H[23;35H[7m5[m[m[15;1H[24;1H[34mI-search: [m[15;1H[23;52H[7m Isearch)[m[m[15;1H[24;11Hb[15;1H[18;34H[36m[45mb[m
+
+
+
+
+[7m8[m[m[18;35H[24;12Hr[18;35H[1;20r[6;1H[13M[1;24r[2;1H[33mrestrict[m[m 127.0.0.1[K
+[33mrestrict[m[m ::1[K
+[K[5;3H[31mClients from this (example!) subnet have unlimited access, but only if[m
+
+
+[K
+[K
+[31m# If you want to provide time to your local subnet, change the next line.       [m
+[A
+[31m# (Again, the address is an example only.)                                      [m
+[A
+[31m#[m[36m[45mbr[m[31moadcast 192.168.123.255                                                      [m
+[A
+[K
+[31m# If you want to listen to time broadcasts on your local subnet, de-comment the[m[K
+[31m# next lines.  Please do this only if you trust everybody on the network!       [m
+[A
+[31m#disable auth                                                                   [m
+[A
+[31m#broadcastclient                                                                [m
+[A
+[K
+[K
+[K[23;29H[7mBot L45[m[m[12;4H[24;13Ho[12;4H[36m[45mo[m
+
+				[31m[46mbro[m[17;2H[31m[46mbro[m[12;5H[24;14Ha[12;5H[36m[45ma[m
+
+				[31mbro[m[17;2H[31mbro[m[12;6H
+
+				[31m[46mbroa[m[17;2H[31m[46mbroa[m[12;6H[24;15Hd[12;6H[36m[45md[m
+
+				[31mbroa[m[17;2H[31mbroa[m[12;7H
+
+				[31m[46mbroad[m[17;2H[31m[46mbroad[m[12;7H[24;1HMark saved where search started[12;7H[C[31mbroad[m
+
+				[31mbroad[m[17;2H[31mbroad[m[23;52H[7m)--------[m[m[12;1H[24;1H[K[23;35H[7m6[m[m[13;1H[33mb[m[m[23;6H[7m**[m[m[13;2H[33mr[m[m[33mo[m[m[33ma[m[m[K[K[K[33mr[m[m[33mo[m[m[33ma[m[m[33md[m[m[33mc[m[m[33ma[m[m[33ms[m[m[33mt[m[m[C192.168.56.255[24;1HSaving file /etc/ntp.conf...[13;25H[24;1HWrote /etc/ntp.conf[K[13;25H[23;6H[7m--[m[m[13;25H[24;1H[K[23;35H[7m7[m[m[14;25H[23;35H[7m8[m[m[15;25H[23;35H[7m9[m[m[16;14H[23;34H[7m50[m[m[17;17H[1;18r[12;1H[1L[1;24r[2;1H[31m#broadcast 192.168.123.255                                                      [m
+[33mbroadcast[m[m 192.168.56.255
+[31m# If you want to listen to time broadcasts on your local subnet, de-comment the[m[5;3H[31mnext lines.  Please do this only if you trust everybody on the network![m
+[C[31mdisable auth                     [m
+[C[31mbroadcastclient                                  [m
+
+
+[K
+[K
+[7m-UU-:----F1  [m[m[7m[1mntp.conf    [m[m[7m   Bot L50    (Conf[Space])----------------------------[m[m
+[A[23;1H[7m-UU-:----F1  [m[m[7m[1mntp.conf    [m[m[7m   Bot L50    (Conf[Space])----------------------------[m[m
+[7;17H
+
+
+
+
+[7m-UU-:----F1  [m[m[7m[1mntp.conf    [m[m[7m   Bot L50    (Conf[Space])----------------------------[m[m
+[23;1H[7m-UU-:----F1  [m[m[7m[1mntp.conf    [m[m[7m   Bot L50    (Conf[Space])----------------------------[m[m
+[18;17H[24;1H[34mM-x [m[1;33H[7mMinibuf Help[m[m[24;5Hshell[K[H[7mFile Edit Options Buffers Tools Complete In/Out Signals Help                    [m[m
+[A
+[31m#broadcast 192.168.123.255                                                      [m
+[A
+[33mbroadcast[m[m 192.168.56.255[K
+[31m# If you want to listen to time broadcasts on your local subnet, de-comment the[m[K
+[31m# next lines.  Please do this only if you trust everybody on the network!       [m
+[A
+[31m#disable auth                                                                   [m
+[A
+[31m#broadcastclient                                                                [m
+[A
+[K
+[K
+[K
+[K
+[7m-UU-:----F1  [m[m[7m[1mntp.conf    [m[m[7m   Bot L50    (Conf[Space])----------------------------[m[m
+[A
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[7m-UUU:----F1  [m[m[7m[1m*shell*     [m[m[7m   All L1     (Shell:run)------------------------------[m[m
+[A[13;1H[34mroot@debian64-3:/etc# [m[23;6H[7m**[m[m[13;23Hifconfig[13;23H[1mifconfig[m[23;34H[7m2[m[m[14;1H[Alo        Link encap:Local Loopback[14;11Hinet addr:127.0.0.1  Mask:255.0.0.0[15;11Hinet6 addr: ::1/128 Scope:Host[16;11HUP LOOPBACK RUNNING  MTU:16436  Metric:1[17;11HRX packets:5 errors:0 dropped:0 overruns:0 frame:0[18;11HTX packets:5 errors:0 dropped:0 overruns:0 carrier:0[19;11Hcollisions:0 txqueuelen:0[20;11HRX bytes:469 (469.0 B)  TX bytes:469 (469.0 B)
+
+[34mroot@debian64-3:/etc# [m[23;29H[7mBot L29[m[m[22;23H[23;35H[7m8[m[m[21;1H[23;35H[7m7[m[m[20;23H[23;35H[7m6[m[m[19;23H[23;35H[7m5[m[m[18;23H[23;35H[7m4[m[m[17;23H[23;35H[7m3[m[m[16;23H[23;35H[7m2[m[m[15;23H[23;35H[7m1[m[m[14;23H[23;35H[7m0[m[m[13;23H[1;22r[13;1H[6L[1;24r[13;1H          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1[K
+          RX packets:1545 errors:0 dropped:0 overruns:0 frame:0[K
+          TX packets:1345 errors:0 dropped:0 overruns:0 carrier:0[K
+          collisions:0 txqueuelen:1000[K
+          RX bytes:149451 (149.4 KB)  TX bytes:172257 (172.2 KB)[K
+[K[23;29H[7m50% L19[m[m[18;1H[23;35H[7m8[m[m[17;23H[23;35H[7m7[m[m[16;23H[23;35H[7m6[m[m[15;23H[23;35H[7m5[m[m[14;23H[23;35H[7m4[m[m[13;23H[1;22r[13;1H[6L[1;24r[13;1H          collisions:0 txqueuelen:1000[K
+          RX bytes:1726782 (1.7 MB)  TX bytes:75384 (75.3 KB)[K
+[K
+eth1      Link encap:Ethernet  HWaddr 08:00:27:22:e7:34[K
+          inet addr:192.168.56.30  Bcast:192.168.56.255  Mask:255.255.255.0[K
+          inet6 addr: fe80::a00:27ff:fe22:e734/64 Scope:Link[K[23;29H[7m29% L13[m[m[18;23H[23;35H[7m2[m[m[17;23H[23;35H[7m1[m[m[16;23H[23;35H[7m0[m[m[15;1H[23;34H[7m9 [m[m[14;23H[23;34H[7m8[m[m[13;23H[1;22r[13;1H[6L[1;24r[13;1Heth0      Link encap:Ethernet  HWaddr 08:00:27:df:b9:93[K
+          inet addr:10.0.2.15  Bcast:10.0.2.255  Mask:255.255.255.0[K
+          inet6 addr: fe80::a00:27ff:fedf:b993/64 Scope:Link[K
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1[K
+          RX packets:2114 errors:0 dropped:0 overruns:0 frame:0[K
+          TX packets:1144 errors:0 dropped:0 overruns:0 carrier:0[K[23;29H[7m 3% L7[m[m[18;23H[23;34H[7m6[m[m[17;23H[23;34H[7m7[m[m[18;23H[23;34H[7m8[m[m[19;23H[23;34H[7m9[m[m[20;23H[23;34H[7m10[m[m[21;1H[23;35H[7m1[m[m[22;23H[1;22r[13;1H[5M[1;24r[18;1H          inet addr:192.168.56.30  Bcast:192.168.56.255  Mask:255.255.255.0[K
+          inet6 addr: fe80::a00:27ff:fe22:e734/64 Scope:Link[K
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1[K
+          RX packets:1545 errors:0 dropped:0 overruns:0 frame:0[K
+          TX packets:1345 errors:0 dropped:0 overruns:0 carrier:0[K[23;29H[7m25% L12[m[m[18;23H[23;35H[7m3[m[m[19;23H[23;35H[7m4[m[m[20;23H[23;35H[7m5[m[m[21;23H[23;35H[7m6[m[m[22;23H[1;22r[13;1H[5M[1;24r[18;1H          collisions:0 txqueuelen:1000[K
+          RX bytes:149451 (149.4 KB)  TX bytes:172257 (172.2 KB)[K
+[K
+lo        Link encap:Local Loopback[K
+          inet addr:127.0.0.1  Mask:255.0.0.0[K[23;29H[7m41% L17[m[m[18;23H[23;35H[7m8[m[m[19;23H[23;35H[7m9[m[m[20;1H[23;34H[7m20[m[m[21;23H[23;35H[7m1[m[m[22;23H[1;35H[7mnf Help                   [m[m[12;1H[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+
+[K
+[K[23;4H[7m-:----F1  [m[m[7m[1mntp.conf    [m[m[7m   Bot L50    (Conf[Space])[m[m[7;17H[23;34H[7m49[m[m[6;14H[23;35H[7m8[m[m[5;17H[23;35H[7m7[m[m[4;17H[23;35H[7m6[m[m[3;17H[23;35H[7m5[m[m[H
+		[1;18r[2;1H[11L[1;24r[2;1H[31m# Local users may interrogate the ntp server more closely.                      [m
+[A
+[33mrestrict[m[m 127.0.0.1[K
+[33mrestrict[m[m ::1[K
+[K
+[31m# Clients from this (example!) subnet have unlimited access, but only if        [m
+[A
+[31m# cryptographically authenticated.                                              [m
+[A
+[31m#restrict 192.168.123.0 mask 255.255.255.0 notrust                              [m
+[A
+[K
+[K
+[31m# If you want to provide time to your local subnet, change the next line.       [m
+[A
+[31m# (Again, the address is an example only.)                                      [m
+[A[23;35H[7m4[m[m[12;17H[23;35H[7m5[m[m[13;17H[23;35H[7m6[m[m[14;17H[23;35H[7m7[m[m[15;17H[23;35H[7m8[m[m[16;17H[23;35H[7m9[m[m[17;14H[23;34H[7m50[m[m[18;17H[23;35H[7m1[m[m[19;1H
+
+
+
+
+(No files need saving)[19;1H[1;18r[2;1H[12M[1;24r[24;1H[34mActive processes exist; kill them and exit anyway? (yes or no) [m[1;33H[7mMinibuf Help[m[m[7;1H[K
+[K
+[K
+[K
+[K
+[7m-UU-:----F1  [m[m[7m[1mntp.conf    [m[m[7m   Bot L51    (Conf[Space])----------------------------[m[m
+[A
+Proc  Status   Buffer  Tty        Command[K
+----  ------   ------  ---        -------[K
+shell run      *shell* /dev/pts/2 /bin/bash --noediting -i[K
+[K
+[K
+[K
+
+
+
+
+[7m-UUU:%%--F1  [m[m[7m[1m*Process List*[m[m[7m   All L1     (Help View)----------------------------[m[m
+[24;64Hyes[K[?1l>[2J[?47l8[m]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# /etc/init.d/ntp [K-[K restart
+ * Stopping NTP server ntpd
+   ...done.
+ * Starting NTP server ntpd
+   ...done.
+]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# watch 'sh -c "ntpq -p -c as && echo && ntptrace"'
+)07[?47h[1;24r[m[4l[H[2JEvery 2.0s: sh -c "ntpq -p -c as && echo && ntptrace"   Thu Dec  9 10:39:20 2010[4;1Hind assID status  conf reach auth condition  last_event cnt[1B===========================================================[6;3H1 10374  9014   yes   yes  none    reject   reachable  1[7;3H2 10375  9014   yes   yes  none    reject   reachable  1[8;3H3 10376  9014   yes   yes  none    reject   reachable  1[9;3H4 10377  9014   yes   yes  none    reject   reachable  1[10;3H5 10378  8000   yes   yes  none    reject[11;6Hremote[11;23Hrefid[6Cst t when poll reach   delay   offset  jitter[1B==============================================================================[1B clock.trit.net  204.34.198.41    2 u   42   64    1   17.909  -45.913   0.001[1B europium.canoni 193.79.237.14    2 u   41   64    1  177.620  -37.414   0.001[1B time.nist.gov   .ACTS.[15;35H1 u   40   64    1   52.042  -24.680   0.001[1B LOCAL(0)[16;18H.LOCL.[16;34H13 l   39   64    1    0.000    0.000   0.001[1B 192.168.56.255  .BCST.[17;34H16 u    -   64    0    0.000    0.000   0.001[2Blocalhost: stratum 16, offset 0.000000, synch distance 0.000645[24;80H[1;75H2[13;42H4[1B3[1B2[1B41[19;62H7[24;80H[1;75H4[13;42H6[1B5[1B4[1B3[19;61H70[24;80H[1;75H7[13;42H9[1B8[1B7[1B6[19;62H3[24;80H[1;75H9[13;41H51[1B50[1B9[1B8[19;62H80[24;80H[1;74H31[13;42H3[1B2[1B51[1B50[19;61H81[24;80H[1;75H3[13;42H5[1B4[1B3[1B2[19;62H4[24;80H[1;75H5[13;42H7[1B6[1B5[1B4[19;62H7[24;80H[1;75H7[13;42H9[1B8[1B7[1B6[19;61H90[24;80H[H[2JEvery 2.0s: sh -c "ntpq -p -c as && echo && ntptrace"     Thu Dec  9 10:39:39 2010[4;1Hind assID status  conf reach auth condition  last_event cnt[1B===========================================================[6;3H1 10374  9014   yes   yes  none    reject   reachable  1[7;3H2 10375  9014   yes   yes  none    reject   reachable  1[8;3H3 10376  9014   yes   yes  none    reject   reachable  1[9;3H4 10377  9014   yes   yes  none    reject   reachable  1[10;3H5 10378  8000   yes   yes  none    reject[11;6Hremote[11;23Hrefid[6Cst t when poll reach   delay   offset  jitter[1B==============================================================================[1B clock.trit.net  204.34.198.41    2 u   61   64    1   17.909  -45.913   0.001[1B europium.canoni 193.79.237.14    2 u   60   64    1  177.620  -37.414   0.001[1B time.nist.gov   .ACTS.[15;35H1 u   59   64    1   52.042  -24.680   0.001[1B LOCAL(0)[16;18H.LOCL.[16;34H13 l   58   64    1    0.000    0.000   0.001[1B 192.168.56.255  .BCST.[17;34H16 u    -   64    0    0.000    0.000   0.001[2Blocalhost: stratum 16, offset 0.000000, synch distance 0.000930[24;82H[H[2JEvery 2.0s: sh -c "ntpq -p -c as && echo && ntptrace"[1;87HThu Dec  9 10:39:40 2010[4;1Hind assID status  conf reach auth condition  last_event cnt[1B===========================================================[6;3H1 10374  9014   yes   yes  none    reject   reachable  1[7;3H2 10375  9014   yes   yes  none    reject   reachable  1[8;3H3 10376  9014   yes   yes  none    reject   reachable  1[9;3H4 10377  9014   yes   yes  none    reject   reachable  1[10;3H5 10378  8000   yes   yes  none    reject[11;6Hremote[11;23Hrefid[6Cst t when poll reach   delay   offset  jitter[1B==============================================================================[1B clock.trit.net  204.34.198.41    2 u   62   64    1   17.909  -45.913   0.001[1B europium.canoni 193.79.237.14    2 u   61   64    1  177.620  -37.414   0.001[1B time.nist.gov   .ACTS.[15;35H1 u   60   64    1   52.042  -24.680   0.001[1B LOCAL(0)[16;18H.LOCL.[16;34H13 l   59   64    1    0.000    0.000   0.001[1B 192.168.56.255  .BCST.[17;34H16 u    -   64    0    0.000    0.000   0.001[2Blocalhost: stratum 16, offset 0.000000, synch distance 0.000945[24;110H[24;1H[2J[?47l8[?1l>]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# watch 'sh -c "ntpq -p -c as && echo && ntptrace"'
+)07[?47h[1;24r[m[4l[H[2JEvery 2.0s: sh -c "ntpq -p -c as && echo && ntptrace"[1;102HThu Dec  9 10:39:42 2010[4;1Hind assID status  conf reach auth condition  last_event cnt[1B===========================================================[6;3H1 10374  9014   yes   yes  none    reject   reachable  1[7;3H2 10375  9014   yes   yes  none    reject   reachable  1[8;3H3 10376  9014   yes   yes  none    reject   reachable  1[9;3H4 10377  9014   yes   yes  none    reject   reachable  1[10;3H5 10378  8000   yes   yes  none    reject[11;6Hremote[11;23Hrefid[6Cst t when poll reach   delay   offset  jitter[1B==============================================================================[1B clock.trit.net  204.34.198.41    2 u   64   64    1   17.909  -45.913   0.001[1B europium.canoni 193.79.237.14    2 u   63   64    1  177.620  -37.414   0.001[1B time.nist.gov   .ACTS.[15;35H1 u   62   64    1   52.042  -24.680   0.001[1B LOCAL(0)[16;18H.LOCL.[16;34H13 l   61   64    1    0.000    0.000   0.001[1B 192.168.56.255  .BCST.[17;34H16 u    -   64    0    0.000    0.000   0.001[2Blocalhost: stratum 16, offset 0.000000, synch distance 0.000960[24;125H[24;1H[2J[?47l8[?1l>]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# [K]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# watch 'sh -c "ntpq -p -c as && echo && ntptrace"'
+)07[?47h[1;28r[m[4l[H[2JEvery 2.0s: sh -c "ntpq -p -c as && echo && ntptrace"[1;188HThu Dec  9 10:39:49 2010[4;1Hind assID status  conf reach auth condition  last_event cnt[1B===========================================================[6;3H1 10374  9014   yes   yes  none    reject   reachable  1[7;3H2 10375  9014   yes   yes  none    reject   reachable  1[8;3H3 10376  9014   yes   yes  none    reject   reachable  1[9;3H4 10377  9014   yes   yes  none    reject   reachable  1[10;3H5 10378  8000   yes   yes  none    reject[11;6Hremote[11;23Hrefid[6Cst t when poll reach   delay   offset  jitter[1B==============================================================================[1B clock.trit.net  204.34.198.41    2 u    6   64    3   24.857    2.056  47.969[1B europium.canoni 193.79.237.14    2 u    5   64    3  199.499  -10.944  26.470[1B time.nist.gov   .ACTS.[15;35H1 u    3   64    3   59.806   -0.883  23.797[1B LOCAL(0)[16;18H.LOCL.[16;34H13 l    5   64    3    0.000    0.000   0.001[1B 192.168.56.255  .BCST.[17;34H16 u    -   64    0    0.000    0.000   0.001[2Blocalhost: stratum 16, offset 0.000000, synch distance 0.001080[28;211H[1;205H51[13;42H8[1B8[1B6[1B8[19;61H11[28;211H[1;206H4[13;41H11[1B10[1B8[1B10[19;62H55[28;211H[1;206H6[13;42H3[1B2[1B10[1B2[19;62H8[28;211H[28;1H[2J[?47l8[?1l>]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# watch 'sh -c "ntpq -p -c as && echo && ntptrace"'
+)07[?47h[1;27r[m[4l[H[2JEvery 2.0s: sh -c "ntpq -p -c as && echo && ntptrace"[1;102HThu Dec  9 10:40:19 2010[4;1Hind assID status  conf reach auth condition  last_event cnt[1B===========================================================[6;3H1 10374  9014   yes   yes  none    reject   reachable  1[7;3H2 10375  9014   yes   yes  none    reject   reachable  1[8;3H3 10376  9014   yes   yes  none    reject   reachable  1[9;3H4 10377  9014   yes   yes  none    reject   reachable  1[10;3H5 10378  8000   yes   yes  none    reject[11;6Hremote[11;23Hrefid[6Cst t when poll reach   delay   offset  jitter[1B==============================================================================[1B clock.trit.net  204.34.198.41    2 u   36   64    3   24.857    2.056  47.969[1B europium.canoni 193.79.237.14    2 u   35   64    3  199.499  -10.944  26.470[1B time.nist.gov   .ACTS.[15;35H1 u   33   64    3   59.806   -0.883  23.797[1B LOCAL(0)[16;18H.LOCL.[16;34H13 l   35   64    3    0.000    0.000   0.001[1B 192.168.56.255  .BCST.[17;34H16 u    -   64    0    0.000    0.000   0.001[2Blocalhost: stratum 16, offset 0.000000, synch distance 0.001530[27;125H[1;119H21[13;42H8[1B7[1B5[1B7[19;62H6[27;125H[1;120H3[13;41H40[1B9[1B7[1B9[19;62H9[27;125H[1;120H5[13;42H3[1B42[1B40[1B42[19;61H62[27;125H[1;120H8[13;42H5[1B4[1B2[1B4[19;62H65[27;125H[1;119H30[13;42H7[1B6[1B4[1B6[19;62H9[27;125H[1;120H2[13;42H9[1B8[1B6[1B8[19;61H72[27;125H[1;120H4[13;41H51[1B50[1B8[1B50[19;62H5[27;125H[1;120H6[13;42H3[1B2[1B50[1B2[19;62H8[27;125H[1;120H8[13;42H5[1B4[1B2[1B4[19;61H81[27;125H[1;119H40[13;42H8[1B7[1B5[1B7[19;62H4[27;125H[1;120H3[13;41H60[1B9[1B7[1B9[19;62H90[27;125H[1;120H5[13;42H2[1B61[1B9[1B61[19;61H92[27;125H[1;120H7[13;42H4[1B3[1B61[1B3[19;62H5[27;125H[1;120H9[13;42H6[13;52H6[14;42H5[1B3[1B -[16;52H7[19;62H8[27;125H[1;119H51[13;42H8[1B 1[14;52H7  185.163[6C757  18.85[15;41H 1[15;52H7   65.561   -5.340  14.034[16;42H2[19;60H201[27;125H[1;120H3[13;41H70[1B3[1B3[1B4[19;62H4[27;125H[1;120H5[13;42H3[1B6[1B6[1B7[19;62H7[27;125H[1;120H8[13;42H5[1B8[1B8[1B9[19;61H115[27;125H[1;117H1:00[13;42H7[1B10[1B10[1B11[19;62H4[27;125H[1;120H2[13;42H9[1B2[1B2[1B3[19;62H7[27;125H[1;120H4[13;41H81[1B4[1B4[1B5[19;61H20[27;125H[1;120H6[13;42H3[1B6[1B6[1B7[19;62H3[27;125H[1;120H8[13;42H5[1B8[1B8[1B9[19;62H6[27;125H[1;119H11[13;42H8[1B21[1B21[1B22[19;62H9[27;125H[1;120H3[13;41H90[1B3[1B3[1B4[19;61H340[27;125H[1;120H5[13;42H2[1B5[1B5[1B6[19;62H7[27;125H[1;120H7[13;42H4[1B7[1B7[1B8[19;61H40[27;125H[1;120H9[13;42H6[1B9[1B9[1B30[19;62H3[27;125H[1;119H21[13;42H8[1B31[1B31[1B2[19;62H6[27;125H[1;120H3[13;40H100[1B3[1B3[1B4[19;62H9[27;125H[1;120H6[13;42H3[1B6[1B6[1B7[19;61H535[27;125H[1;120H8[13;42H5[1B8[1B8[1B9[19;62H6[27;125H[1;119H30[13;42H7[1B40[1B40[1B41[19;62H9[27;125H[1;120H2[13;42H9[1B2[1B2[1B3[19;61H62[27;125H[1;120H4[13;41H11[1B4[1B4[1B5[19;62H5[27;125H[1;120H6[13;42H3[1B6[1B6[1B7[19;62H8[27;125H[1;120H8[13;42H5[1B8[1B8[1B9[19;61H71[27;125H[1;119H41[13;42H8[1B51[1B51[1B52[19;62H60[27;125H[1;120H3[13;41H20[1B3[1B3[1B4[19;62H9[27;125H[1;120H5[13;42H2[1B5[1B5[1B6[19;61H82[27;125H[1;120H7[13;42H4[1B7[1B7[1B8[19;62H5[27;125H[1;120H9[13;42H6[1B9[1B9[1B60[19;62H8[27;125H[1;119H51[13;42H8[1B61[1B61[1B2[19;61H91[27;125H[1;120H3[9;13H6[9;36Hsys.peer[13;41H31[1B4[1B4[1B*[16;41H [16;51H1[19;21H4[19;58H948172[27;125H[1;120H6[13;40H  [13;51H15   17.909  -45.913  44.494[14;41H 1[14;51H17  177.620  -37.414  25.224[15;41H 2[15;51H17   52.042  -24.680  19.367[16;42H4[19;61H217[27;125H[1;120H8[13;42H3[1B3[1B4[1B6[19;62H4[27;125H[1;117H2:00[13;42H5[1B5[1B6[1B8[19;62H7[27;125H[1;120H2[13;42H7[1B7[1B8[1B10[19;61H30[27;125H[1;120H4[13;42H9[1B9[1B10[1B2[19;62H3[27;125H[1;120H7[13;41H12[1B12[1B3[1B5[19;62H6[27;125H[1;120H9[13;42H4[1B4[1B5[1B7[19;61H412[27;125H[1;119H11[13;42H6[1B6[1B7[1B9[19;62H4[27;125H[1;120H3[13;42H8[1B8[1B9[1B21[19;62H7[27;125H[1;120H5[13;41H20[1B20[1B21[1B3[19;61H50[27;125H[1;120H7[13;42H2[1B2[1B3[1B5[19;62H3[27;125H[1;119H20[13;42H5[1B5[1B6[1B8[19;62H6[27;125H[1;120H2[13;42H7[1B7[1B8[1B30[19;61H607[27;125H[1;120H4[13;42H9[1B9[1B30[1B2[19;62H3[27;125H[1;120H6[13;41H31[1B31[1B2[1B4[19;62H6[27;125H[1;120H8[13;42H3[1B3[1B4[1B6[19;62H9[27;125H[1;119H30[13;42H5[1B5[1B6[1B48[19;61H87[27;125H[1;119H43[13;41H48[1B48[1B49[1B51[19;61H922[27;125H[1;120H5[13;41H50[1B50[1B51[1B3[19;62H5[27;125H[1;120H7[13;42H2[1B2[1B3[1B5[19;62H8[27;125H[1;120H9[13;42H4[1B4[1B5[1B7[19;60H901[27;125H[1;119H51[13;42H6[1B6[1B7[1B9[19;62H4[27;125H[1;120H3[13;42H8[1B8[1B9[1B61[19;62H7[27;125H[1;120H6[8;13H6[8;36Hsys.peer[9;13H0[9;36H  reject[13;41H61[1B61[1B*[15;41H62[1B [16;41H [16;51H3[19;61H117[1Btime.nist.gov: stratum 1, offset 0.000000, synch distance 0.002650, refid 'ACTS'[27;125H[1;117H3:08[13;41H 9[13;51H33[13;74H1.439[14;41H 7[14;51H3[14;74H3.313[15;41H11[15;51H3[15;74H7.295[16;41H13[19;61H29[27;125H[1;119H10[13;41H11[1B9[1B3[1B5[19;61H32[27;125H[1;120H2[13;42H3[1B11[1B5[1B7[19;62H5[27;125H[1;120H5[13;42H6[1B4[1B8[1B20[19;61H402[27;125H[1;120H7[13;42H8[1B6[1B20[1B2[19;62H3[27;125H[1;120H9[13;41H20[1B8[1B2[1B4[19;62H6[27;125H[1;119H22[13;42H3[1B21[1B5[1B7[19;62H9[27;125H[1;120H4[13;42H5[1B3[1B7[1B9[19;61H537[27;125H[1;120H6[13;42H7[1B5[1B9[1B31[19;62H6[27;125H[1;120H8[13;42H9[1B7[1B31[1B3[19;62H9[27;125H[1;119H31[13;41H32[1B30[1B4[1B6[19;61H642[27;125H[27;1H[2J[?47l8[?1l>]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# date
+Thu Dec  9 10:43:33 PST 2010
+]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# apt-get install krb[Kaptc=[K[K-a[Kcache search krb5
+krb5-config - Configuration files for Kerberos Version 5
+libpam-krb5 - PAM module for MIT Kerberos
+freeradius-krb5 - kerberos module for FreeRADIUS server
+krb5-auth-dialog - tray applet for reauthenticating kerberos tickets
+krb5-clients - Secure replacements for ftp, telnet and rsh using MIT Kerberos
+krb5-ftpd - Secure FTP server supporting MIT Kerberos
+krb5-rsh-server - Secure replacements for rshd and rlogind using MIT Kerberos
+krb5-telnetd - Secure telnet server supporting MIT Kerberos
+libauthen-krb5-admin-perl - Perl extension for MIT Kerberos 5 admin interface
+libauthen-krb5-perl - Perl interface to Kerberos 5 API
+libauthen-krb5-simple-perl - Perl module for authentication using Kerberos 5
+libkrb5-25-heimdal - Heimdal Kerberos - libraries
+libkrb5-ruby - Basic Kerberos ruby binding
+libkrb5-ruby-doc - Documentation for libkrb5-ruby
+libkrb5-ruby1.8 - Basic Kerberos ruby binding (Ruby 1.8)
+libkrb5-ruby1.9.1 - Basic Kerberos ruby binding (Ruby 1.9.1)
+libpam-krb5-migrate-heimdal - PAM module for migrating to Kerberos
+libpam-openafs-kaserver - AFS distributed filesystem kaserver PAM module
+libzephyr4-krb5 - The original "Instant Message" system libraries with Kerberos V
+openafs-client - AFS distributed filesystem client support
+openafs-krb5 - AFS distributed filesystem Kerberos 5 integration
+root-plugin-krb5 - Kerberos (version 5) plugin for ROOT
+shishi - Command line client for the Shishi Kerberos v5 implementation
+zephyr-server-krb5 - The original "Instant Message" system-server with Kerberos 5
+krb5-doc - Documentation for MIT Kerberos
+krb5-multidev - Development files for MIT Kerberos without Heimdal conflict
+krb5-user - Basic programs to authenticate using MIT Kerberos
+libgssapi-krb5-2 - MIT Kerberos runtime libraries - krb5 GSS-API Mechanism
+libkrb5-3 - MIT Kerberos runtime libraries
+libkrb5-dbg - Debugging files for MIT Kerberos
+libkrb5-dev - Headers and development libraries for MIT Kerberos
+libkrb5support0 - MIT Kerberos runtime libraries - Support library
+krb5-admin-server - MIT Kerberos master server (kadmind)
+krb5-kdc - MIT Kerberos key server (KDC)
+krb5-kdc-ldap - MIT Kerberos key server (KDC) LDAP plugin
+krb5-pkinit - PKINIT plugin for MIT Kerberos
+ssh-krb5 - secure shell client and server (transitional package)
+]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# apt-get install krb-[K5-admin-server krb5-kdc krb5-[K[K[K[K[Kkrb5-[K[K[K[K[K[K
+Reading package lists... 0%Reading package lists... 100%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree       
+Reading state information... 0%Reading state information... 1%Reading state information... Done
+The following extra packages will be installed:
+  krb5-config krb5-user libgssapi-krb5-2 libgssrpc4 libkadm5clnt-mit7 libkadm5srv-mit7 libkdb5-4 libkrb5-3 libkrb5support0
+Suggested packages:
+  openbsd-inetd inet-superserver krb5-kdc-ldap krb5-doc
+The following NEW packages will be installed:
+  krb5-admin-server krb5-config krb5-kdc krb5-user libgssrpc4 libkadm5clnt-mit7 libkadm5srv-mit7 libkdb5-4
+The following packages will be upgraded:
+  libgssapi-krb5-2 libkrb5-3 libkrb5support0
+3 upgraded, 8 newly installed, 0 to remove and 65 not upgraded.
+Need to get 1,316kB of archives.
+After this operation, 2,187kB of additional disk space will be used.
+Do you want to continue [Y/n]? y
+0% [Working]            0% [Waiting for headers]                        Get:1 http://us.archive.ubuntu.com/ubuntu/ lucid-updates/main libgssapi-krb5-2 1.8.1+dfsg-2ubuntu0.4 [129kB]
+                        0% [1 libgssapi-krb5-2 0B/129kB 0%]                                   0% [1 libgssapi-krb5-2 12.7kB/129kB 9%]                                       5% [1 libgssapi-krb5-2 66.3kB/129kB 51%]                                        9% [Working]            Get:2 http://us.archive.ubuntu.com/ubuntu/ lucid-updates/main libkrb5-3 1.8.1+dfsg-2ubuntu0.4 [369kB]
+            9% [2 libkrb5-3 0B/369kB 0%]                            30% [2 libkrb5-3 278kB/369kB 75%]                                 37% [Working]             Get:3 http://us.archive.ubuntu.com/ubuntu/ lucid-updates/main libkrb5support0 1.8.1+dfsg-2ubuntu0.4 [44.4kB]
+             37% [3 libkrb5support0 0B/44.4kB 0%]                                    41% [Working]             Get:4 http://us.archive.ubuntu.com/ubuntu/ lucid-updates/main libgssrpc4 1.8.1+dfsg-2ubuntu0.4 [81.8kB]
+             41% [4 libgssrpc4 0B/81.8kB 0%]                               47% [Working]             Get:5 http://us.archive.ubuntu.com/ubuntu/ lucid-updates/main libkadm5clnt-mit7 1.8.1+dfsg-2ubuntu0.4 [62.5kB]
+             47% [5 libkadm5clnt-mit7 0B/62.5kB 0%]                                      52% [Working]             Get:6 http://us.archive.ubuntu.com/ubuntu/ lucid-updates/main libkdb5-4 1.8.1+dfsg-2ubuntu0.4 [62.0kB]
+             52% [6 libkdb5-4 0B/62.0kB 0%]                              56% [Working]             Get:7 http://us.archive.ubuntu.com/ubuntu/ lucid-updates/main libkadm5srv-mit7 1.8.1+dfsg-2ubuntu0.4 [76.5kB]
+             56% [7 libkadm5srv-mit7 0B/76.5kB 0%]                                     62% [Working]             Get:8 http://us.archive.ubuntu.com/ubuntu/ lucid/main krb5-config 2.2 [23.0kB]
+             62% [8 krb5-config 0B/23.0kB 0%]                                64% [Working]             Get:9 http://us.archive.ubuntu.com/ubuntu/ lucid-updates/main krb5-user 1.8.1+dfsg-2ubuntu0.4 [137kB]
+             64% [9 krb5-user 0B/137kB 0%]                             74% [Working]             Get:10 http://us.archive.ubuntu.com/ubuntu/ lucid-updates/universe krb5-kdc 1.8.1+dfsg-2ubuntu0.4 [218kB]
+             74% [10 krb5-kdc 0B/218kB 0%]                             91% [Working]             Get:11 http://us.archive.ubuntu.com/ubuntu/ lucid-updates/universe krb5-admin-server 1.8.1+dfsg-2ubuntu0.4 [113kB]
+             91% [11 krb5-admin-server 0B/113kB 0%]                                      100% [Working]              Fetched 1,316kB in 3s (404kB/s)
+Preconfiguring packages ...
+7[?47h[1;27r[4l[m[37m[40m[1;27r[H[2J[1;1H[1m[37m[44m                                                                                                                             [2;1H                                                                                                                             [3;1H                                                                                                                             [4;1H                                                                                                                             [5;1H                                                                                                                             [6;1H                                                                                                                             [7;1H                                                                                                                             [8;1H                                                                                                                             [9;1H                                                                                                                             [10;1H                                                                                                                             [11;1H                                                                                                                             [12;1H                                                                                                                             [13;1H                                                                                                                             [14;1H                                                                                                                             [15;1H                                                                                                                             [16;1H                                                                                                                             [17;1H                                                                                                                             [18;1H                                                                                                                             [19;1H                                                                                                                             [20;1H                                                                                                                             [21;1H                                                                                                                             [22;1H                                                                                                                             [23;1H                                                                                                                             [24;1H                                                                                                                             [25;1H                                                                                                                             [26;1H                                                                                                                             [27;1H                                                                                                                            [27;124H [4h [4l[1;1H[m[37m[44mPackage configuration[8;3H[30m[47m┌────────────────────────────────────────┤ [31mConfiguring Kerberos Authentication[30m ├────────────────────────────────────────┐[9;3H│ When users attempt to use Kerberos and specify a principal or user name without specifying what administrative        │[1m[37m[40m [10;3H[m[30m[47m│ Kerberos realm that principal belongs to, the system appends the default realm.  The default realm may also be used   │[1m[37m[40m [11;3H[m[30m[47m│ as the realm of a Kerberos service running on the local machine.  Often, the default realm is the uppercase version   │[1m[37m[40m [12;3H[m[30m[47m│ of the local DNS domain.                                                                                              │[1m[37m[40m [13;3H[m[30m[47m│                                                                                                                       │[1m[37m[40m [14;3H[m[30m[47m│ Default Kerberos version 5 realm:                                                                                     │[1m[37m[40m [15;3H[m[30m[47m│                                                                                                                       │[1m[37m[40m [16;3H[m[30m[47m│ [37m[44m_____________________________________________________________________________________________________________________[30m[47m │[1m[37m[40m [17;3H[m[30m[47m│                                                                                                                       │[1m[37m[40m [18;3H[m[30m[47m│                                                        <Ok>                                                           │[1m[37m[40m [19;3H[m[30m[47m│                                                                                                                       │[1m[37m[40m [20;3H[m[30m[47m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[1m[37m[40m [21;4H                                                                                                                         [16;5H[m[37m[44mFOOFERS.ORG[18;60H[41m<Ok>[18;61H[27;1H[40m[m[m                                                                                                                            [2J[?47l87[?47h[1;27r[4l[m[37m[40m[1;27r[H[2J[1;1H[1m[37m[44m                                                                                                                             [2;1H                                                                                                                             [3;1H                                                                                                                             [4;1H                                                                                                                             [5;1H                                                                                                                             [6;1H                                                                                                                             [7;1H                                                                                                                             [8;1H                                                                                                                             [9;1H                                                                                                                             [10;1H                                                                                                                             [11;1H                                                                                                                             [12;1H                                                                                                                             [13;1H                                                                                                                             [14;1H                                                                                                                             [15;1H                                                                                                                             [16;1H                                                                                                                             [17;1H                                                                                                                             [18;1H                                                                                                                             [19;1H                                                                                                                             [20;1H                                                                                                                             [21;1H                                                                                                                             [22;1H                                                                                                                             [23;1H                                                                                                                             [24;1H                                                                                                                             [25;1H                                                                                                                             [26;1H                                                                                                                             [27;1H                                                                                                                            [27;124H [4h [4l[1;1H[m[37m[44mPackage configuration[9;14H[30m[47m┌─────────────────────────────┤ [31mConfiguring Kerberos Authentication[30m ├─────────────────────────────┐[10;14H│ Enter the hostnames of Kerberos servers in the FOOFERS.ORG Kerberos realm separated by spaces.  │[1m[37m[40m [11;14H[m[30m[47m│                                                                                                 │[1m[37m[40m [12;14H[m[30m[47m│ Kerberos servers for your realm:                                                                │[1m[37m[40m [13;14H[m[30m[47m│                                                                                                 │[1m[37m[40m [14;14H[m[30m[47m│ [37m[44m_______________________________________________________________________________________________[30m[47m │[1m[37m[40m [15;14H[m[30m[47m│                                                                                                 │[1m[37m[40m [16;14H[m[30m[47m│                                             <Ok>                                                │[1m[37m[40m [17;14H[m[30m[47m│                                                                                                 │[1m[37m[40m [18;14H[m[30m[47m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[1m[37m[40m [19;15H                                                                                                   [14;16H[m[37m[44mdebian56__64-3.foofers.org[16;60H[41m<Ok>[16;61H[27;1H[40m[m[m                                                                                                                            [2J[?47l87[?47h[1;27r[4l[m[37m[40m[1;27r[H[2J[1;1H[1m[37m[44m                                                                                                                             [2;1H                                                                                                                             [3;1H                                                                                                                             [4;1H                                                                                                                             [5;1H                                                                                                                             [6;1H                                                                                                                             [7;1H                                                                                                                             [8;1H                                                                                                                             [9;1H                                                                                                                             [10;1H                                                                                                                             [11;1H                                                                                                                             [12;1H                                                                                                                             [13;1H                                                                                                                             [14;1H                                                                                                                             [15;1H                                                                                                                             [16;1H                                                                                                                             [17;1H                                                                                                                             [18;1H                                                                                                                             [19;1H                                                                                                                             [20;1H                                                                                                                             [21;1H                                                                                                                             [22;1H                                                                                                                             [23;1H                                                                                                                             [24;1H                                                                                                                             [25;1H                                                                                                                             [26;1H                                                                                                                             [27;1H                                                                                                                            [27;124H [4h [4l[1;1H[m[37m[44mPackage configuration[9;9H[30m[47m┌─────────────────────────────────┤ [31mConfiguring Kerberos Authentication[30m ├──────────────────────────────────┐[10;9H│ Enter the hostname of the administrative (password changing) server for the FOOFERS.ORG Kerberos realm.  │[1m[37m[40m [11;9H[m[30m[47m│                                                                                                          │[1m[37m[40m [12;9H[m[30m[47m│ Administrative server for your Kerberos realm:                                                           │[1m[37m[40m [13;9H[m[30m[47m│                                                                                                          │[1m[37m[40m [14;9H[m[30m[47m│ [37m[44m________________________________________________________________________________________________________[30m[47m │[1m[37m[40m [15;9H[m[30m[47m│                                                                                                          │[1m[37m[40m [16;9H[m[30m[47m│                                                  <Ok>                                                    │[1m[37m[40m [17;9H[m[30m[47m│                                                                                                          │[1m[37m[40m [18;9H[m[30m[47m└──────────────────────────────────────────────────────────────────────────────────────────────────────────┘[1m[37m[40m [19;10H                                                                                                            [14;11H[m[37m[44mdebian64-_-3.foofers.org[16;60H[41m<Ok>[16;61H[27;1H[40m[m[m                                                                                                                            [2J[?47l87[?47h[1;27r[4l[m[37m[40m[1;27r[H[2J[1;1H[1m[37m[44m                                                                                                                             [2;1H                                                                                                                             [3;1H                                                                                                                             [4;1H                                                                                                                             [5;1H                                                                                                                             [6;1H                                                                                                                             [7;1H                                                                                                                             [8;1H                                                                                                                             [9;1H                                                                                                                             [10;1H                                                                                                                             [11;1H                                                                                                                             [12;1H                                                                                                                             [13;1H                                                                                                                             [14;1H                                                                                                                             [15;1H                                                                                                                             [16;1H                                                                                                                             [17;1H                                                                                                                             [18;1H                                                                                                                             [19;1H                                                                                                                             [20;1H                                                                                                                             [21;1H                                                                                                                             [22;1H                                                                                                                             [23;1H                                                                                                                             [24;1H                                                                                                                             [25;1H                                                                                                                             [26;1H                                                                                                                             [27;1H                                                                                                                            [27;124H [4h [4l[1;1H[m[37m[44mPackage configuration[7;3H[30m[47m┌───────────────────────────────────────────┤ [31mConfiguring krb5-admin-server[30m ├───────────────────────────────────────────┐[8;3H│                                                                                                                       │[1m[37m[40m [9;3H[m[30m[47m│ Setting up a Kerberos Realm                                                                                           │[1m[37m[40m [10;3H[m[30m[47m│                                                                                                                       │[1m[37m[40m [11;3H[m[30m[47m│ This package contains the administrative tools required to run the Kerberos master server.                            │[1m[37m[40m [12;3H[m[30m[47m│                                                                                                                       │[1m[37m[40m [13;3H[m[30m[47m│ However, installing this package does not automatically set up a Kerberos realm.  This can be done later by running   │[1m[37m[40m [14;3H[m[30m[47m│ the "krb5_newrealm" command.                                                                                          │[1m[37m[40m [15;3H[m[30m[47m│                                                                                                                       │[1m[37m[40m [16;3H[m[30m[47m│ Please also read the /usr/share/doc/krb5-kdc/README.KDC file and the administration guide found in the krb5-doc       │[1m[37m[40m [17;3H[m[30m[47m│ package.                                                                                                              │[1m[37m[40m [18;3H[m[30m[47m│                                                                                                                       │[1m[37m[40m [19;3H[m[30m[47m│                                                        [37m[41m<Ok>[30m[47m                                                           │[1m[37m[40m [20;3H[m[30m[47m│                                                                                                                       │[1m[37m[40m [21;3H[m[30m[47m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[1m[37m[40m [22;4H                                                                                                                         [19;61H[27;1H[m[37m[40m[m[m                                                                                                                            [2J[?47l8(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46156 files and directories currently installed.)
+Preparing to replace libgssapi-krb5-2 1.8.1+dfsg-2ubuntu0.1 (using .../libgssapi-krb5-2_1.8.1+dfsg-2ubuntu0.4_amd64.deb) ...
+Unpacking replacement libgssapi-krb5-2 ...
+Preparing to replace libkrb5-3 1.8.1+dfsg-2ubuntu0.1 (using .../libkrb5-3_1.8.1+dfsg-2ubuntu0.4_amd64.deb) ...
+Unpacking replacement libkrb5-3 ...
+Preparing to replace libkrb5support0 1.8.1+dfsg-2ubuntu0.1 (using .../libkrb5support0_1.8.1+dfsg-2ubuntu0.4_amd64.deb) ...
+Unpacking replacement libkrb5support0 ...
+Selecting previously deselected package libgssrpc4.
+Unpacking libgssrpc4 (from .../libgssrpc4_1.8.1+dfsg-2ubuntu0.4_amd64.deb) ...
+Selecting previously deselected package libkadm5clnt-mit7.
+Unpacking libkadm5clnt-mit7 (from .../libkadm5clnt-mit7_1.8.1+dfsg-2ubuntu0.4_amd64.deb) ...
+Selecting previously deselected package libkdb5-4.
+Unpacking libkdb5-4 (from .../libkdb5-4_1.8.1+dfsg-2ubuntu0.4_amd64.deb) ...
+Selecting previously deselected package libkadm5srv-mit7.
+Unpacking libkadm5srv-mit7 (from .../libkadm5srv-mit7_1.8.1+dfsg-2ubuntu0.4_amd64.deb) ...
+Selecting previously deselected package krb5-config.
+Unpacking krb5-config (from .../krb5-config_2.2_all.deb) ...
+Selecting previously deselected package krb5-user.
+Unpacking krb5-user (from .../krb5-user_1.8.1+dfsg-2ubuntu0.4_amd64.deb) ...
+Selecting previously deselected package krb5-kdc.
+Unpacking krb5-kdc (from .../krb5-kdc_1.8.1+dfsg-2ubuntu0.4_amd64.deb) ...
+Selecting previously deselected package krb5-admin-server.
+Unpacking krb5-admin-server (from .../krb5-admin-server_1.8.1+dfsg-2ubuntu0.4_amd64.deb) ...
+Processing triggers for man-db ...
+Processing triggers for ureadahead ...
+Setting up libkrb5support0 (1.8.1+dfsg-2ubuntu0.4) ...
+
+Setting up libkrb5-3 (1.8.1+dfsg-2ubuntu0.4) ...
+
+Setting up libgssapi-krb5-2 (1.8.1+dfsg-2ubuntu0.4) ...
+
+Setting up libgssrpc4 (1.8.1+dfsg-2ubuntu0.4) ...
+
+Setting up libkadm5clnt-mit7 (1.8.1+dfsg-2ubuntu0.4) ...
+
+Setting up libkdb5-4 (1.8.1+dfsg-2ubuntu0.4) ...
+
+Setting up libkadm5srv-mit7 (1.8.1+dfsg-2ubuntu0.4) ...
+
+Setting up krb5-config (2.2) ...
+
+Setting up krb5-user (1.8.1+dfsg-2ubuntu0.4) ...
+Setting up krb5-kdc (1.8.1+dfsg-2ubuntu0.4) ...
+krb5kdc: cannot initialize realm FOOFERS.ORG - see log file for details
+
+Setting up krb5-admin-server (1.8.1+dfsg-2ubuntu0.4) ...
+kadmind: No such file or directory while initializing, aborting
+
+Processing triggers for libc-bin ...
+ldconfig deferred processing now taking place
+]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# cat /etc/krb5.conf
+[libdefaults]
+	default_realm = FOOFERS.ORG
+
+# The following krb5.conf variables are only for MIT Kerberos.
+	krb4_config = /etc/krb.conf
+	krb4_realms = /etc/krb.realms
+	kdc_timesync = 1
+	ccache_type = 4
+	forwardable = true
+	proxiable = true
+
+# The following encryption type specification will be used by MIT Kerberos
+# if uncommented.  In general, the defaults in the MIT Kerberos code are
+# correct and overriding these specifications only serves to disable new
+# encryption types as they are added, creating interoperability problems.
+#
+# Thie only time when you might need to uncomment these lines and change
+# the enctypes is if you have local software that will break on ticket
+# caches containing ticket encryption types it doesn't know about (such as
+# old versions of Sun Java).
+
+#	default_tgs_enctypes = des3-hmac-sha1
+#	default_tkt_enctypes = des3-hmac-sha1
+#	permitted_enctypes = des3-hmac-sha1
+
+# The following libdefaults parameters are only for Heimdal Kerberos.
+	v4_instance_resolve = false
+	v4_name_convert = {
+		host = {
+			rcmd = host
+			ftp = ftp
+		}
+		plain = {
+			something = something-else
+		}
+	}
+	fcc-mit-ticketflags = true
+
+[realms]
+	FOOFERS.ORG = {
+		kdc = debian64-3.foofers.org
+		admin_server = debian64-3.foofers.org
+	}
+	ATHENA.MIT.EDU = {
+		kdc = kerberos.mit.edu:88
+		kdc = kerberos-1.mit.edu:88
+		kdc = kerberos-2.mit.edu:88
+		admin_server = kerberos.mit.edu
+		default_domain = mit.edu
+	}
+	MEDIA-LAB.MIT.EDU = {
+		kdc = kerberos.media.mit.edu
+		admin_server = kerberos.media.mit.edu
+	}
+	ZONE.MIT.EDU = {
+		kdc = casio.mit.edu
+		kdc = seiko.mit.edu
+		admin_server = casio.mit.edu
+	}
+	MOOF.MIT.EDU = {
+		kdc = three-headed-dogcow.mit.edu:88
+		kdc = three-headed-dogcow-1.mit.edu:88
+		admin_server = three-headed-dogcow.mit.edu
+	}
+	CSAIL.MIT.EDU = {
+		kdc = kerberos-1.csail.mit.edu
+		kdc = kerberos-2.csail.mit.edu
+		admin_server = kerberos.csail.mit.edu
+		default_domain = csail.mit.edu
+		krb524_server = krb524.csail.mit.edu
+	}
+	IHTFP.ORG = {
+		kdc = kerberos.ihtfp.org
+		admin_server = kerberos.ihtfp.org
+	}
+	GNU.ORG = {
+		kdc = kerberos.gnu.org
+		kdc = kerberos-2.gnu.org
+		kdc = kerberos-3.gnu.org
+		admin_server = kerberos.gnu.org
+	}
+	1TS.ORG = {
+		kdc = kerberos.1ts.org
+		admin_server = kerberos.1ts.org
+	}
+	GRATUITOUS.ORG = {
+		kdc = kerberos.gratuitous.org
+		admin_server = kerberos.gratuitous.org
+	}
+	DOOMCOM.ORG = {
+		kdc = kerberos.doomcom.org
+		admin_server = kerberos.doomcom.org
+	}
+	ANDREW.CMU.EDU = {
+		kdc = vice28.fs.andrew.cmu.edu
+		kdc = vice2.fs.andrew.cmu.edu
+		kdc = vice11.fs.andrew.cmu.edu
+		kdc = vice12.fs.andrew.cmu.edu
+		admin_server = vice28.fs.andrew.cmu.edu
+		default_domain = andrew.cmu.edu
+	}
+	CS.CMU.EDU = {
+		kdc = kerberos.cs.cmu.edu
+		kdc = kerberos-2.srv.cs.cmu.edu
+		admin_server = kerberos.cs.cmu.edu
+	}
+	DEMENTIA.ORG = {
+		kdc = kerberos.dementia.org
+		kdc = kerberos2.dementia.org
+		admin_server = kerberos.dementia.org
+	}
+	stanford.edu = {
+		kdc = krb5auth1.stanford.edu
+		kdc = krb5auth2.stanford.edu
+		kdc = krb5auth3.stanford.edu
+		master_kdc = krb5auth1.stanford.edu
+		admin_server = krb5-admin.stanford.edu
+		default_domain = stanford.edu
+	}
+
+[domain_realm]
+	.mit.edu = ATHENA.MIT.EDU
+	mit.edu = ATHENA.MIT.EDU
+	.media.mit.edu = MEDIA-LAB.MIT.EDU
+	media.mit.edu = MEDIA-LAB.MIT.EDU
+	.csail.mit.edu = CSAIL.MIT.EDU
+	csail.mit.edu = CSAIL.MIT.EDU
+	.whoi.edu = ATHENA.MIT.EDU
+	whoi.edu = ATHENA.MIT.EDU
+	.stanford.edu = stanford.edu
+	.slac.stanford.edu = SLAC.STANFORD.EDU
+
+[login]
+	krb4_convert = true
+	krb4_get_tickets = false
+]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# cat /etc/krb5.conf
+[libdefaults]
+	default_realm = FOOFERS.ORG
+
+# The following krb5.conf variables are only for MIT Kerberos.
+	krb4_config = /etc/krb.conf
+	krb4_realms = /etc/krb.realms
+	kdc_timesync = 1
+	ccache_type = 4
+	forwardable = true
+	proxiable = true
+
+# The following encryption type specification will be used by MIT Kerberos
+# if uncommented.  In general, the defaults in the MIT Kerberos code are
+# correct and overriding these specifications only serves to disable new
+# encryption types as they are added, creating interoperability problems.
+#
+# Thie only time when you might need to uncomment these lines and change
+# the enctypes is if you have local software that will break on ticket
+# caches containing ticket encryption types it doesn't know about (such as
+# old versions of Sun Java).
+
+#	default_tgs_enctypes = des3-hmac-sha1
+#	default_tkt_enctypes = des3-hmac-sha1
+#	permitted_enctypes = des3-hmac-sha1
+
+# The following libdefaults parameters are only for Heimdal Kerberos.
+	v4_instance_resolve = false
+	v4_name_convert = {
+		host = {
+			rcmd = host
+			ftp = ftp
+		}
+		plain = {
+			something = something-else
+		}
+	}
+	fcc-mit-ticketflags = true
+
+[realms]
+	FOOFERS.ORG = {
+		kdc = debian64-3.foofers.org
+		admin_server = debian64-3.foofers.org
+	}
+	ATHENA.MIT.EDU = {
+		kdc = kerberos.mit.edu:88
+		kdc = kerberos-1.mit.edu:88
+		kdc = kerberos-2.mit.edu:88
+		admin_server = kerberos.mit.edu
+		default_domain = mit.edu
+	}
+	MEDIA-LAB.MIT.EDU = {
+		kdc = kerberos.media.mit.edu
+		admin_server = kerberos.media.mit.edu
+	}
+	ZONE.MIT.EDU = {
+		kdc = casio.mit.edu
+		kdc = seiko.mit.edu
+		admin_server = casio.mit.edu
+	}
+	MOOF.MIT.EDU = {
+		kdc = three-headed-dogcow.mit.edu:88
+		kdc = three-headed-dogcow-1.mit.edu:88
+		admin_server = three-headed-dogcow.mit.edu
+	}
+	CSAIL.MIT.EDU = {
+		kdc = kerberos-1.csail.mit.edu
+		kdc = kerberos-2.csail.mit.edu
+		admin_server = kerberos.csail.mit.edu
+		default_domain = csail.mit.edu
+		krb524_server = krb524.csail.mit.edu
+	}
+	IHTFP.ORG = {
+		kdc = kerberos.ihtfp.org
+		admin_server = kerberos.ihtfp.org
+	}
+	GNU.ORG = {
+		kdc = kerberos.gnu.org
+		kdc = kerberos-2.gnu.org
+		kdc = kerberos-3.gnu.org
+		admin_server = kerberos.gnu.org
+	}
+	1TS.ORG = {
+		kdc = kerberos.1ts.org
+		admin_server = kerberos.1ts.org
+	}
+	GRATUITOUS.ORG = {
+		kdc = kerberos.gratuitous.org
+		admin_server = kerberos.gratuitous.org
+	}
+	DOOMCOM.ORG = {
+		kdc = kerberos.doomcom.org
+		admin_server = kerberos.doomcom.org
+	}
+	ANDREW.CMU.EDU = {
+		kdc = vice28.fs.andrew.cmu.edu
+		kdc = vice2.fs.andrew.cmu.edu
+		kdc = vice11.fs.andrew.cmu.edu
+		kdc = vice12.fs.andrew.cmu.edu
+		admin_server = vice28.fs.andrew.cmu.edu
+		default_domain = andrew.cmu.edu
+	}
+	CS.CMU.EDU = {
+		kdc = kerberos.cs.cmu.edu
+		kdc = kerberos-2.srv.cs.cmu.edu
+		admin_server = kerberos.cs.cmu.edu
+	}
+	DEMENTIA.ORG = {
+		kdc = kerberos.dementia.org
+		kdc = kerberos2.dementia.org
+		admin_server = kerberos.dementia.org
+	}
+	stanford.edu = {
+		kdc = krb5auth1.stanford.edu
+		kdc = krb5auth2.stanford.edu
+		kdc = krb5auth3.stanford.edu
+		master_kdc = krb5auth1.stanford.edu
+		admin_server = krb5-admin.stanford.edu
+		default_domain = stanford.edu
+	}
+
+[domain_realm]
+	.mit.edu = ATHENA.MIT.EDU
+	mit.edu = ATHENA.MIT.EDU
+	.media.mit.edu = MEDIA-LAB.MIT.EDU
+	media.mit.edu = MEDIA-LAB.MIT.EDU
+	.csail.mit.edu = CSAIL.MIT.EDU
+	csail.mit.edu = CSAIL.MIT.EDU
+	.whoi.edu = ATHENA.MIT.EDU
+	whoi.edu = ATHENA.MIT.EDU
+	.stanford.edu = stanford.edu
+	.slac.stanford.edu = SLAC.STANFORD.EDU
+
+[login]
+	krb4_convert = true
+	krb4_get_tickets = false
+]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# ping debian64-3.foofers.org
+PING debian64-3.foofers.org (66.150.161.140) 56(84) bytes of data.
+64 bytes from 66.150.161.140: icmp_seq=1 ttl=63 time=33.2 ms
+64 bytes from 66.150.161.140: icmp_seq=2 ttl=63 time=36.9 ms
+64 bytes from 66.150.161.140: icmp_seq=3 ttl=63 time=39.3 ms
+^C64 bytes from 66.150.161.140: icmp_seq=4 ttl=63 time=38.7 ms
+
+--- debian64-3.foofers.org ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3012ms
+rtt min/avg/max/mdev = 33.204/37.073/39.342/2.410 ms
+]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# emacs -nw /etc/hosts[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C
+7[?47h7[?47h[?1h=[H[2J[26;1H[7m-=--:----F1  [m[m[7m[1m*scratch*   [m[m[7m   All L1     (Fundamental)-------------------------------------------------------------------------[m[m
+[A[H[H[2J[27;1H[K[?1l>[2J[?47l8[m7[?47h7[?47h[?1h=[27;1HLoading 00debian-vars...[K[H
+[27;1HNo /etc/mailname. Rev[4herting to default[H
+[4l[27;1HLoading 00debian-vars...done[K[H
+[>0c[27;1HLoading 00debian-vars...done[K[H[7mFile Edit Options Buffers Tools Lisp-Interaction Help                                                                        [m[m
+[A
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[7m-UUU:----F1  [m[m[7m[1m*scratch*   [m[m[7m   All L1     (Lisp Interaction)--------------------------------------------------------------------[m[m
+[A[H
+[27;1HFor information about GNU Emacs and the GNU system, type C-h C-a.[H
+[27;1HFor information about GNU Emacs and the GNU system, type C-h C-a.[K[H[7mFile Edit Options Buffers Tools Conf Help                                                                                    [m[m
+[A
+[33m127.0.0.1[m[m       localhost[K
+[33m127.0.1.1[m[m       debian64-3[K
+[K
+[31m# The following lines are desirable for IPv6 capable hosts                                                                   [m
+[A
+[33m::1[m[m     localhost ip6-localhost ip6-loopback[K
+[33mfe00::0[m[m ip6-localnet[K
+[33mff00::0[m[m ip6-mcastprefix[K
+[33mff02::1[m[m ip6-allnodes[K
+[33mff02::2[m[m ip6-allrouters[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[7m-UU-:----F1  [m[m[7m[1mhosts       [m[m[7m   All L1     (Conf[Space])-------------------------------------------------------------------------[m[m
+[A[H
+[27;1H[K[26;34H[7m2[m[m[H
+
+[3;27H[26;6H[7m**[m[m[3;28Hdeba[Kian64-3.foofers.org[27;1HSaving file /etc/hosts...[3;50H[27;1HWrote /etc/hosts[K[3;50H[26;6H[7m--[m[m[3;50H[27;1H[K[3;50H[27;1H(No files need saving)[3;50H[27;1H[K[?1l>[2J[?47l8[m]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# emacs -nw /etc/hostsping debian64-3.foofers.org
+PING debian64-3 (127.0.1.1) 56(84) bytes of data.
+64 bytes from debian64-3 (127.0.1.1): icmp_seq=1 ttl=64 time=0.005 ms
+64 bytes from debian64-3 (127.0.1.1): icmp_seq=2 ttl=64 time=0.015 ms
+^C
+--- debian64-3 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1000ms
+rtt min/avg/max/mdev = 0.005/0.010/0.015/0.005 ms
+]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# ping debian64-3.foofers.org[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[7Pemacs -nw /etc/hosts
+7[?47h7[?47h[?1h=[H[2J[26;1H[7m-=--:----F1  [m[m[7m[1m*scratch*   [m[m[7m   All L1     (Fundamental)-------------------------------------------------------------------------[m[m
+[A[H[H[2J[27;1H[K[?1l>[2J[?47l8[m7[?47h7[?47h[?1h=[27;1HLoading 00debian-vars...[K[H
+[27;1HNo /etc/mailname. Rev[4herting to default[H
+[4l[27;1HLoading 00debian-vars...done[K[H
+[>0c[27;1HLoading 00debian-vars...done[K[H[7mFile Edit Options Buffers Tools Lisp-Interaction Help                                                                        [m[m
+[A
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[7m-UUU:----F1  [m[m[7m[1m*scratch*   [m[m[7m   All L1     (Lisp Interaction)--------------------------------------------------------------------[m[m
+[A[H
+[27;1HFor information about GNU Emacs and the GNU system, type C-h C-a.[H
+[27;1HFor information about GNU Emacs and the GNU system, type C-h C-a.[K[H[7mFile Edit Options Buffers Tools Conf Help                                                                                    [m[m
+[A
+[33m127.0.0.1[m[m       localhost[K
+[33m127.0.1.1[m[m       debian64-3 debian64-3.foofers.org[K
+[K
+[31m# The following lines are desirable for IPv6 capable hosts                                                                   [m
+[A
+[33m::1[m[m     localhost ip6-localhost ip6-loopback[K
+[33mfe00::0[m[m ip6-localnet[K
+[33mff00::0[m[m ip6-mcastprefix[K
+[33mff02::1[m[m ip6-allnodes[K
+[33mff02::2[m[m ip6-allrouters[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[7m-UU-:----F1  [m[m[7m[1mhosts       [m[m[7m   All L1     (Conf[Space])-------------------------------------------------------------------------[m[m
+[A[H
+[27;1H[K[26;34H[7m2[m[m[H
+
+[26;34H[7m3[m[m[4;1H[33m1[m[m[26;6H[7m**[m[m[4;2H[33m9[m[m[33m2[m[m[33m.[m[m[33m1[m[m[33m6[m[m[33m8[m[m[33m.[m[m[33m5[m[m[33m6[m[m[33m.[m[m[33m3[m[m[33m0[m[m[26;34H[7m2[m[m[3;10H	[C[C[C[C[C[C		[C[C[C[K[C[27;1HMark set[3;28Hdebian64-3.foofers.org[27;1H[K[26;34H[7m3[m[m[4;14H[C		[27;1HMark set[4;17Hdebian64-3.foofers.org[27;1H[K[26;34H[7m2[m[m[3;39H[K[27;1HSaving file /etc/hosts...[3;27H[27;1HWrote /etc/hosts[K[3;27H[26;6H[7m--[m[m[3;27H[27;1H[K[3;27H[27;1H(No files need saving)[3;27H[27;1H[K[?1l>[2J[?47l8[m]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# emacs -nw /etc/hostsping debian64-3.foofers.org
+PING debian64-3.foofers.org (192.168.56.30) 56(84) bytes of data.
+64 bytes from debian64-3.foofers.org (192.168.56.30): icmp_seq=1 ttl=64 time=0.005 ms
+64 bytes from debian64-3.foofers.org (192.168.56.30): icmp_seq=2 ttl=64 time=0.009 ms
+^C
+--- debian64-3.foofers.org ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 999ms
+rtt min/avg/max/mdev = 0.005/0.007/0.009/0.002 ms
+]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# cat /etc/krb5kdc/kdc.conf 
+[kdcdefaults]
+    kdc_ports = 750,88
+
+[realms]
+    FOOFERS.ORG = {
+        database_name = /var/lib/krb5kdc/principal
+        admin_keytab = FILE:/etc/krb5kdc/kadm5.keytab
+        acl_file = /etc/krb5kdc/kadm5.acl
+        key_stash_file = /etc/krb5kdc/stash
+        kdc_ports = 750,88
+        max_life = 10h 0m 0s
+        max_renewable_life = 7d 0h 0m 0s
+        master_key_type = des3-hmac-sha1
+        supported_enctypes = aes256-cts:normal arcfour-hmac:normal des3-hmac-sha1:normal des-cbc-crc:normal des:normal des:v4 des:norealm des:onlyrealm des:afs3
+        default_principal_flags = +preauth
+    }
+]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# for script in /etc/init.d/krb5*; do $script restart; done
+ * Restarting Kerberos administrative servers kadmind
+kadmind: No such file or directory while initializing, aborting
+ * Restarting Kerberos KDC krb5kdc
+krb5kdc: cannot initialize realm FOOFERS.ORG - see log file for details
+   ...fail!
+]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# for script in /etc/init.d/krb5*; do $script restart; done[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[31Pcat /etc/krb5kdc/kdc.conf [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cping debian64-3.foofers.org[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[7Pemacs -nw /etc/hostsping debian64-3.foofers.org[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[7Pemacs -nw /etc/hostsping debian64-3.foofers.org[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[7Pemacs -nw /etc/hostsping debian64-3.foofers.org[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[9Pcat /etc/krb5.confapt-get install krb5-admin-server krb5-kdc[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[24Pcat /etc/krb5.conf
+[libdefaults]
+	default_realm = FOOFERS.ORG
+
+# The following krb5.conf variables are only for MIT Kerberos.
+	krb4_config = /etc/krb.conf
+	krb4_realms = /etc/krb.realms
+	kdc_timesync = 1
+	ccache_type = 4
+	forwardable = true
+	proxiable = true
+
+# The following encryption type specification will be used by MIT Kerberos
+# if uncommented.  In general, the defaults in the MIT Kerberos code are
+# correct and overriding these specifications only serves to disable new
+# encryption types as they are added, creating interoperability problems.
+#
+# Thie only time when you might need to uncomment these lines and change
+# the enctypes is if you have local software that will break on ticket
+# caches containing ticket encryption types it doesn't know about (such as
+# old versions of Sun Java).
+
+#	default_tgs_enctypes = des3-hmac-sha1
+#	default_tkt_enctypes = des3-hmac-sha1
+#	permitted_enctypes = des3-hmac-sha1
+
+# The following libdefaults parameters are only for Heimdal Kerberos.
+	v4_instance_resolve = false
+	v4_name_convert = {
+		host = {
+			rcmd = host
+			ftp = ftp
+		}
+		plain = {
+			something = something-else
+		}
+	}
+	fcc-mit-ticketflags = true
+
+[realms]
+	FOOFERS.ORG = {
+		kdc = debian64-3.foofers.org
+		admin_server = debian64-3.foofers.org
+	}
+	ATHENA.MIT.EDU = {
+		kdc = kerberos.mit.edu:88
+		kdc = kerberos-1.mit.edu:88
+		kdc = kerberos-2.mit.edu:88
+		admin_server = kerberos.mit.edu
+		default_domain = mit.edu
+	}
+	MEDIA-LAB.MIT.EDU = {
+		kdc = kerberos.media.mit.edu
+		admin_server = kerberos.media.mit.edu
+	}
+	ZONE.MIT.EDU = {
+		kdc = casio.mit.edu
+		kdc = seiko.mit.edu
+		admin_server = casio.mit.edu
+	}
+	MOOF.MIT.EDU = {
+		kdc = three-headed-dogcow.mit.edu:88
+		kdc = three-headed-dogcow-1.mit.edu:88
+		admin_server = three-headed-dogcow.mit.edu
+	}
+	CSAIL.MIT.EDU = {
+		kdc = kerberos-1.csail.mit.edu
+		kdc = kerberos-2.csail.mit.edu
+		admin_server = kerberos.csail.mit.edu
+		default_domain = csail.mit.edu
+		krb524_server = krb524.csail.mit.edu
+	}
+	IHTFP.ORG = {
+		kdc = kerberos.ihtfp.org
+		admin_server = kerberos.ihtfp.org
+	}
+	GNU.ORG = {
+		kdc = kerberos.gnu.org
+		kdc = kerberos-2.gnu.org
+		kdc = kerberos-3.gnu.org
+		admin_server = kerberos.gnu.org
+	}
+	1TS.ORG = {
+		kdc = kerberos.1ts.org
+		admin_server = kerberos.1ts.org
+	}
+	GRATUITOUS.ORG = {
+		kdc = kerberos.gratuitous.org
+		admin_server = kerberos.gratuitous.org
+	}
+	DOOMCOM.ORG = {
+		kdc = kerberos.doomcom.org
+		admin_server = kerberos.doomcom.org
+	}
+	ANDREW.CMU.EDU = {
+		kdc = vice28.fs.andrew.cmu.edu
+		kdc = vice2.fs.andrew.cmu.edu
+		kdc = vice11.fs.andrew.cmu.edu
+		kdc = vice12.fs.andrew.cmu.edu
+		admin_server = vice28.fs.andrew.cmu.edu
+		default_domain = andrew.cmu.edu
+	}
+	CS.CMU.EDU = {
+		kdc = kerberos.cs.cmu.edu
+		kdc = kerberos-2.srv.cs.cmu.edu
+		admin_server = kerberos.cs.cmu.edu
+	}
+	DEMENTIA.ORG = {
+		kdc = kerberos.dementia.org
+		kdc = kerberos2.dementia.org
+		admin_server = kerberos.dementia.org
+	}
+	stanford.edu = {
+		kdc = krb5auth1.stanford.edu
+		kdc = krb5auth2.stanford.edu
+		kdc = krb5auth3.stanford.edu
+		master_kdc = krb5auth1.stanford.edu
+		admin_server = krb5-admin.stanford.edu
+		default_domain = stanford.edu
+	}
+
+[domain_realm]
+	.mit.edu = ATHENA.MIT.EDU
+	mit.edu = ATHENA.MIT.EDU
+	.media.mit.edu = MEDIA-LAB.MIT.EDU
+	media.mit.edu = MEDIA-LAB.MIT.EDU
+	.csail.mit.edu = CSAIL.MIT.EDU
+	csail.mit.edu = CSAIL.MIT.EDU
+	.whoi.edu = ATHENA.MIT.EDU
+	whoi.edu = ATHENA.MIT.EDU
+	.stanford.edu = stanford.edu
+	.slac.stanford.edu = SLAC.STANFORD.EDU
+
+[login]
+	krb4_convert = true
+	krb4_get_tickets = false
+]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# cat /etc/krb5.conffor script in /etc/init.d/krb5*; do $script restart; done[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccat /etc/krb5.conf[K[Kemacs -nw /etc/[Kcat /etc/krb5.conf[1P[1P[1P /etc/krb5.confc /etc/krb5.confp /etc/krb5.conf[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C /etc/krb5[K[K[K[K[K[K[K[Ktmp/krc[Kb.c[K[K5[K[K[K[K[K
+]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# emacs -nw /etc/krb5.conf 
+7[?47h7[?47h[?1h=[H[2J[26;1H[7m-=--:----F1  [m[m[7m[1m*scratch*   [m[m[7m   All L1     (Fundamental)-------------------------------------------------------------------------[m[m
+[A[H[H[2J[27;1H[K[?1l>[2J[?47l8[m7[?47h7[?47h[?1h=[27;1HLoading 00debian-vars...[K[H
+[27;1HNo /etc/mailname. Rev[4herting to default[H
+[4l[27;1HLoading 00debian-vars...done[K[H
+[>0c[27;1HLoading 00debian-vars...done[K[H[7mFile Edit Options Buffers Tools Lisp-Interaction Help                                                                        [m[m
+[A
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[7m-UUU:----F1  [m[m[7m[1m*scratch*   [m[m[7m   All L1     (Lisp Interaction)--------------------------------------------------------------------[m[m
+[A[H
+[27;1HFor information about GNU Emacs and the GNU system, type C-h C-a.[H
+[27;1HFor information about GNU Emacs and the GNU system, type C-h C-a.[K[H[7mFile Edit Options Buffers Tools Conf Help                                                                                    [m[m
+[A
+[[32mlibdefaults[m][K
+        [33mdefault_realm[m[m = FOOFERS.ORG[K
+[K
+[31m# The following krb5.conf variables are only for MIT Kerberos.                                                               [m
+[A
+        [33mkrb4_config[m[m = /etc/krb.conf[K
+        [33mkrb4_realms[m[m = /etc/krb.realms[K
+        [33mkdc_timesync[m[m = 1[K
+        [33mccache_type[m[m = 4[K
+        [33mforwardable[m[m = true[K
+        [33mproxiable[m[m = true[K
+[K
+[31m# The following encryption type specification will be used by MIT Kerberos                                                   [m
+[A
+[31m# if uncommented.  In general, the defaults in the MIT Kerberos code are                                                     [m
+[A
+[31m# correct and overriding these specifications only serves to disable new                                                     [m
+[A
+[31m# encryption types as they are added, creating interoperability problems.                                                    [m
+[A
+[31m#                                                                                                                            [m
+[A
+[31m# Thie only time when you might need to uncomment these lines and change                                                     [m
+[A
+[31m# the enctypes is if you have local software that will break on ticket                                                       [m
+[A
+[31m# caches containing ticket encryption types it doesn't know about (such as                                                   [m
+[A
+[31m# old versions of Sun Java).                                                                                                 [m
+[A
+[K
+[31m#       default_tgs_enctypes = des3-hmac-sha1                                                                                [m
+[A
+[31m#       default_tkt_enctypes = des3-hmac-sha1                                                                                [m
+[A
+[31m#       permitted_enctypes = des3-hmac-sha1                                                                                  [m
+[A
+[7m-UU-:----F1  [m[m[7m[1mkrb5.conf   [m[m[7m   Top L1     (Conf[Unix])--------------------------------------------------------------------------[m[m
+[A[H
+[27;1H[K[26;34H[7m2[m[m[H
+
+[27;1HMark set[H
+
+[A                [33mkdc[m[m = krb5auth3.stanford.edu
+	        [33mmaster_kdc[m[m = krb5auth1.stanford.edu
+		[33madmin_server[m[m = krb5-admin.stanford.edu
+                [33mdefault_domain[m[m = stanford.edu[K
+	}[K
+[K
+[[32mdomain_realm[m][K
+	[33m.mit.edu[m[m = ATHENA.MIT.EDU
+	[33mmit.edu[m[m = ATHENA.MIT.EDU
+	[33m.media.mit.edu[m[m = MEDIA-LAB.MIT.EDU
+	[33mmedia.mit.edu[m[m = MEDIA-LAB.MIT.EDU
+        [33m.csail.mit.edu[m[m = CSAIL.MIT.EDU[K
+        [33mcsail.mit.edu[m[m = CSAIL.MIT.EDU[K
+        [33m.whoi.edu[m[m = ATHENA.MIT.EDU[K
+        [33mwhoi.edu[m[m = ATHENA.MIT.EDU[K
+        [33m.stanford.edu[m[m = stanford.edu[K
+        [33m.slac.stanford.edu[m[m = SLAC.STANFORD.EDU[K
+[K
+[[32mlogin[m][K
+        [33mkrb4_convert[m[m = true[K
+	[33mkrb4_get_tickets[m[m = false
+[K
+[K
+[K[26;29H[7mBot L136[m[m[23;1H
+
+
+
+[K[26;36H[7m5[m[m[22;1H[26;36H[7m4[m[m[21;1H[26;36H[7m3[m[m[20;1H[26;36H[7m2[m[m[19;1H[26;36H[7m1[m[m[18;1H[26;36H[7m0[m[m[17;1H[26;35H[7m29[m[m[16;1H[26;36H[7m8[m[m[15;1H[26;36H[7m7[m[m[14;1H[26;36H[7m6[m[m[13;1H[26;36H[7m5[m[m[12;1H[26;36H[7m4[m[m[11;1H[26;36H[7m3[m[m[10;1H[26;36H[7m2[m[m[9;1H[1;23r[9;1H[1L[1;27r[9;1H[K[26;6H[7m**--F1  [m[m[7m[1mkrb5.conf   [m[m[7m   Bot L123[m[m[10;1H[26;36H[7m2[m[m[9;1H	.foofers.org[C	[33m.foofers.org[m[m =	FOOFERS.ORG[27;1HSaving file /etc/krb5.conf...[9;35H[27;1HWrote /etc/krb5.conf[K[9;35H[26;6H[7m--[m[m[9;35H[27;1H[K[9;35H[27;1H(No files need saving)[9;35H[27;1H[K[?1l>[2J[?47l8[m]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# emacs -nw /etc/krb5.conf [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[3Pcp /etc/krb5.conf /tmp[4Pat /etc/krb5.conffor script in /etc/init.d/krb5*; do $script restart; done
+ * Restarting Kerberos administrative servers kadmind
+kadmind: No such file or directory while initializing, aborting
+ * Restarting Kerberos KDC krb5kdc
+krb5kdc: cannot initialize realm FOOFERS.ORG - see log file for details
+   ...fail!
+]0;root@debian64-3: ~[01;32mroot@debian64-3[00m:[01;34m~[00m# cd /var/log
+]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# ls -lt |head
+total 1436
+-rw-r----- 1 syslog    adm   23498 2010-12-09 10:53 daemon.log
+-rw-r----- 1 syslog    adm  262760 2010-12-09 10:53 syslog
+-rw-r----- 1 syslog    adm   13576 2010-12-09 10:53 auth.log
+-rw-r--r-- 1 root      root 307743 2010-12-09 10:50 dpkg.log
+-rw-r----- 1 syslog    adm   37388 2010-12-09 10:38 debug
+-rw-r----- 1 syslog    adm  233173 2010-12-09 10:33 kern.log
+-rw-r----- 1 syslog    adm  197381 2010-12-09 10:33 messages
+-rw-rw-r-- 1 root      utmp 292292 2010-12-09 10:33 lastlog
+-rw-r--r-- 1 root      root  32032 2010-12-09 10:33 faillog
+]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# tail -n 1000 daemon.log 
+Jul 17 18:51:47 debian64-3 dhclient: Listening on LPF/eth0/08:00:27:df:b9:93
+Jul 17 18:51:47 debian64-3 dhclient: Sending on   LPF/eth0/08:00:27:df:b9:93
+Jul 17 18:51:47 debian64-3 dhclient: Sending on   Socket/fallback
+Jul 17 18:51:47 debian64-3 dhclient: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 5
+Jul 17 18:51:47 debian64-3 dhclient: DHCPOFFER of 10.0.2.15 from 10.0.2.2
+Jul 17 18:51:47 debian64-3 dhclient: DHCPREQUEST of 10.0.2.15 on eth0 to 255.255.255.255 port 67
+Jul 17 18:51:47 debian64-3 dhclient: DHCPACK of 10.0.2.15 from 10.0.2.2
+Jul 17 18:51:48 debian64-3 dhclient: bound to 10.0.2.15 -- renewal in 33387 seconds.
+Jul 17 18:51:48 debian64-3 init: ssh main process (564) terminated with status 255
+Jul 17 18:51:48 debian64-3 init: apport pre-start process (607) terminated with status 1
+Jul 17 18:51:48 debian64-3 init: apport post-stop process (622) terminated with status 1
+Jul 17 18:51:48 debian64-3 ntpdate[603]: step time server 91.189.94.4 offset -0.568229 sec
+Jul 17 19:05:47 debian64-3 dhclient: There is already a pid file /var/run/dhclient.eth0.pid with pid 584
+Jul 17 19:05:48 debian64-3 dhclient: killed old client process, removed PID file
+Jul 17 19:05:48 debian64-3 dhclient: Internet Systems Consortium DHCP Client V3.1.3
+Jul 17 19:05:48 debian64-3 dhclient: Copyright 2004-2009 Internet Systems Consortium.
+Jul 17 19:05:48 debian64-3 dhclient: All rights reserved.
+Jul 17 19:05:48 debian64-3 dhclient: For info, please visit https://www.isc.org/software/dhcp/
+Jul 17 19:05:48 debian64-3 dhclient: 
+Jul 17 19:05:48 debian64-3 dhclient: Listening on LPF/eth0/08:00:27:df:b9:93
+Jul 17 19:05:49 debian64-3 dhclient: Sending on   LPF/eth0/08:00:27:df:b9:93
+Jul 17 19:05:49 debian64-3 dhclient: Sending on   Socket/fallback
+Jul 17 19:05:49 debian64-3 dhclient: DHCPRELEASE on eth0 to 10.0.2.2 port 67
+Jul 17 19:05:50 debian64-3 dhclient: Internet Systems Consortium DHCP Client V3.1.3
+Jul 17 19:05:50 debian64-3 dhclient: Copyright 2004-2009 Internet Systems Consortium.
+Jul 17 19:05:50 debian64-3 dhclient: All rights reserved.
+Jul 17 19:05:50 debian64-3 dhclient: For info, please visit https://www.isc.org/software/dhcp/
+Jul 17 19:05:50 debian64-3 dhclient: 
+Jul 17 19:05:50 debian64-3 dhclient: Listening on LPF/eth0/08:00:27:df:b9:93
+Jul 17 19:05:51 debian64-3 dhclient: Sending on   LPF/eth0/08:00:27:df:b9:93
+Jul 17 19:05:51 debian64-3 dhclient: Sending on   Socket/fallback
+Jul 17 19:05:51 debian64-3 dhclient: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 8
+Jul 17 19:05:51 debian64-3 dhclient: DHCPOFFER of 10.0.2.15 from 10.0.2.2
+Jul 17 19:05:51 debian64-3 dhclient: DHCPREQUEST of 10.0.2.15 on eth0 to 255.255.255.255 port 67
+Jul 17 19:05:52 debian64-3 dhclient: DHCPACK of 10.0.2.15 from 10.0.2.2
+Jul 17 19:05:52 debian64-3 dhclient: bound to 10.0.2.15 -- renewal in 32690 seconds.
+Jul 17 19:05:52 debian64-3 init: ssh main process (634) terminated with status 255
+Jul 17 19:07:22 debian64-3 init: apport pre-start process (586) terminated with status 1
+Jul 17 19:07:22 debian64-3 init: apport post-stop process (601) terminated with status 1
+Jul 17 19:07:25 debian64-3 dhclient: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 5
+Jul 17 19:07:25 debian64-3 dhclient: DHCPOFFER of 10.0.2.15 from 10.0.2.2
+Jul 17 19:07:25 debian64-3 dhclient: DHCPREQUEST of 10.0.2.15 on eth0 to 255.255.255.255 port 67
+Jul 17 19:07:25 debian64-3 dhclient: DHCPACK of 10.0.2.15 from 10.0.2.2
+Jul 17 19:07:25 debian64-3 dhclient: bound to 10.0.2.15 -- renewal in 39565 seconds.
+Jul 17 19:07:25 debian64-3 init: ssh main process (544) terminated with status 255
+Jul 17 19:08:45 debian64-3 ntpdate[671]: name server cannot be used, reason: Temporary failure in name resolution
+Jul 17 19:09:32 debian64-3 dhclient: Listening on LPF/eth0/08:00:27:df:b9:93
+Jul 17 19:09:32 debian64-3 dhclient: Sending on   LPF/eth0/08:00:27:df:b9:93
+Jul 17 19:09:32 debian64-3 dhclient: Sending on   Socket/fallback
+Jul 17 19:09:33 debian64-3 dhclient: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3
+Jul 17 19:09:33 debian64-3 dhclient: DHCPOFFER of 10.0.2.15 from 10.0.2.2
+Jul 17 19:09:33 debian64-3 dhclient: DHCPREQUEST of 10.0.2.15 on eth0 to 255.255.255.255 port 67
+Jul 17 19:09:33 debian64-3 dhclient: DHCPACK of 10.0.2.15 from 10.0.2.2
+Jul 17 19:09:33 debian64-3 dhclient: bound to 10.0.2.15 -- renewal in 35453 seconds.
+Jul 17 19:09:33 debian64-3 init: apport pre-start process (631) terminated with status 1
+Jul 17 19:09:33 debian64-3 init: ssh main process (557) terminated with status 255
+Jul 17 19:09:34 debian64-3 init: apport post-stop process (646) terminated with status 1
+Jul 17 19:10:23 debian64-3 init: tty1 main process ended, respawning
+Jul 17 19:10:53 debian64-3 ntpdate[623]: name server cannot be used, reason: Temporary failure in name resolution
+Jul 18 19:02:06 debian64-3 dhclient: bound to 10.0.2.15 -- renewal in 37346 seconds.
+Jul 18 19:02:07 debian64-3 init: ssh main process (563) terminated with status 255
+Jul 18 19:02:08 debian64-3 init: apport pre-start process (636) terminated with status 1
+Jul 18 19:02:09 debian64-3 init: apport post-stop process (651) terminated with status 1
+Jul 18 19:03:27 debian64-3 ntpdate[597]: name server cannot be used, reason: Temporary failure in name resolution
+Jul 19 05:10:00 debian64-3 dhclient: There is already a pid file /var/run/dhclient.eth0.pid with pid 579
+Jul 19 05:10:00 debian64-3 dhclient: killed old client process, removed PID file
+Jul 19 05:10:00 debian64-3 dhclient: Internet Systems Consortium DHCP Client V3.1.3
+Jul 19 05:10:00 debian64-3 dhclient: Copyright 2004-2009 Internet Systems Consortium.
+Jul 19 05:10:00 debian64-3 dhclient: All rights reserved.
+Jul 19 05:10:01 debian64-3 dhclient: For info, please visit https://www.isc.org/software/dhcp/
+Jul 19 05:10:01 debian64-3 dhclient: 
+Jul 19 05:10:01 debian64-3 dhclient: Listening on LPF/eth0/08:00:27:df:b9:93
+Jul 19 05:10:01 debian64-3 dhclient: Sending on   LPF/eth0/08:00:27:df:b9:93
+Jul 19 05:10:01 debian64-3 dhclient: Sending on   Socket/fallback
+Jul 19 05:10:01 debian64-3 dhclient: DHCPRELEASE on eth0 to 10.0.2.2 port 67
+Jul 19 05:10:02 debian64-3 dhclient: Internet Systems Consortium DHCP Client V3.1.3
+Jul 19 05:10:02 debian64-3 dhclient: Copyright 2004-2009 Internet Systems Consortium.
+Jul 19 05:10:02 debian64-3 dhclient: All rights reserved.
+Jul 19 05:10:03 debian64-3 dhclient: For info, please visit https://www.isc.org/software/dhcp/
+Jul 19 05:10:03 debian64-3 dhclient: 
+Jul 19 05:10:03 debian64-3 dhclient: Listening on LPF/eth0/08:00:27:df:b9:93
+Jul 19 05:10:03 debian64-3 dhclient: Sending on   LPF/eth0/08:00:27:df:b9:93
+Jul 19 05:10:03 debian64-3 dhclient: Sending on   Socket/fallback
+Jul 19 05:10:04 debian64-3 dhclient: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 4
+Jul 19 05:10:04 debian64-3 dhclient: DHCPOFFER of 10.0.2.15 from 10.0.2.2
+Jul 19 05:10:04 debian64-3 dhclient: DHCPREQUEST of 10.0.2.15 on eth0 to 255.255.255.255 port 67
+Jul 19 05:10:04 debian64-3 dhclient: DHCPACK of 10.0.2.15 from 10.0.2.2
+Jul 19 05:10:05 debian64-3 dhclient: bound to 10.0.2.15 -- renewal in 37363 seconds.
+Jul 19 05:10:05 debian64-3 init: ssh main process (616) terminated with status 255
+Jul 19 05:10:06 debian64-3 init: ssh main process (947) terminated with status 255
+Jul 19 09:33:29 debian64-3 ntpdate[941]: step time server 91.189.94.4 offset 15802.823533 sec
+Jul 19 09:33:34 debian64-3 ntpdate[994]: step time server 91.189.94.4 offset -0.002280 sec
+Jul 19 09:51:47 debian64-3 init: ssh main process (981) terminated with status 255
+Oct 19 20:57:30 debian64-3 ntpdate[551]: no servers can be used, exiting
+Oct 19 20:57:30 debian64-3 dhclient: Listening on LPF/eth0/08:00:27:df:b9:93
+Oct 19 20:57:30 debian64-3 dhclient: Sending on   LPF/eth0/08:00:27:df:b9:93
+Oct 19 20:57:30 debian64-3 dhclient: Sending on   Socket/fallback
+Oct 19 20:57:32 debian64-3 dhclient: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 4
+Oct 19 20:57:32 debian64-3 dhclient: DHCPOFFER of 10.0.2.15 from 10.0.2.2
+Oct 19 20:57:32 debian64-3 dhclient: DHCPREQUEST of 10.0.2.15 on eth0 to 255.255.255.255 port 67
+Oct 19 20:57:32 debian64-3 dhclient: DHCPACK of 10.0.2.15 from 10.0.2.2
+Oct 19 20:57:32 debian64-3 init: apport pre-start process (611) terminated with status 1
+Oct 19 20:57:32 debian64-3 init: apport post-stop process (628) terminated with status 1
+Oct 19 20:57:33 debian64-3 dhclient: bound to 10.0.2.15 -- renewal in 38034 seconds.
+Oct 19 20:57:33 debian64-3 init: ssh main process (582) terminated with status 255
+Oct 19 20:57:37 debian64-3 ntpdate[686]: step time server 91.189.94.4 offset 1.576712 sec
+Oct 19 21:00:21 debian64-3 puppetd[857]: Reopening log files
+Oct 19 21:00:21 debian64-3 puppetd[857]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Oct 19 21:02:21 debian64-3 puppetd[857]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Oct 19 21:04:21 debian64-3 puppetd[857]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Oct 19 21:06:21 debian64-3 puppetd[857]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Oct 19 21:08:21 debian64-3 puppetd[857]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Oct 19 21:10:21 debian64-3 puppetd[857]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Oct 19 21:11:04 debian64-3 puppetd[1043]: Reopening log files
+Oct 19 21:11:04 debian64-3 puppetd[1043]: Removing file Puppet::SSL::Certificate debian64-3.foofers.org at '/var/lib/puppet/ssl/certs/debian64-3.foofers.org.pem'
+Oct 19 21:11:04 debian64-3 puppetd[1043]: Retrieved certificate does not match private key
+Oct 19 21:11:04 debian64-3 puppetd[1043]: Removing file Puppet::SSL::Certificate debian64-3.foofers.org at '/var/lib/puppet/ssl/certs/debian64-3.foofers.org.pem'
+Oct 19 21:11:04 debian64-3 puppetd[1043]: Retrieved certificate does not match private key
+Oct 19 21:11:04 debian64-3 puppetd[1043]: Removing file Puppet::SSL::Certificate debian64-3.foofers.org at '/var/lib/puppet/ssl/certs/debian64-3.foofers.org.pem'
+Oct 19 21:11:04 debian64-3 puppetd[1043]: Retrieved certificate does not match private key
+Oct 19 21:12:01 debian64-3 puppetd[1101]: Reopening log files
+Oct 19 21:12:01 debian64-3 puppetd[1101]: Removing file Puppet::SSL::Certificate debian64-3.foofers.org at '/var/lib/puppet/ssl/certs/debian64-3.foofers.org.pem'
+Oct 19 21:12:01 debian64-3 puppetd[1101]: Retrieved certificate does not match private key
+Oct 19 21:12:01 debian64-3 puppetd[1101]: Removing file Puppet::SSL::Certificate debian64-3.foofers.org at '/var/lib/puppet/ssl/certs/debian64-3.foofers.org.pem'
+Oct 19 21:12:01 debian64-3 puppetd[1101]: Retrieved certificate does not match private key
+Oct 19 21:12:01 debian64-3 puppetd[1101]: Removing file Puppet::SSL::Certificate debian64-3.foofers.org at '/var/lib/puppet/ssl/certs/debian64-3.foofers.org.pem'
+Oct 19 21:12:01 debian64-3 puppetd[1101]: Retrieved certificate does not match private key
+Oct 19 21:14:01 debian64-3 puppetd[1101]: Removing file Puppet::SSL::Certificate debian64-3.foofers.org at '/var/lib/puppet/ssl/certs/debian64-3.foofers.org.pem'
+Oct 19 21:14:01 debian64-3 puppetd[1101]: Retrieved certificate does not match private key
+Oct 19 21:14:01 debian64-3 puppetd[1101]: Did not receive certificate
+Oct 19 21:16:01 debian64-3 puppetd[1101]: Removing file Puppet::SSL::Certificate debian64-3.foofers.org at '/var/lib/puppet/ssl/certs/debian64-3.foofers.org.pem'
+Oct 19 21:16:01 debian64-3 puppetd[1101]: Retrieved certificate does not match private key
+Oct 19 21:16:01 debian64-3 puppetd[1101]: Did not receive certificate
+Oct 19 21:18:01 debian64-3 puppetd[1101]: Removing file Puppet::SSL::Certificate debian64-3.foofers.org at '/var/lib/puppet/ssl/certs/debian64-3.foofers.org.pem'
+Oct 19 21:18:01 debian64-3 puppetd[1101]: Retrieved certificate does not match private key
+Oct 19 21:18:01 debian64-3 puppetd[1101]: Did not receive certificate
+Oct 19 21:20:02 debian64-3 puppetd[1101]: Removing file Puppet::SSL::Certificate debian64-3.foofers.org at '/var/lib/puppet/ssl/certs/debian64-3.foofers.org.pem'
+Oct 19 21:20:02 debian64-3 puppetd[1101]: Retrieved certificate does not match private key
+Oct 19 21:20:02 debian64-3 puppetd[1101]: Did not receive certificate
+Oct 19 21:22:02 debian64-3 puppetd[1101]: Removing file Puppet::SSL::Certificate debian64-3.foofers.org at '/var/lib/puppet/ssl/certs/debian64-3.foofers.org.pem'
+Oct 19 21:22:02 debian64-3 puppetd[1101]: Retrieved certificate does not match private key
+Oct 19 21:22:02 debian64-3 puppetd[1101]: Did not receive certificate
+Oct 19 21:24:02 debian64-3 puppetd[1101]: Removing file Puppet::SSL::Certificate debian64-3.foofers.org at '/var/lib/puppet/ssl/certs/debian64-3.foofers.org.pem'
+Oct 19 21:24:02 debian64-3 puppetd[1101]: Retrieved certificate does not match private key
+Oct 19 21:24:02 debian64-3 puppetd[1101]: Did not receive certificate
+Oct 19 21:26:02 debian64-3 puppetd[1101]: Removing file Puppet::SSL::Certificate debian64-3.foofers.org at '/var/lib/puppet/ssl/certs/debian64-3.foofers.org.pem'
+Oct 19 21:26:02 debian64-3 puppetd[1101]: Retrieved certificate does not match private key
+Oct 19 21:26:02 debian64-3 puppetd[1101]: Did not receive certificate
+Oct 19 21:28:02 debian64-3 puppetd[1101]: Removing file Puppet::SSL::Certificate debian64-3.foofers.org at '/var/lib/puppet/ssl/certs/debian64-3.foofers.org.pem'
+Oct 19 21:28:02 debian64-3 puppetd[1101]: Retrieved certificate does not match private key
+Oct 19 21:28:02 debian64-3 puppetd[1101]: Did not receive certificate
+Oct 19 21:30:02 debian64-3 puppetd[1101]: Removing file Puppet::SSL::Certificate debian64-3.foofers.org at '/var/lib/puppet/ssl/certs/debian64-3.foofers.org.pem'
+Oct 19 21:30:02 debian64-3 puppetd[1101]: Retrieved certificate does not match private key
+Oct 19 21:30:02 debian64-3 puppetd[1101]: Did not receive certificate
+Oct 19 21:32:02 debian64-3 puppetd[1101]: Starting Puppet client version 0.25.4
+Oct 19 21:32:06 debian64-3 puppetd[1101]: Finished catalog run in 0.02 seconds
+Oct 19 21:40:05 debian64-3 puppetd[1101]: Caught TERM; calling stop
+Oct 19 21:40:08 debian64-3 puppetd[1317]: Reopening log files
+Oct 19 21:40:08 debian64-3 puppetd[1317]: Starting Puppet client version 0.25.4
+Oct 19 21:40:38 debian64-3 puppetd[1317]: (/Stage[main]/Jre/File[/opt/jre.tar.gz]/ensure) content changed '{md5}099d09eb14a70f4bdad6e48d08e6ce73' to '{md5}099d09eb14a70f4bdad6e48d08e6ce73'
+Oct 19 21:40:38 debian64-3 puppetd[1317]: (/Stage[main]/Jre/Exec[tar xfz /opt/jre.tar.gz]) Triggering 'refresh' from 1 dependencies
+Oct 19 21:40:41 debian64-3 puppetd[1317]: Finished catalog run in 29.31 seconds
+Oct 19 22:10:44 debian64-3 puppetd[1317]: Finished catalog run in 1.13 seconds
+Oct 19 22:40:48 debian64-3 puppetd[1317]: Finished catalog run in 1.41 seconds
+Oct 19 23:10:50 debian64-3 puppetd[1317]: Finished catalog run in 1.05 seconds
+Oct 19 23:40:53 debian64-3 puppetd[1317]: Finished catalog run in 0.69 seconds
+Oct 20 00:10:56 debian64-3 puppetd[1317]: Finished catalog run in 1.01 seconds
+Oct 20 00:41:01 debian64-3 puppetd[1317]: Finished catalog run in 1.01 seconds
+Oct 20 01:11:04 debian64-3 puppetd[1317]: Finished catalog run in 1.06 seconds
+Oct 20 01:41:07 debian64-3 puppetd[1317]: Finished catalog run in 1.06 seconds
+Oct 20 02:11:10 debian64-3 puppetd[1317]: Finished catalog run in 1.05 seconds
+Oct 20 02:41:13 debian64-3 puppetd[1317]: Finished catalog run in 1.01 seconds
+Oct 20 03:11:16 debian64-3 puppetd[1317]: Finished catalog run in 1.03 seconds
+Oct 20 14:54:17 debian64-3 puppetd[1317]: (/Stage[main]/Jre/File[/opt/jre.tar.gz]/ensure) content changed '{md5}099d09eb14a70f4bdad6e48d08e6ce73' to '{md5}099d09eb14a70f4bdad6e48d08e6ce73'
+Oct 20 14:54:17 debian64-3 puppetd[1317]: (/Stage[main]/Jre/Exec[tar xfz /opt/jre.tar.gz]) Triggering 'refresh' from 1 dependencies
+Oct 20 14:54:25 debian64-3 puppetd[1317]: Finished catalog run in 23.16 seconds
+Oct 20 15:02:41 debian64-3 puppetd[1317]: Reparsing /etc/puppet/puppet.conf
+Oct 20 15:02:56 debian64-3 puppetd[1317]: Reparsing /etc/puppet/puppet.conf
+Oct 20 15:04:29 debian64-3 puppetd[1317]: Caught TERM; calling stop
+Oct 20 15:04:32 debian64-3 puppetd[18324]: Reopening log files
+Oct 20 15:04:32 debian64-3 puppetd[18324]: Starting Puppet client version 0.25.4
+Oct 20 15:04:48 debian64-3 puppetd[18324]: (/Stage[main]/Jre/File[/opt/jre.tar.gz]/ensure) content changed '{md5}099d09eb14a70f4bdad6e48d08e6ce73' to '{md5}099d09eb14a70f4bdad6e48d08e6ce73'
+Oct 20 15:04:48 debian64-3 puppetd[18324]: (/Stage[main]/Jre/Exec[tar xfz /opt/jre.tar.gz]) Triggering 'refresh' from 1 dependencies
+Oct 20 15:04:51 debian64-3 puppetd[18324]: Finished catalog run in 16.98 seconds
+Oct 20 15:05:16 debian64-3 puppetd[18324]: (/Stage[main]/Jre/File[/opt/jre.tar.gz]/ensure) content changed '{md5}099d09eb14a70f4bdad6e48d08e6ce73' to '{md5}099d09eb14a70f4bdad6e48d08e6ce73'
+Oct 20 15:05:16 debian64-3 puppetd[18324]: (/Stage[main]/Jre/Exec[tar xfz /opt/jre.tar.gz]) Triggering 'refresh' from 1 dependencies
+Oct 20 15:05:19 debian64-3 puppetd[18324]: Finished catalog run in 16.53 seconds
+Oct 20 15:05:32 debian64-3 puppetd[18324]: Finished catalog run in 1.02 seconds
+Oct 20 15:05:45 debian64-3 puppetd[18324]: Finished catalog run in 0.61 seconds
+Oct 20 15:05:58 debian64-3 puppetd[18324]: Finished catalog run in 1.02 seconds
+Oct 20 15:06:23 debian64-3 puppetd[18324]: (/Stage[main]/Jre/File[/opt/jre.tar.gz]/ensure) content changed '{md5}099d09eb14a70f4bdad6e48d08e6ce73' to '{md5}099d09eb14a70f4bdad6e48d08e6ce73'
+Oct 20 15:06:23 debian64-3 puppetd[18324]: (/Stage[main]/Jre/Exec[tar xfz /opt/jre.tar.gz]) Triggering 'refresh' from 1 dependencies
+Oct 20 15:06:25 debian64-3 puppetd[18324]: Finished catalog run in 15.70 seconds
+Oct 20 15:06:38 debian64-3 puppetd[18324]: Finished catalog run in 1.07 seconds
+Oct 20 15:06:52 debian64-3 puppetd[18324]: Finished catalog run in 1.11 seconds
+Oct 20 15:07:05 debian64-3 puppetd[18324]: Finished catalog run in 1.13 seconds
+Oct 20 15:07:18 debian64-3 puppetd[18324]: Finished catalog run in 0.61 seconds
+Oct 20 15:07:31 debian64-3 puppetd[18324]: Finished catalog run in 1.05 seconds
+Oct 20 15:07:44 debian64-3 puppetd[18324]: Finished catalog run in 1.19 seconds
+Oct 20 15:07:57 debian64-3 puppetd[18324]: Finished catalog run in 1.16 seconds
+Oct 20 15:09:21 debian64-3 init: apport pre-start process (632) terminated with status 1
+Oct 20 15:09:22 debian64-3 init: apport post-stop process (647) terminated with status 1
+Oct 20 15:09:27 debian64-3 puppetd[696]: Reopening log files
+Oct 20 15:09:27 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:21:54 debian64-3 ntpdate[533]: step time server 91.189.94.4 offset 4306313.487387 sec
+Dec  9 10:22:05 debian64-3 ntpdate[736]: adjust time server 91.189.94.4 offset -0.000212 sec
+Dec  9 10:23:21 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:25:21 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:27:21 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:29:21 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:31:21 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:33:21 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:33:45 debian64-3 ntpd[1054]: ntpd 4.2.4p8@1.1612-o Fri Apr  9 03:13:54 UTC 2010 (1)
+Dec  9 10:33:45 debian64-3 ntpd[1055]: precision = 1.000 usec
+Dec  9 10:33:45 debian64-3 ntpd[1055]: ntp_io: estimated max descriptors: 1024, initial socket boundary: 16
+Dec  9 10:33:45 debian64-3 ntpd[1055]: Listening on interface #0 wildcard, 0.0.0.0#123 Disabled
+Dec  9 10:33:45 debian64-3 ntpd[1055]: Listening on interface #1 wildcard, ::#123 Disabled
+Dec  9 10:33:45 debian64-3 ntpd[1055]: Listening on interface #2 eth1, fe80::a00:27ff:fe22:e734#123 Enabled
+Dec  9 10:33:45 debian64-3 ntpd[1055]: Listening on interface #3 lo, ::1#123 Enabled
+Dec  9 10:33:45 debian64-3 ntpd[1055]: Listening on interface #4 eth0, fe80::a00:27ff:fedf:b993#123 Enabled
+Dec  9 10:33:45 debian64-3 ntpd[1055]: Listening on interface #5 lo, 127.0.0.1#123 Enabled
+Dec  9 10:33:45 debian64-3 ntpd[1055]: Listening on interface #6 eth0, 10.0.2.15#123 Enabled
+Dec  9 10:33:45 debian64-3 ntpd[1055]: Listening on interface #7 eth1, 192.168.56.30#123 Enabled
+Dec  9 10:33:45 debian64-3 ntpd[1055]: kernel time sync status 2040
+Dec  9 10:35:21 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:37:22 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:38:04 debian64-3 ntpd[1055]: synchronized to 91.189.94.4, stratum 2
+Dec  9 10:38:04 debian64-3 ntpd[1055]: kernel time sync status change 2001
+Dec  9 10:38:35 debian64-3 ntpd[1055]: ntpd exiting on signal 15
+Dec  9 10:38:37 debian64-3 ntpd[1128]: ntpd 4.2.4p8@1.1612-o Fri Apr  9 03:13:54 UTC 2010 (1)
+Dec  9 10:38:37 debian64-3 ntpd[1129]: precision = 1.000 usec
+Dec  9 10:38:37 debian64-3 ntpd[1129]: ntp_io: estimated max descriptors: 1024, initial socket boundary: 16
+Dec  9 10:38:37 debian64-3 ntpd[1129]: Listening on interface #0 wildcard, 0.0.0.0#123 Disabled
+Dec  9 10:38:37 debian64-3 ntpd[1129]: Listening on interface #1 wildcard, ::#123 Disabled
+Dec  9 10:38:37 debian64-3 ntpd[1129]: Listening on interface #2 eth1, fe80::a00:27ff:fe22:e734#123 Enabled
+Dec  9 10:38:37 debian64-3 ntpd[1129]: Listening on interface #3 lo, ::1#123 Enabled
+Dec  9 10:38:37 debian64-3 ntpd[1129]: Listening on interface #4 eth0, fe80::a00:27ff:fedf:b993#123 Enabled
+Dec  9 10:38:37 debian64-3 ntpd[1129]: Listening on interface #5 lo, 127.0.0.1#123 Enabled
+Dec  9 10:38:37 debian64-3 ntpd[1129]: Listening on interface #6 eth0, 10.0.2.15#123 Enabled
+Dec  9 10:38:37 debian64-3 ntpd[1129]: Listening on interface #7 eth1, 192.168.56.30#123 Enabled
+Dec  9 10:38:37 debian64-3 ntpd[1129]: kernel time sync status 2040
+Dec  9 10:38:37 debian64-3 ntpd[1129]: frequency initialized 0.000 PPM from /var/lib/ntp/ntp.drift
+Dec  9 10:39:22 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:41:22 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:41:52 debian64-3 ntpd[1129]: synchronized to LOCAL(0), stratum 13
+Dec  9 10:41:52 debian64-3 ntpd[1129]: kernel time sync status change 2001
+Dec  9 10:42:55 debian64-3 ntpd[1129]: synchronized to 192.43.244.18, stratum 1
+Dec  9 10:43:32 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:45:32 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:47:32 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:49:32 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:51:33 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:53:33 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# ls -lt |head
+total 1436
+-rw-r----- 1 syslog    adm   23498 2010-12-09 10:53 daemon.log
+-rw-r----- 1 syslog    adm  262760 2010-12-09 10:53 syslog
+-rw-r----- 1 syslog    adm   13576 2010-12-09 10:53 auth.log
+-rw-r--r-- 1 root      root 307743 2010-12-09 10:50 dpkg.log
+-rw-r----- 1 syslog    adm   37388 2010-12-09 10:38 debug
+-rw-r----- 1 syslog    adm  233173 2010-12-09 10:33 kern.log
+-rw-r----- 1 syslog    adm  197381 2010-12-09 10:33 messages
+-rw-rw-r-- 1 root      utmp 292292 2010-12-09 10:33 lastlog
+-rw-r--r-- 1 root      root  32032 2010-12-09 10:33 faillog
+]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# tail -f [K[K[K-n 100 a[Ksyslog 
+Oct 20 15:09:20 debian64-3 kernel: [    3.512825] scsi 2:0:0:0: Direct-Access     ATA      VBOX HARDDISK    1.0  PQ: 0 ANSI: 5
+Oct 20 15:09:20 debian64-3 kernel: [    3.513456] sd 2:0:0:0: Attached scsi generic sg1 type 0
+Oct 20 15:09:20 debian64-3 kernel: [    3.514017] sd 2:0:0:0: [sda] 16777216 512-byte logical blocks: (8.58 GB/8.00 GiB)
+Oct 20 15:09:20 debian64-3 kernel: [    3.514054] sd 2:0:0:0: [sda] Write Protect is off
+Oct 20 15:09:20 debian64-3 kernel: [    3.514056] sd 2:0:0:0: [sda] Mode Sense: 00 3a 00 00
+Oct 20 15:09:20 debian64-3 kernel: [    3.514073] sd 2:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+Oct 20 15:09:20 debian64-3 kernel: [    3.514289]  sda: sda1 sda2 < sda5 >
+Oct 20 15:09:20 debian64-3 kernel: [    3.583952] sd 2:0:0:0: [sda] Attached SCSI disk
+Oct 20 15:09:20 debian64-3 kernel: [    4.246308] EXT4-fs (dm-0): mounted filesystem with ordered data mode
+Oct 20 15:09:20 debian64-3 kernel: [    8.510993] Adding 397304k swap on /dev/mapper/debian64--3-swap_1.  Priority:-1 extents:1 across:397304k 
+Oct 20 15:09:20 debian64-3 kernel: [    8.594109] udev: starting version 151
+Oct 20 15:09:20 debian64-3 kernel: [    9.045760] piix4_smbus 0000:00:07.0: SMBus base address uninitialized - upgrade BIOS or use force_addr=0xaddr
+Oct 20 15:09:20 debian64-3 kernel: [    9.063324] vga16fb: initializing
+Oct 20 15:09:20 debian64-3 kernel: [    9.063335] vga16fb: mapped to 0xffff8800000a0000
+Oct 20 15:09:20 debian64-3 kernel: [    9.063491] fb0: VGA16 VGA frame buffer device
+Oct 20 15:09:20 debian64-3 kernel: [    9.162316] parport_pc 00:04: reported by Plug and Play ACPI
+Oct 20 15:09:20 debian64-3 kernel: [    9.201696] lp: driver loaded but no devices found
+Oct 20 15:09:20 debian64-3 kernel: [    9.783197] input: ImExPS/2 Generic Explorer Mouse as /devices/platform/i8042/serio1/input/input5
+Oct 20 15:09:20 debian64-3 kernel: [   11.562822] Console: switching to colour frame buffer device 80x30
+Oct 20 15:09:20 debian64-3 kernel: [   12.132016] ppdev: user-space parallel port driver
+Oct 20 15:09:20 debian64-3 kernel: [   12.310926] type=1505 audit(1287612557.958:2):  operation="profile_load" pid=373 name="/sbin/dhclient3"
+Oct 20 15:09:20 debian64-3 kernel: [   12.311497] type=1505 audit(1287612557.958:3):  operation="profile_load" pid=373 name="/usr/lib/NetworkManager/nm-dhcp-client.action"
+Oct 20 15:09:20 debian64-3 kernel: [   12.311796] type=1505 audit(1287612557.958:4):  operation="profile_load" pid=373 name="/usr/lib/connman/scripts/dhclient-script"
+Oct 20 15:09:20 debian64-3 kernel: [   12.357111] Intel ICH 0000:00:05.0: PCI INT A -> GSI 21 (level, low) -> IRQ 21
+Oct 20 15:09:20 debian64-3 kernel: [   13.740860] intel8x0_measure_ac97_clock: measured 52857 usecs (3898 samples)
+Oct 20 15:09:20 debian64-3 kernel: [   13.740862] intel8x0: measured clock 73746 rejected
+Oct 20 15:09:20 debian64-3 kernel: [   14.110888] intel8x0_measure_ac97_clock: measured 59337 usecs (3900 samples)
+Oct 20 15:09:20 debian64-3 kernel: [   14.110890] intel8x0: measured clock 65726 rejected
+Oct 20 15:09:20 debian64-3 kernel: [   14.180973] e1000: eth1 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX
+Oct 20 15:09:20 debian64-3 kernel: [   14.226513] ADDRCONF(NETDEV_UP): eth1: link is not ready
+Oct 20 15:09:20 debian64-3 kernel: [   14.228141] ADDRCONF(NETDEV_CHANGE): eth1: link becomes ready
+Oct 20 15:09:20 debian64-3 kernel: [   14.281678] e1000: eth0 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX
+Oct 20 15:09:20 debian64-3 kernel: [   14.340941] ADDRCONF(NETDEV_UP): eth0: link is not ready
+Oct 20 15:09:20 debian64-3 kernel: [   14.342762] ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+Oct 20 15:09:20 debian64-3 kernel: [   14.480695] intel8x0_measure_ac97_clock: measured 59331 usecs (3900 samples)
+Oct 20 15:09:20 debian64-3 kernel: [   14.480698] intel8x0: measured clock 65732 rejected
+Oct 20 15:09:20 debian64-3 kernel: [   14.480708] intel8x0: clocking to 48000
+Oct 20 15:09:21 debian64-3 kernel: [   15.922105] type=1505 audit(1287612561.568:5):  operation="profile_replace" pid=610 name="/sbin/dhclient3"
+Oct 20 15:09:21 debian64-3 kernel: [   15.922671] type=1505 audit(1287612561.568:6):  operation="profile_replace" pid=610 name="/usr/lib/NetworkManager/nm-dhcp-client.action"
+Oct 20 15:09:21 debian64-3 kernel: [   15.923245] type=1505 audit(1287612561.568:7):  operation="profile_replace" pid=610 name="/usr/lib/connman/scripts/dhclient-script"
+Oct 20 15:09:21 debian64-3 kernel: [   15.934572] type=1505 audit(1287612561.578:8):  operation="profile_load" pid=611 name="/usr/sbin/tcpdump"
+Oct 20 15:09:21 debian64-3 init: apport pre-start process (632) terminated with status 1
+Oct 20 15:09:21 debian64-3 cron[637]: (CRON) INFO (pidfile fd = 3)
+Oct 20 15:09:22 debian64-3 init: apport post-stop process (647) terminated with status 1
+Oct 20 15:09:22 debian64-3 cron[652]: (CRON) STARTUP (fork ok)
+Oct 20 15:09:22 debian64-3 cron[652]: (CRON) INFO (Running @reboot jobs)
+Oct 20 15:09:27 debian64-3 puppetd[696]: Reopening log files
+Oct 20 15:09:27 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Oct 20 15:09:30 debian64-3 kernel: [   24.942332] eth1: no IPv6 routers present
+Oct 20 15:09:30 debian64-3 kernel: [   25.001847] eth0: no IPv6 routers present
+Dec  9 10:21:54 debian64-3 ntpdate[533]: step time server 91.189.94.4 offset 4306313.487387 sec
+Dec  9 10:22:05 debian64-3 ntpdate[736]: adjust time server 91.189.94.4 offset -0.000212 sec
+Dec  9 10:23:21 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:25:21 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:27:21 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:29:21 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:31:21 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:33:21 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:33:44 debian64-3 kernel: [  765.647656] type=1505 audit(1291919624.776:9):  operation="profile_load" pid=1027 name="/usr/sbin/ntpd"
+Dec  9 10:33:45 debian64-3 ntpd[1054]: ntpd 4.2.4p8@1.1612-o Fri Apr  9 03:13:54 UTC 2010 (1)
+Dec  9 10:33:45 debian64-3 ntpd[1055]: precision = 1.000 usec
+Dec  9 10:33:45 debian64-3 ntpd[1055]: ntp_io: estimated max descriptors: 1024, initial socket boundary: 16
+Dec  9 10:33:45 debian64-3 ntpd[1055]: Listening on interface #0 wildcard, 0.0.0.0#123 Disabled
+Dec  9 10:33:45 debian64-3 ntpd[1055]: Listening on interface #1 wildcard, ::#123 Disabled
+Dec  9 10:33:45 debian64-3 ntpd[1055]: Listening on interface #2 eth1, fe80::a00:27ff:fe22:e734#123 Enabled
+Dec  9 10:33:45 debian64-3 ntpd[1055]: Listening on interface #3 lo, ::1#123 Enabled
+Dec  9 10:33:45 debian64-3 ntpd[1055]: Listening on interface #4 eth0, fe80::a00:27ff:fedf:b993#123 Enabled
+Dec  9 10:33:45 debian64-3 ntpd[1055]: Listening on interface #5 lo, 127.0.0.1#123 Enabled
+Dec  9 10:33:45 debian64-3 ntpd[1055]: Listening on interface #6 eth0, 10.0.2.15#123 Enabled
+Dec  9 10:33:45 debian64-3 ntpd[1055]: Listening on interface #7 eth1, 192.168.56.30#123 Enabled
+Dec  9 10:33:45 debian64-3 ntpd[1055]: kernel time sync status 2040
+Dec  9 10:35:21 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:37:22 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:38:04 debian64-3 ntpd[1055]: synchronized to 91.189.94.4, stratum 2
+Dec  9 10:38:04 debian64-3 ntpd[1055]: kernel time sync status change 2001
+Dec  9 10:38:35 debian64-3 ntpd[1055]: ntpd exiting on signal 15
+Dec  9 10:38:37 debian64-3 ntpd[1128]: ntpd 4.2.4p8@1.1612-o Fri Apr  9 03:13:54 UTC 2010 (1)
+Dec  9 10:38:37 debian64-3 ntpd[1129]: precision = 1.000 usec
+Dec  9 10:38:37 debian64-3 ntpd[1129]: ntp_io: estimated max descriptors: 1024, initial socket boundary: 16
+Dec  9 10:38:37 debian64-3 ntpd[1129]: Listening on interface #0 wildcard, 0.0.0.0#123 Disabled
+Dec  9 10:38:37 debian64-3 ntpd[1129]: Listening on interface #1 wildcard, ::#123 Disabled
+Dec  9 10:38:37 debian64-3 ntpd[1129]: Listening on interface #2 eth1, fe80::a00:27ff:fe22:e734#123 Enabled
+Dec  9 10:38:37 debian64-3 ntpd[1129]: Listening on interface #3 lo, ::1#123 Enabled
+Dec  9 10:38:37 debian64-3 ntpd[1129]: Listening on interface #4 eth0, fe80::a00:27ff:fedf:b993#123 Enabled
+Dec  9 10:38:37 debian64-3 ntpd[1129]: Listening on interface #5 lo, 127.0.0.1#123 Enabled
+Dec  9 10:38:37 debian64-3 ntpd[1129]: Listening on interface #6 eth0, 10.0.2.15#123 Enabled
+Dec  9 10:38:37 debian64-3 ntpd[1129]: Listening on interface #7 eth1, 192.168.56.30#123 Enabled
+Dec  9 10:38:37 debian64-3 ntpd[1129]: kernel time sync status 2040
+Dec  9 10:38:37 debian64-3 ntpd[1129]: frequency initialized 0.000 PPM from /var/lib/ntp/ntp.drift
+Dec  9 10:39:22 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:41:22 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:41:52 debian64-3 ntpd[1129]: synchronized to LOCAL(0), stratum 13
+Dec  9 10:41:52 debian64-3 ntpd[1129]: kernel time sync status change 2001
+Dec  9 10:42:55 debian64-3 ntpd[1129]: synchronized to 192.43.244.18, stratum 1
+Dec  9 10:43:32 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:45:32 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:47:32 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:49:32 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:51:33 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+Dec  9 10:53:33 debian64-3 puppetd[696]: Could not request certificate: undefined method `closed?' for nil:NilClass
+]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# tail -n 100 syslog [7Pls -lt |headtail -n 1000 daemon.log [12Pls -lt |head[1Pcd /var/logfor script in /etc/init.d/krb5*; do $script restart; done[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[32Pemacs -nw /etc/krb5.conf for script in /etc/init.d/krb5*; do $script restart; done
+ * Restarting Kerberos administrative servers kadmind
+kadmind: No such file or directory while initializing, aborting
+ * Restarting Kerberos KDC krb5kdc
+krb5kdc: cannot initialize realm FOOFERS.ORG - see log file for details
+   ...fail!
+]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# kdb5_util -s
+Usage: kdb5_util [-x db_args]* [-r realm] [-d dbname] [-k mkeytype] [-M mkeyname]
+	        [-kv mkeyVNO] [-sf stashfilename] [-m] cmd [cmd_options]
+	create  [-s]
+	destroy [-f]
+	stash   [-f keyfile]
+	dump    [-old|-ov|-b6|-b7|-r13] [-verbose]
+	        [-mkey_convert] [-new_mkey_file mkey_file]
+	        [-rev] [-recurse] [filename [princs...]]
+	load    [-old|-ov|-b6|-b7|-r13] [-verbose] [-update] filename
+	ark     [-e etype_list] principal
+	add_mkey [-e etype] [-s]
+	use_mkey kvno [time]
+	list_mkeys
+	update_princ_encryption [-f] [-n] [-v] [princ-pattern]
+	purge_mkeys [-f] [-n] [-v]
+
+where,
+	[-x db_args]* - any number of database specific arguments.
+			Look at each database documentation for supported arguments
+]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# kdb5_util -sc-se-sa-s[1P-s[1P-sr-se-sa-st-se-s -s
+Loading random data
+dyjcm4021         
+^C
+]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# kdb5_util create -s
+Loading random data
+^C
+]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# kdb5_util create -s[K[K[K
+Loading random data
+^C
+]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# man kdb5_util
+7[?47h[?1h=KDB5_UTIL(8)                                                                                                 KDB5_UTIL(8)[m
+[m
+[1mNAME[m[m
+       kdb5_util - Kerberos database maintenance utility[m
+[m
+[1mSYNOPSIS[m[m
+       [1mkdb5_util[m  [[1m-r[m [4mrealm[m] [[1m-d[m [4mdbname[m] [[1m-k[m [4mmkeytype[m] [[1m-M[m [4mmkeyname[m] [[1m-kv[m [4mmkeyVNO[m] [[1m-sf[m [4mstashfilename[m] [[1m-m[m] [4mcommand[m [4m[com‐[m[m
+       [4mmand_options][m[m
+[m
+[1mDESCRIPTION[m[m
+       [1mkdb5_util[m allows an administrator to perform low-level maintenance procedures on the Kerberos and KADM5  database.[m
+       Databases  can be created, destroyed, and dumped to and loaded from ASCII files.  Additionally, [1mkdb5_util[m can cre‐[m
+       ate a Kerberos master key stash file.  [1mkdb5_util[m subsumes the functionality of and  makes  obsolete  the  previous[m
+       database maintenance programs [1mkdb5_create[m, [1mkdb5_edit[m, [1mkdb5_destroy[m, and [1mkdb5_stash[m.[m
+[m
+       When  [1mkdb5_util[m is run, it attempts to acquire the master key and open the database.  However, execution continues[m
+       regardless of whether or not [1mkdb5_util[m successfully opens the database, because the database may not exist yet  or[m
+       the stash file may be corrupt.[m
+[m
+       Note that some KDB plugins may not support all [1mkdb5_util[m commands.[m
+[m
+[1mCOMMAND-LINE[m [1mOPTIONS[m[m
+       [1m-r[m [4mrealm[m[m
+              specifies  the Kerberos realm of the database; by default the realm returned by [4mkrb5_default_local_realm[m(3)[m
+              is used.[m
+[m
+[7m Manual page kdb5_util(8) line 1[m[K[K/[Kcc[Krr[Kee[Kaa[Ktt[Kee[K[1;1HKDB5_UTIL(8)                                                                                                 KDB5_UTIL(8)[m
+[2;1H[m
+[3;1H[1mNAME[m[m
+[4;1H       kdb5_util - Kerberos database maintenance utility[m
+[5;1H[m
+[6;1H[1mSYNOPSIS[m[m
+[7;1H       [1mkdb5_util[m  [[1m-r[m [4mrealm[m] [[1m-d[m [4mdbname[m] [[1m-k[m [4mmkeytype[m] [[1m-M[m [4mmkeyname[m] [[1m-kv[m [4mmkeyVNO[m] [[1m-sf[m [4mstashfilename[m] [[1m-m[m] [4mcommand[m [4m[com‐[m[m
+[8;1H       [4mmand_options][m[m
+[9;1H[m
+[10;1H[1mDESCRIPTION[m[m
+[11;1H       [1mkdb5_util[m allows an administrator to perform low-level maintenance procedures on the Kerberos and KADM5  database.[m
+[12;1H       Databases  can be created, destroyed, and dumped to and loaded from ASCII files.  Additionally, [1mkdb5_util[m can cre‐[m
+[13;1H       ate a Kerberos master key stash file.  [1mkdb5_util[m subsumes the functionality of and  makes  obsolete  the  previous[m
+[14;1H       database maintenance programs [1mkdb5_create[m, [1mkdb5_edit[m, [1mkdb5_destroy[m, and [1mkdb5_stash[m.[m
+[15;1H[m
+[16;1H       When  [1mkdb5_util[m is run, it attempts to acquire the master key and open the database.  However, execution continues[m
+[17;1H       regardless of whether or not [1mkdb5_util[m successfully opens the database, because the database may not exist yet  or[m
+[18;1H       the stash file may be corrupt.[m
+[19;1H[m
+[20;1H       Note that some KDB plugins may not support all [1mkdb5_util[m commands.[m
+[21;1H[m
+[22;1H[1mCOMMAND-LINE[m [1mOPTIONS[m[m
+[23;1H       [1m-r[m [4mrealm[m[m
+[24;1H              specifies  the Kerberos realm of the database; by default the realm returned by [4mkrb5_default_local_realm[m(3)[m
+[25;1H              is used.[m
+[26;1H[m
+[27;1H[1;1HKDB5_UTIL(8)                                                                                                 KDB5_UTIL(8)[m
+[2;1H[m
+[3;1H[1mNAME[m[m
+[4;1H       kdb5_util - Kerberos database maintenance utility[m
+[5;1H[m
+[6;1H[1mSYNOPSIS[m[m
+[7;1H       [1mkdb5_util[m  [[1m-r[m [4mrealm[m] [[1m-d[m [4mdbname[m] [[1m-k[m [4mmkeytype[m] [[1m-M[m [4mmkeyname[m] [[1m-kv[m [4mmkeyVNO[m] [[1m-sf[m [4mstashfilename[m] [[1m-m[m] [4mcommand[m [4m[com‐[m[m
+[8;1H       [4mmand_options][m[m
+[9;1H[m
+[10;1H[1mDESCRIPTION[m[m
+[11;1H       [1mkdb5_util[m allows an administrator to perform low-level maintenance procedures on the Kerberos and KADM5  database.[m
+[12;1H       Databases  can be [7mcreate[md, destroyed, and dumped to and loaded from ASCII files.  Additionally, [1mkdb5_util[m can cre‐[m
+[13;1H       ate a Kerberos master key stash file.  [1mkdb5_util[m subsumes the functionality of and  makes  obsolete  the  previous[m
+[14;1H       database maintenance programs [1mkdb5_[m[1m[7mcreate[m[m, [1mkdb5_edit[m, [1mkdb5_destroy[m, and [1mkdb5_stash[m.[m
+[15;1H[m
+[16;1H       When  [1mkdb5_util[m is run, it attempts to acquire the master key and open the database.  However, execution continues[m
+[17;1H       regardless of whether or not [1mkdb5_util[m successfully opens the database, because the database may not exist yet  or[m
+[18;1H       the stash file may be corrupt.[m
+[19;1H[m
+[20;1H       Note that some KDB plugins may not support all [1mkdb5_util[m commands.[m
+[21;1H[m
+[22;1H[1mCOMMAND-LINE[m [1mOPTIONS[m[m
+[23;1H       [1m-r[m [4mrealm[m[m
+[24;1H              specifies  the Kerberos realm of the database; by default the realm returned by [4mkrb5_default_local_realm[m(3)[m
+[25;1H              is used.[m
+[26;1H[m
+[27;1H       [1m-d[m [4mdbname[m[m
+              specifies the name under which the principal database is stored; by default the database is that listed  in[m
+              [4mkdc.conf[m(5).  The KADM5 policy database and lock file are also derived from this value.[m
+[m
+       [1m-k[m [4mmkeytype[m[m
+              specifies the key type of the master key in the database; the default is that given in [4mkdc.conf[m.[m
+[m
+       [1m-kv[m [4mmkeyVNO[m[m
+              Specifies  the  version  number  of  the  master key in the database; the default is 1.  Note that 0 is not[m
+              allowed.[m
+[m
+[7m Manual page kdb5_util(8) line 14[m[K[K       [1m-M[m [4mmkeyname[m[m
+              principal name for the master key in the database; the default is that given in [4mkdc.conf[m.[m
+[m
+       [1m-m[m     specifies that the master database password should be read from the TTY rather than fetched from a file  on[m
+              disk.[m
+[m
+       [1m-sf[m [4mstash_file[m[m
+              specifies the stash file of the master database password.[m
+[m
+       [1m-P[m [4mpassword[m[m
+              specifies the master database password.  This option is not recommended.[m
+[m
+[1mCOMMANDS[m[m
+       [1m[7mcreate[m[m [[1m-s[m][m
+              [7mCreate[ms a new database.  If the [1m-s[m option is specified, the stash file is also [7mcreate[md.  This command fails[m
+              if the database already exists.  If the command is successful, the database is opened just  as  if  it  had[m
+              already existed when the program was first run.[m
+[m
+       [1mdestroy[m [[1m-f[m][m
+              Destroys the database, first overwriting the disk sectors and then unlinking the files, after prompting the[m
+              user for confirmation.  With the [1m-f[m argument, does not prompt the user.[m
+[m
+       [1mstash[m [[1m-f[m [4mkeyfile[m][m
+              Stores the master principal's keys in a stash file.  The [1m-f[m argument can be used to  override  the  keyfile[m
+              specified at startup.[m
+[m
+[7m Manual page kdb5_util(8) line 40[m[K[K[?1l>[2J[?47l8]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# man kdb5_utilkdb5_util create[K[K[K[K[K[Kdestroy
+kdb5_util: No such file or directory while initializing database
+]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# kdb5_util destroy[K[K[K[K[K[K[Kcr[K[Kman kdb5_util
+7[?47h[?1h=KDB5_UTIL(8)                                                                                                 KDB5_UTIL(8)[m
+[m
+[1mNAME[m[m
+       kdb5_util - Kerberos database maintenance utility[m
+[m
+[1mSYNOPSIS[m[m
+       [1mkdb5_util[m  [[1m-r[m [4mrealm[m] [[1m-d[m [4mdbname[m] [[1m-k[m [4mmkeytype[m] [[1m-M[m [4mmkeyname[m] [[1m-kv[m [4mmkeyVNO[m] [[1m-sf[m [4mstashfilename[m] [[1m-m[m] [4mcommand[m [4m[com‐[m[m
+       [4mmand_options][m[m
+[m
+[1mDESCRIPTION[m[m
+       [1mkdb5_util[m allows an administrator to perform low-level maintenance procedures on the Kerberos and KADM5  database.[m
+       Databases  can be created, destroyed, and dumped to and loaded from ASCII files.  Additionally, [1mkdb5_util[m can cre‐[m
+       ate a Kerberos master key stash file.  [1mkdb5_util[m subsumes the functionality of and  makes  obsolete  the  previous[m
+       database maintenance programs [1mkdb5_create[m, [1mkdb5_edit[m, [1mkdb5_destroy[m, and [1mkdb5_stash[m.[m
+[m
+       When  [1mkdb5_util[m is run, it attempts to acquire the master key and open the database.  However, execution continues[m
+       regardless of whether or not [1mkdb5_util[m successfully opens the database, because the database may not exist yet  or[m
+       the stash file may be corrupt.[m
+[m
+       Note that some KDB plugins may not support all [1mkdb5_util[m commands.[m
+[m
+[1mCOMMAND-LINE[m [1mOPTIONS[m[m
+       [1m-r[m [4mrealm[m[m
+              specifies  the Kerberos realm of the database; by default the realm returned by [4mkrb5_default_local_realm[m(3)[m
+              is used.[m
+[m
+[7m Manual page kdb5_util(8) line 1[m[K[K/[Kcc[Krr[Kee[Kaa[Ktt[Kee[K[1;1HKDB5_UTIL(8)                                                                                                 KDB5_UTIL(8)[m
+[2;1H[m
+[3;1H[1mNAME[m[m
+[4;1H       kdb5_util - Kerberos database maintenance utility[m
+[5;1H[m
+[6;1H[1mSYNOPSIS[m[m
+[7;1H       [1mkdb5_util[m  [[1m-r[m [4mrealm[m] [[1m-d[m [4mdbname[m] [[1m-k[m [4mmkeytype[m] [[1m-M[m [4mmkeyname[m] [[1m-kv[m [4mmkeyVNO[m] [[1m-sf[m [4mstashfilename[m] [[1m-m[m] [4mcommand[m [4m[com‐[m[m
+[8;1H       [4mmand_options][m[m
+[9;1H[m
+[10;1H[1mDESCRIPTION[m[m
+[11;1H       [1mkdb5_util[m allows an administrator to perform low-level maintenance procedures on the Kerberos and KADM5  database.[m
+[12;1H       Databases  can be created, destroyed, and dumped to and loaded from ASCII files.  Additionally, [1mkdb5_util[m can cre‐[m
+[13;1H       ate a Kerberos master key stash file.  [1mkdb5_util[m subsumes the functionality of and  makes  obsolete  the  previous[m
+[14;1H       database maintenance programs [1mkdb5_create[m, [1mkdb5_edit[m, [1mkdb5_destroy[m, and [1mkdb5_stash[m.[m
+[15;1H[m
+[16;1H       When  [1mkdb5_util[m is run, it attempts to acquire the master key and open the database.  However, execution continues[m
+[17;1H       regardless of whether or not [1mkdb5_util[m successfully opens the database, because the database may not exist yet  or[m
+[18;1H       the stash file may be corrupt.[m
+[19;1H[m
+[20;1H       Note that some KDB plugins may not support all [1mkdb5_util[m commands.[m
+[21;1H[m
+[22;1H[1mCOMMAND-LINE[m [1mOPTIONS[m[m
+[23;1H       [1m-r[m [4mrealm[m[m
+[24;1H              specifies  the Kerberos realm of the database; by default the realm returned by [4mkrb5_default_local_realm[m(3)[m
+[25;1H              is used.[m
+[26;1H[m
+[27;1H[1;1HKDB5_UTIL(8)                                                                                                 KDB5_UTIL(8)[m
+[2;1H[m
+[3;1H[1mNAME[m[m
+[4;1H       kdb5_util - Kerberos database maintenance utility[m
+[5;1H[m
+[6;1H[1mSYNOPSIS[m[m
+[7;1H       [1mkdb5_util[m  [[1m-r[m [4mrealm[m] [[1m-d[m [4mdbname[m] [[1m-k[m [4mmkeytype[m] [[1m-M[m [4mmkeyname[m] [[1m-kv[m [4mmkeyVNO[m] [[1m-sf[m [4mstashfilename[m] [[1m-m[m] [4mcommand[m [4m[com‐[m[m
+[8;1H       [4mmand_options][m[m
+[9;1H[m
+[10;1H[1mDESCRIPTION[m[m
+[11;1H       [1mkdb5_util[m allows an administrator to perform low-level maintenance procedures on the Kerberos and KADM5  database.[m
+[12;1H       Databases  can be [7mcreate[md, destroyed, and dumped to and loaded from ASCII files.  Additionally, [1mkdb5_util[m can cre‐[m
+[13;1H       ate a Kerberos master key stash file.  [1mkdb5_util[m subsumes the functionality of and  makes  obsolete  the  previous[m
+[14;1H       database maintenance programs [1mkdb5_[m[1m[7mcreate[m[m, [1mkdb5_edit[m, [1mkdb5_destroy[m, and [1mkdb5_stash[m.[m
+[15;1H[m
+[16;1H       When  [1mkdb5_util[m is run, it attempts to acquire the master key and open the database.  However, execution continues[m
+[17;1H       regardless of whether or not [1mkdb5_util[m successfully opens the database, because the database may not exist yet  or[m
+[18;1H       the stash file may be corrupt.[m
+[19;1H[m
+[20;1H       Note that some KDB plugins may not support all [1mkdb5_util[m commands.[m
+[21;1H[m
+[22;1H[1mCOMMAND-LINE[m [1mOPTIONS[m[m
+[23;1H       [1m-r[m [4mrealm[m[m
+[24;1H              specifies  the Kerberos realm of the database; by default the realm returned by [4mkrb5_default_local_realm[m(3)[m
+[25;1H              is used.[m
+[26;1H[m
+[27;1H       [1m-d[m [4mdbname[m[m
+              specifies the name under which the principal database is stored; by default the database is that listed  in[m
+              [4mkdc.conf[m(5).  The KADM5 policy database and lock file are also derived from this value.[m
+[m
+       [1m-k[m [4mmkeytype[m[m
+              specifies the key type of the master key in the database; the default is that given in [4mkdc.conf[m.[m
+[m
+       [1m-kv[m [4mmkeyVNO[m[m
+              Specifies  the  version  number  of  the  master key in the database; the default is 1.  Note that 0 is not[m
+              allowed.[m
+[m
+[7m Manual page kdb5_util(8) line 14[m[K[K/[K       [1m-M[m [4mmkeyname[m[m
+              principal name for the master key in the database; the default is that given in [4mkdc.conf[m.[m
+[7m Manual page kdb5_util(8) line 16[m[K[K/[K...skipping...
+       [1m[7mcreate[m[m [[1m-s[m][m
+              [7mCreate[ms a new database.  If the [1m-s[m option is specified, the stash file is also [7mcreate[md.  This command fails[m
+              if the database already exists.  If the command is successful, the database is opened just  as  if  it  had[m
+              already existed when the program was first run.[m
+[m
+       [1mdestroy[m [[1m-f[m][m
+              Destroys the database, first overwriting the disk sectors and then unlinking the files, after prompting the[m
+              user for confirmation.  With the [1m-f[m argument, does not prompt the user.[m
+[m
+       [1mstash[m [[1m-f[m [4mkeyfile[m][m
+              Stores the master principal's keys in a stash file.  The [1m-f[m argument can be used to  override  the  keyfile[m
+              specified at startup.[m
+[m
+       [1mdump[m [[1m-old[m|[1m-b6[m|[1m-b7[m|[1m-ov[m|[1m-r13[m][m
+              [[1m-verbose[m] [[1m-mkey_convert[m] [[1m-new_mkey_file[m [4mmkey_file[m] [[1m-rev[m] [[1m-recurse[m] [[4mfilename[m [[4mprincipals...[m]][m
+              Dumps  the  current  Kerberos and KADM5 database into an ASCII file.  By default, the database is dumped in[m
+              current format, "kdb5_util load_dump version 6".  If [4mfilename[m is not specified, or is the string  "-",  the[m
+              dump is sent to standard output.  Options:[m
+[m
+              [1m-old[m   causes the dump to be in the Kerberos 5 Beta 5 and earlier dump format ("kdb5_edit load_dump version[m
+                     2.0").[m
+[m
+              [1m-b6[m    causes the dump to be in the Kerberos 5 Beta 6 format ("kdb5_edit load_dump version 3.0").[m
+[m
+              [1m-b7[m    causes the dump to be in the Kerberos 5 Beta 7 format ("kdb5_util load_dump version 4").   This  was[m
+                     the dump format produced on releases prior to 1.2.2.[m
+[7m Manual page kdb5_util(8) line 53[m[K[K[?1l>[2J[?47l8]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# man kdb5_util[3Pkdb5_util man kdb5_utilkdb5_util create -s
+Loading random data
+
+
+^C
+]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# cat /etc/resolv.conf
+nameserver 192.168.1.1
+nameserver 192.168.56.10
+domain foofers.org,hsd1.ca.comcast.net.
+search foofers.org,hsd1.ca.comcast.net.
+]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# ping 192.168.56.10
+PING 192.168.56.10 (192.168.56.10) 56(84) bytes of data.
+^C
+--- 192.168.56.10 ping statistics ---
+1 packets transmitted, 0 received, 100% packet loss, time 0ms
+
+]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# ping 192.168.56.10[K[K1
+PING 192.168.56.1 (192.168.56.1) 56(84) bytes of data.
+64 bytes from 192.168.56.1: icmp_seq=1 ttl=64 time=0.221 ms
+^C
+--- 192.168.56.1 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.221/0.221/0.221/0.000 ms
+]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# dig @192.168.56.1 yahoo.com
+^C]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# emacs -nw /etc/resolv.confdig @192.168.56.1 yahoo.com[C[1P[1P[4h1[4l
+
+; <<>> DiG 9.7.0-P1 <<>> @192.168.1.1 yahoo.com
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 24551
+;; flags: qr rd ra; QUERY: 1, ANSWER: 5, AUTHORITY: 0, ADDITIONAL: 0
+
+;; QUESTION SECTION:
+;yahoo.com.			IN	A
+
+;; ANSWER SECTION:
+yahoo.com.		6374	IN	A	72.30.2.43
+yahoo.com.		6374	IN	A	98.137.149.56
+yahoo.com.		6374	IN	A	209.191.122.70
+yahoo.com.		6374	IN	A	67.195.160.76
+yahoo.com.		6374	IN	A	69.147.125.65
+
+;; Query time: 87 msec
+;; SERVER: 192.168.1.1#53(192.168.1.1)
+;; WHEN: Thu Dec  9 10:58:05 2010
+;; MSG SIZE  rcvd: 107
+
+]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# dig @192.168.1.1 yahoo.com[4h5[4l6[C[C[C[C[C[C[C[C[C[C[C[C[10Pping 192.168.56.1dig @192.168.56.1 yahoo.com[1P1[C[C[C[C[C[C[C[C[C[C[C[C[Kemcs [K[K[Kacs -nw /etc/resolv.conf
+7[?47h7[?47h[?1h=[H[2J[26;1H[7m-=--:----F1  [m[m[7m[1m*scratch*   [m[m[7m   All L1     (Fundamental)-------------------------------------------------------------------------[m[m
+[A[H[H[2J[27;1H[K[?1l>[2J[?47l8[m7[?47h7[?47h[?1h=[27;1HLoading 00debian-vars...[K[H
+[27;1HNo /etc/mailname. Rev[4herting to default[H
+[4l[27;1HLoading 00debian-vars...done[K[H
+[>0c[27;1HLoading 00debian-vars...done[K[H[7mFile Edit Options Buffers Tools Lisp-Interaction Help                                                                        [m[m
+[A
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[7m-UUU:----F1  [m[m[7m[1m*scratch*   [m[m[7m   All L1     (Lisp Interaction)--------------------------------------------------------------------[m[m
+[A[H
+[27;1HFor information about GNU Emacs and the GNU system, type C-h C-a.[H
+[27;1HFor information about GNU Emacs and the GNU system, type C-h C-a.[K[H[7mFile Edit Options Buffers Tools Conf Help                                                                                    [m[m
+[A
+[33mnameserver[m[m 192.168.1.1[K
+[33mnameserver[m[m 192.168.56.10[K
+[33mdomain[m[m foofers.org,hsd1.ca.comcast.net.[K
+[33msearch[m[m foofers.org,hsd1.ca.comcast.net.[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[7m-UU-:----F1  [m[m[7m[1mresolv.conf [m[m[7m   All L1     (Conf[Space])-------------------------------------------------------------------------[m[m
+[A[H
+[27;1H[K[26;34H[7m2[m[m[H
+
+[26;34H[7m3[m[m[4;1H[26;34H[7m2[m[m[H
+
+[26;34H[7m1[m[m[H
+[C[4h[33mn[m[m[26;6H[4l[7m**[m[m[2;2H[4h[33ma[m[m[4l[4h[33mm[m[m[4l[4h[33me[m[m[4l[4h[33ms[m[m[4l[4h[33me[m[m[4l[4h[33mr[m[m[4l[4h[33mv[m[m[4l[4h[33me[m[m[4l[4h[33mr[m[m[4l nameserve[4hr[2;12H[4l[4h1[4l[4h9[4l[4h2[4l[4h.[4l[4h1[4l[4h6[4l[4h8[4l[4h.[4l[4h5[4l[4h6[4l[4h.[4l[1P[1P[1P[4h1[4l[4h.[4l[4h1.[4l[1P[1;6r[3;1H[1L[1;27r[2;23H[K
+[33mnameserver[m[m 192.168.1.1[K[26;34H[7m2[m[m[H
+
+[K[27;1HUndo![H
+
+[33mnameserver[m[m 192.168.1.1[27;1H[K[H
+
+[27;1HUndo![H
+
+[1;6r[3;1H[1M[1;27r[2;23Hnameserver 192.168.1.1
+
+
+
+[K[26;34H[7m1[m[m[2;23H[27;1H[K[2;23H[4hx[4l[4hu[4l[27;1HUndo![2;25H[2P[27;1H[K[2;23H[27;1HRedo![2;23H[1;6r[3;1H[1L[1;27r[2;23H[K
+[33mnameserver[m[m 192.168.1.1[K[A[27;1H[K[H
+[26;34H[7m2[m[m[H
+
+[31m#nameserver 192.168.1.1                                                                                                      [m
+[3;2H[26;34H[7m3[m[m[4;2H[31m#nameserver 192.168.56.10                                                                                                    [m
+[4;2H[27;1HSaving file /etc/resolv.conf...[4;2H[27;1HWrote /etc/resolv.conf[K[4;2H[26;6H[7m--[m[m[4;2H[27;1H[K[4;2H[27;1H(No files need saving)[4;2H[27;1H[K[?1l>[2J[?47l8[m]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# ping[K[K[K[Kdig yahoo.com
+
+; <<>> DiG 9.7.0-P1 <<>> yahoo.com
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 8438
+;; flags: qr rd ra; QUERY: 1, ANSWER: 5, AUTHORITY: 0, ADDITIONAL: 0
+
+;; QUESTION SECTION:
+;yahoo.com.			IN	A
+
+;; ANSWER SECTION:
+yahoo.com.		6341	IN	A	72.30.2.43
+yahoo.com.		6341	IN	A	98.137.149.56
+yahoo.com.		6341	IN	A	209.191.122.70
+yahoo.com.		6341	IN	A	67.195.160.76
+yahoo.com.		6341	IN	A	69.147.125.65
+
+;; Query time: 2 msec
+;; SERVER: 192.168.1.1#53(192.168.1.1)
+;; WHEN: Thu Dec  9 10:58:37 2010
+;; MSG SIZE  rcvd: 107
+
+]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# dig yahoo.comemacs -nw /etc/resolv.confdig @192.168.1.1 yahoo.com[4h5[4l6[C[C[C[C[C[C[C[C[C[C[C[C[10Pping 192.168.56.10cat /etc/resolv.conf[1Pkdb5_util create -s
+Loading random data
+Initializing database '/var/lib/krb5kdc/principal' for realm 'FOOFERS.ORG',
+master key name 'K/M@FOOFERS.ORG'
+You will be prompted for the database Master Password.
+It is important that you NOT FORGET this password.
+Enter KDC database master key: 
+Re-enter KDC database master key to verify: 
+]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# kadmin.local -d[Kq "addprinc admin/admin"
+Authenticating as principal root/admin@FOOFERS.ORG with password.
+WARNING: no policy specified for admin/admin@FOOFERS.ORG; defaulting to no policy
+Enter password for principal "admin/admin@FOOFERS.ORG": 
+Re-enter password for principal "admin/admin@FOOFERS.ORG": 
+Principal "admin/admin@FOOFERS.ORG" created.
+]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# kadmin.local -q "addprinc admin/admin"[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[19Pdb5_util create -sadmin.local -q "addprinc admin/admin"[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Kkadmin.o[Klocal -p admin/admin
+Authenticating as principal admin/admin with password.
+kadmin.local:  dyjcm[K[K[K[K[Kaddprinc -[K[K[K[K[K[K[K[K[K[Kaddprinc ekoontz
+WARNING: no policy specified for ekoontz@FOOFERS.ORG; defaulting to no policy
+Enter password for principal "ekoontz@FOOFERS.ORG": 
+Re-enter password for principal "ekoontz@FOOFERS.ORG": 
+Principal "ekoontz@FOOFERS.ORG" created.
+kadmin.local:  addprinc -randkey host/debian64-3.foofers.org
+WARNING: no policy specified for host/debian64-3.foofers.org@FOOFERS.ORG; defaulting to no policy
+Principal "host/debian64-3.foofers.org@FOOFERS.ORG" created.
+kadmin.local:  [Kkadmin.local:  [Kkadmin.local:  [Kkadmin.local:  [Kkadmin.local:  [Kkadmin.local:  ktadd host/debian64-3.foofers.org
+Entry for principal host/debian64-3.foofers.org with kvno 2, encryption type AES-256 CTS mode with 96-bit SHA-1 HMAC added to keytab WRFILE:/etc/krb5.keytab.
+Entry for principal host/debian64-3.foofers.org with kvno 2, encryption type ArcFour with HMAC/md5 added to keytab WRFILE:/etc/krb5.keytab.
+Entry for principal host/debian64-3.foofers.org with kvno 2, encryption type Triple DES cbc mode with HMAC/sha1 added to keytab WRFILE:/etc/krb5.keytab.
+Entry for principal host/debian64-3.foofers.org with kvno 2, encryption type DES cbc mode with CRC-32 added to keytab WRFILE:/etc/krb5.keytab.
+kadmin.local:  ]0;root@debian64-3: /var/log[01;32mroot@debian64-3[00m:[01;34m/var/log[00m# exit
+]0;ekoontz@debian64-3: ~[01;32mekoontz@debian64-3[00m:[01;34m~[00m$ exit
+
+Script done on Thu 09 Dec 2010 05:02:35 PM PST
