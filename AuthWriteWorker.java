@@ -18,7 +18,16 @@ public class AuthWriteWorker extends WriteWorker {
       Pair<SelectionKey,String> messageTuple = main.takeFromWriteQueue();
       SelectionKey writeToMe = messageTuple.first;
       String message = messageTuple.second;
-      System.out.println("AuthWriteWorker:run(): writing message: '" + message +"' to " + main.clientNick.get(writeToMe));
+
+      NIOServerSASL.ClientState clientState = ((NIOServerSASL)main).clientStates.get(writeToMe);
+      
+      System.out.println("AuthWriteWorker.run(): state of this client: " + clientState);
+      
+      if (clientState == NIOServerSASL.ClientState.Authenticating) {
+        byte[] messageBytes = message.getBytes();
+        System.out.println("AuthWriteWorker: processing client authentication message of length: " + messageBytes.length);
+      }
+
       main.WriteToClientByNetwork(writeToMe,message);
     }
   }
