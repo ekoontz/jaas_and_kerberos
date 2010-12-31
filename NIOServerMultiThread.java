@@ -12,7 +12,7 @@ public class NIOServerMultiThread extends NIOServer {
 
   protected SelectionKey takeFromReadQueue() {
     while(true) {
-      try {
+      try { 
         return readFromThese.take();
       }
       catch (InterruptedException e) {
@@ -85,14 +85,18 @@ public class NIOServerMultiThread extends NIOServer {
     }
     
   }
+
+  public void setupQueues() {
+    readFromThese = new LinkedBlockingQueue<SelectionKey>();
+    writeToThese = new LinkedBlockingQueue<Pair<SelectionKey,String>>();
+  }
   
   public void StartThreadsAndRun(int localPort) 
     throws IOException {
-    readFromThese = new LinkedBlockingQueue<SelectionKey>();
-    ReadWorker reader = new ReadWorker(this);
 
-    writeToThese = new LinkedBlockingQueue<Pair<SelectionKey,String>>();
-    
+    setupQueues();
+
+    ReadWorker reader = new ReadWorker(this);
     WriteWorker writer = new WriteWorker(this);
     
     new Thread(reader).start();
