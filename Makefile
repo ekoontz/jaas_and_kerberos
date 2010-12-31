@@ -2,7 +2,7 @@
  start_server_socket start_server_nio start_client \
  run_server test_socket test_nio fred saslizedserver \
  saslizedclient testsasl killsaslizedserver nio_server \
- nio_server_multi
+ nio_server_multi chat_client
 
 all: compile README.html
 
@@ -23,10 +23,10 @@ waitforkill:
 nio_server: NIOServer.class
 	java NIOServer 4567
 
-nio_server_multi: NIOServerMultiThread.class NIOServer.class
+nio_server_multi: NIOServerMultiThread.class NIOServer.class ReadWorker.class WriteWorker.class Pair.class
 	java NIOServerMultiThread 5678
 
-nio_server_sasl: NIOServerSASL.class NIOServerMultiThread.class NIOServer.class ClientAuthWorker.class
+nio_server_sasl: NIOServerSASL.class NIOServerMultiThread.class NIOServer.class ClientAuthWorker.class ReadWorker.class WriteWorker.class Pair.class
 	java NIOServerSASL 6789
 
 test: clean
@@ -56,8 +56,8 @@ start_client: GSSizedClient.class
 README.html: README.md
 	Markdown.pl README.md > $@
 
-saslizedserver: killsaslizedserver SASLizedServer.class
-	java SASLizedServer 4567 &
+saslizedserver: killsaslizedserver SaslizedServer.class
+	java SaslizedServer 4567 &
 
 saslizedserver_nio: killsaslizedserver SASLizedServerNio.class
 	java SASLizedServerNio 4567 
@@ -69,7 +69,7 @@ killsaslizedserver:
 saslizedclient: SASLizedClient.class Hexdump.class
 	java -cp . SASLizedClient client.properties localhost 4567
 
-testsasl: killsaslizedserver saslizedserver SASLizedServer.class SASLizedClient.class
+testsasl: killsaslizedserver saslizedserver SaslizedServer.class SASLizedClient.class
 	java -cp . SASLizedClient client.properties localhost 4567 &
 	java -cp . SASLizedClient client.properties localhost 4567 &
 	java -cp . SASLizedClient client.properties localhost 4567 &
@@ -83,3 +83,6 @@ testsasl_nio: killsaslizedserver saslizedserver_nio SASLizedServerNio.class SASL
 	done
 	-make killsaslizedserver
 	echo "testsasl_nio test finished successfully."
+
+chat_client:  SASLizedChatClient.class
+	java -cp . SASLizedChatClient client.properties 192.168.56.1 6789

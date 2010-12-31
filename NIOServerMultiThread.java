@@ -7,73 +7,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class NIOServerMultiThread extends NIOServer {
 
-  private class Pair<A,B> {
-    public A first;
-    public B second;
-    
-    public Pair(A first, B second) {
-      super();
-      this.first = first;
-      this.second = second;
-    }
-
-  }
-  
-
   protected BlockingQueue<SelectionKey> readFromThese;
   protected BlockingQueue<Pair<SelectionKey,String >> writeToThese;
-
-  protected NIOServerMultiThread main;
-
-  private class ReadWorker implements Runnable {
-    public ReadWorker(NIOServerMultiThread mainObject) {
-      main = mainObject;
-    }
-    
-    public void run() {
-      System.out.println("starting ReadWorker..");
-
-      while(true) {
-        // blocks waiting for items to appear on the read queue.
-        System.out.println("ReadWorker.run(): waiting for keys to read.");
-        SelectionKey readFromMe = main.takeFromReadQueue();
-        String message = ReadFromClientByNetwork(readFromMe);
-                
-        if (message == null) {
-          System.out.println("ReadWorker: message is null: assuming client hung up.");
-          CancelClient(readFromMe);
-        }
-        else {
-          if (message.trim().length() == 0) {
-            // FIXME: happens after we've just read a message
-            // from readFromMe, but still readFromMe is added to queue.
-          }
-          else {
-            System.out.println("ReadWorker:run(): read key : " + readFromMe + " and got message: [" + message + "].");
-            ProcessClientMessage(readFromMe,message);
-          }
-        }
-      }
-    }
-  }
-   
-  private class WriteWorker implements Runnable {
-    public WriteWorker(NIOServerMultiThread mainObject) {
-      main = mainObject;
-    }
-
-    public void run() {
-      while(true) {
-        System.out.println("WriteWorker.run(): waiting for keys to write.");
-        // blocks waiting for items to appear on the write queue.
-        Pair<SelectionKey,String> messageTuple = main.takeFromWriteQueue();
-        SelectionKey writeToMe = messageTuple.first;
-        String message = messageTuple.second;
-        System.out.println("WriteWorker:run(): writing message: '" + message +"' to " + main.clientNick.get(writeToMe));
-        main.WriteToClientByNetwork(writeToMe,message);
-      }
-    }
-  }
 
   protected SelectionKey takeFromReadQueue() {
     while(true) {
@@ -97,23 +32,20 @@ public class NIOServerMultiThread extends NIOServer {
     }
   }
 
-  protected synchronized void ReadFromClient(SelectionKey sk) {
-    // overrides parent ReadFromClient().
-    // add to read worker(s)' queue.
-
-    if (readFromThese.contains(sk) == false) {
-      System.out.println("Multi: ReadFromClient(): enqueing sk on read queue.");
-      System.out.println("read queue is now size: " + readFromThese.size());
-      
-      
-      try {
-        readFromThese.put(sk);
+  @Override 
+    protected synchronized void ReadFromClient(SelectionKey sk) {
+      // add to queue for ReadWorker (or pool of ReadWorkers).
+      if (readFromThese.contains(sk) == false) {
+        System.out.println("Multi: ReadFromClient(): enqueing " + clientNick.get(sk)  + " on read queue.");
+        System.out.println("read queue is now size: " + readFromThese.size());
+        
+        try {
+          readFromThese.put(sk);
+        }
+        catch (InterruptedException e) {
+          System.out.println("ReadFromClient: interrupted and giving up on put() to read queue.");
+        }
       }
-      catch (InterruptedException e) {
-        System.out.println("ReadFromClient: interrupted and giving up on put() to read queue.");
-      }
-    }
-    
   }
 
   protected void WriteToClient(SelectionKey sk, String message) {
