@@ -119,6 +119,11 @@ public class NIOServer {
 
   protected String ReadFromClientByNetwork(SelectionKey sk) {
     byte[] bytes = ReadBytesFromClientByNetwork(sk);
+    if (bytes == null) {
+      System.out.println("key is not valid: assuming client hung up.");
+      CancelClient(sk);
+      return null;
+    }
     String clientMessage = new String(bytes);
     return clientMessage;
   }

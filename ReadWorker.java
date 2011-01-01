@@ -24,6 +24,12 @@ class ReadWorker implements Runnable {
   }
 
   protected void ReadClientMessage(SelectionKey readFromMe) {
+    if (!readFromMe.isValid()) {
+      System.out.println("key is not valid: assuming client hung up.");
+      main.CancelClient(readFromMe);
+      return;
+    }
+
     String message = main.ReadFromClientByNetwork(readFromMe);
       
     if (message == null) {
