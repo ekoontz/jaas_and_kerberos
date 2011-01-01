@@ -188,7 +188,7 @@ public class NIOServerSASL extends NIOServerMultiThread {
     // If sender is supplied, sender will not receive a
     // message from itself. 
     for (SelectionKey recipient: clientNick.keySet()) {
-      if (clientStates.get(recipient) == ClientState.Authenticating) {
+      if (clientStates.get(recipient) != ClientState.Authenticating) {
         if ((sender == null) || (recipient != sender)) {
           System.out.println("Send(): " + message + " to " + recipient);
           Send(message,recipient);
