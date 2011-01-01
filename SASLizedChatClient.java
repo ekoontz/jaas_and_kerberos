@@ -155,15 +155,6 @@ public class SASLizedChatClient {
                     System.out.println("");
                     System.out.println("<client challenge/response loop>");
                     System.out.println("writing response of length: " + saslToken.length);
-                    // <corrupt bytes to test server response..>
-                    /*                    saslToken[5] = (byte)0;
-                    saslToken[6] = (byte)1;
-                    saslToken[7] = (byte)2;
-                    saslToken[8] = (byte)3;*/
-                    // </corrupt bytes to test server response..>
-                    //                    outStream.writeInt(saslToken.length);
-                    //                    outStream.flush();
-
                     if (saslToken.length == 0) {
                       String nomsg = new String("(C:nomsg)");
                       outStream.write(nomsg.getBytes(),0,nomsg.getBytes().length);
@@ -220,6 +211,13 @@ public class SASLizedChatClient {
                 return null;
               }
             });
+
+
+        outStream.flush();
+        String helloWorld = "Hi Everyone, I'm authenticated now.\n";
+        outStream.writeBytes(helloWorld);
+        outStream.flush();
+
 
       }
       catch (Exception e) {
