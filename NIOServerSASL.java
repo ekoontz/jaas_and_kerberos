@@ -130,7 +130,7 @@ public class NIOServerSASL extends NIOServerMultiThread {
       setupQueues();
 
       AuthReadWorker reader = new AuthReadWorker(this);
-      AuthWriteWorker writer = new AuthWriteWorker(this);
+      WriteWorker writer = new WriteWorker(this);
 
       new Thread(reader).start();
       new Thread(writer).start();
@@ -188,7 +188,7 @@ public class NIOServerSASL extends NIOServerMultiThread {
     // If sender is supplied, sender will not receive a
     // message from itself. 
     for (SelectionKey recipient: clientNick.keySet()) {
-      if (clientStates.get(recipient) != ClientState.Authenticating) {
+      if (false && clientStates.get(recipient) != ClientState.Authenticating) {
         if ((sender == null) || (recipient != sender)) {
           System.out.println("Send(): " + message + " to " + recipient);
           Send(message,recipient);

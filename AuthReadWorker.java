@@ -24,12 +24,11 @@ class AuthReadWorker extends ReadWorker {
       System.out.println("AuthReadWorker client state is : " + ((NIOServerSASL)main).clientStates.get(readFromMe));
 
       if (clientState == NIOServerSASL.ClientState.Authenticating) {
-
-        // 4 bytes for integer of token length.
-        //        byte[] tokenLength = main.ReadBytesFromClientByNetwork(readFromMe);
-        //        System.out.println("tokenLength read: " + tokenLength.length);
-
         byte[] saslToken = main.ReadBytesFromClientByNetwork(readFromMe);
+        if (saslToken == null) {
+          System.out.println("AuthReadWorker: ignoring null saslToken (probably, client hung up during authentication process).");
+          continue;
+        }
         System.out.println("just read sasl token from client: " + saslToken.length);
 
         String testMessage = new String(saslToken);
@@ -72,13 +71,13 @@ class AuthReadWorker extends ReadWorker {
             main.CancelClient(readFromMe);
           }
           if (saslServer.isComplete()) {
-            System.out.println("COMPLETE!!! YAHOO!!!");
             ((NIOServerSASL)main).clientStates.put(readFromMe,NIOServerSASL.ClientState.Authenticated);
           }
          }
         System.out.println("AuthReadWorker: processed client authentication message; client state is : " + ((NIOServerSASL)main).clientStates.get(readFromMe));
       }
       else {
+        // non-authenticating state: simply read client messages normally.
         System.out.println("AuthReadWorker: about to ReadClientMessage(): client state is : " + ((NIOServerSASL)main).clientStates.get(readFromMe));
         // non-authentication case.
         ReadClientMessage(readFromMe);
