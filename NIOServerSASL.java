@@ -49,7 +49,9 @@ public class NIOServerSASL extends NIOServerMultiThread {
   @Override 
     protected synchronized void ReadFromClient(SelectionKey sk) {
       if (clientStates.get(sk) == null) {
-        clientStates.put(sk,ClientState.Unauthenticated);
+        // initialize new clients.
+        clientStates.put(sk,ClientState.Authenticating);
+        saslServers.put(sk,CreateSaslServer(chatServerSubject, "GSSAPI",SERVICE_PRINCIPAL_NAME,HOST_NAME));
       }
       super.ReadFromClient(sk);
     }
@@ -147,36 +149,28 @@ public class NIOServerSASL extends NIOServerMultiThread {
   protected boolean ProcessClientMessage(SelectionKey sk,String clientMessage) {
     boolean result = super.ProcessClientMessage(sk,clientMessage);
     if (result == false) {
-      // try SASL-specific command processing.
-      if (clientMessage.substring(0,5).equals("/auth")) {
-        clientStates.put(sk,ClientState.Authenticating);
-        saslServers.put(sk,CreateSaslServer(chatServerSubject, "GSSAPI",SERVICE_PRINCIPAL_NAME,HOST_NAME));
+      if (clientMessage.substring(0,7).equals("/status")) {
+        
+        // FIXME: (only authenticated clients should be allowed to this).
+        
+        // Construct a human-readable table of clients and their states
+        // and send to client.
+        String stateTable = "";
+        stateTable = stateTable + "===Client->State===" + "\n";
+        for (SelectionKey client: clientNick.keySet()) {
+          String nick = clientNick.get(client);
+          stateTable = stateTable + "\t" + nick;
+          stateTable = stateTable + "\t" + clientStates.get(client);
+          if (client == sk) {
+            stateTable = stateTable + " <= you";
+          }
+          stateTable = stateTable + "\n";
+        }
+        Send(stateTable,sk);
         return true;
       }
       else {
-        if (clientMessage.substring(0,7).equals("/status")) {
-
-          // FIXME: (only authenticated clients should be allowed to this).
-
-          // Construct a human-readable table of clients and their states
-          // and send to client.
-          String stateTable = "";
-          stateTable = stateTable + "===Client->State===" + "\n";
-          for (SelectionKey client: clientNick.keySet()) {
-            String nick = clientNick.get(client);
-            stateTable = stateTable + "\t" + nick;
-            stateTable = stateTable + "\t" + clientStates.get(client);
-            if (client == sk) {
-              stateTable = stateTable + " <= you";
-            }
-            stateTable = stateTable + "\n";
-          }
-          Send(stateTable,sk);
-          return true;
-        }
-        else {
-          Send("unrecognized command: " + clientMessage,sk);
-        }
+        Send("unrecognized command: " + clientMessage,sk);
       }
     }
     return false;
@@ -188,7 +182,7 @@ public class NIOServerSASL extends NIOServerMultiThread {
     // If sender is supplied, sender will not receive a
     // message from itself. 
     for (SelectionKey recipient: clientNick.keySet()) {
-      if (false && clientStates.get(recipient) != ClientState.Authenticating) {
+      if (clientStates.get(recipient) != ClientState.Authenticating) {
         if ((sender == null) || (recipient != sender)) {
           System.out.println("Send(): " + message + " to " + recipient);
           Send(message,recipient);

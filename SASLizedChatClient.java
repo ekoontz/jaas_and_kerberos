@@ -126,12 +126,7 @@ public class SASLizedChatClient {
       outStream = new DataOutputStream(socket.getOutputStream());
 
 
-      // 3.5 Tell server we want to do SASL authentication.
-      String authCommand = "/auth\n";
-      outStream.writeBytes(authCommand);
-      outStream.flush();
-
-      // 4. Establish SASL connection with server.
+      // 3. Establish SASL connection with server.
       final SaslClient saslClient = sc;
       Object result;
       System.out.println("ESTABLISHING SASL CONNECTION WITH THE '" + SERVICE_PRINCIPAL_NAME + "' service.");
@@ -217,6 +212,13 @@ public class SASLizedChatClient {
         String helloWorld = "Hi Everyone, I'm authenticated now.\n";
         outStream.writeBytes(helloWorld);
         outStream.flush();
+
+        helloWorld = "Here's another message...\n";
+        outStream.writeBytes(helloWorld);
+        outStream.flush();
+
+
+        Thread.sleep(10);
 
 
       }
