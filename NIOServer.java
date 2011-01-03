@@ -151,7 +151,7 @@ public class NIOServer {
       // interpret the command.
       if (clientMessage.substring(0,6).equals("/nick ")) {
         String oldNick = clientNick.get(sk);
-        String newNick = clientMessage.substring(6,clientMessage.length() - 6).trim();
+        String newNick = clientMessage.substring(6,clientMessage.length()).trim();
         System.out.println("changing nickname to: " + newNick);
         clientNick.put(sk,newNick);
         BroadcastSystem(oldNick + " is now known as " + newNick + ".");
