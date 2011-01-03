@@ -266,7 +266,6 @@ public class NIOServer {
     while(true) {
 
       try {
-        //        System.out.println("NIOServer:waiting on select().");
         selector.select();
 
         Iterator selectedKeys = selector.selectedKeys().iterator();
@@ -275,15 +274,12 @@ public class NIOServer {
           final SelectionKey sk = (SelectionKey) selectedKeys.next();
           selectedKeys.remove();
           
-          //        System.out.println("iterating through keys: current key: " + sk.toString());
-          
           if (!sk.isValid()) {
             System.out.println("key is not valid; continuing.");
             continue;
           }
           
           // Check what event is available and deal with it.
-          
           if (sk.isAcceptable()) {
             System.out.println("Accepting connection from client with accept key : " + sk);
             

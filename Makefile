@@ -84,5 +84,5 @@ testsasl_nio: killsaslizedserver saslizedserver_nio SASLizedServerNio.class SASL
 	-make killsaslizedserver
 	echo "testsasl_nio test finished successfully."
 
-chat_client:  SASLizedChatClient.class
+chat_client:  SASLizedChatClient.class KeyboardListener.class
 	java -cp . SASLizedChatClient client.properties 192.168.56.1 6789

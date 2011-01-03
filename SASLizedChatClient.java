@@ -207,19 +207,18 @@ public class SASLizedChatClient {
               }
             });
 
-
-        outStream.flush();
-        String helloWorld = "Hi Everyone, I'm authenticated now.\n";
-        outStream.writeBytes(helloWorld);
         outStream.flush();
 
-        helloWorld = "Here's another message...\n";
-        outStream.writeBytes(helloWorld);
-        outStream.flush();
+        // Create another thread to listen on the keyboard.
+        KeyboardListener kl = new KeyboardListener(outStream);
+        new Thread(kl).start();
 
-
-        Thread.sleep(10);
-
+        System.out.println("Authenticated. Type away.");
+        while(true) {
+          byte[] serverOutput = new byte[8192];
+          int length = inStream.read(serverOutput);
+          System.out.println(new String(serverOutput));
+        }
 
       }
       catch (Exception e) {
