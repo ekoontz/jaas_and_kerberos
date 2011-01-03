@@ -2,7 +2,7 @@
  start_server_socket start_server_nio start_client \
  run_server test_socket test_nio fred saslizedserver \
  saslizedclient testsasl killsaslizedserver nio_server \
- nio_server_multi chat_client
+ nio_server_multi chat_client nio_server_sasl
 
 all: compile README.html
 
@@ -86,3 +86,4 @@ testsasl_nio: killsaslizedserver saslizedserver_nio SASLizedServerNio.class SASL
 
 chat_client:  SASLizedChatClient.class KeyboardListener.class
 	java -cp . SASLizedChatClient client.properties 192.168.56.1 6789
+

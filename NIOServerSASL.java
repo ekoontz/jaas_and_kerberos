@@ -1,9 +1,5 @@
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
-import java.nio.ByteBuffer;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.security.auth.callback.Callback;
