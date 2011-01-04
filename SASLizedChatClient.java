@@ -210,6 +210,8 @@ public class SASLizedChatClient {
         outStream.flush();
 
         // Create another thread to listen on the keyboard.
+        // the KeyboardListener thread will pass any keyboard input
+        // to outStream (which connects to the chat server).
         KeyboardListener kl = new KeyboardListener(outStream);
         new Thread(kl).start();
 

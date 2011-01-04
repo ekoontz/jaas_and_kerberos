@@ -172,7 +172,7 @@ public class NIOServerSASL extends NIOServerMultiThread {
     return false;
   }
 
-  // send a message to all clients (except sender, if non-null).
+  // send a message to all clients (except to sender, if non-null).
   // Also, don't send messages which are in 'Authenticating' state.
   protected void Broadcast(String message, SelectionKey sender) {
     // If sender is supplied, sender will not receive a
