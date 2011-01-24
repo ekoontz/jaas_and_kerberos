@@ -1,15 +1,14 @@
-.PHONY: all clean test compile killserver waitforkill \
- start_server_socket start_server_nio start_client \
- run_server test_socket test_nio fred saslizedserver \
- saslizedclient testsasl killsaslizedserver nio_server \
- nio_server_multi chat_client nio_server_sasl
+.PHONY: all clean kill test compile killchatserver killchatclient start_nio_server_sasl \
+restart_nio_server_sasl start_nio_server_sasl_bg run_chat_client 
 
 all: compile README.html
 
-compile: NIOServerSASL.class SASLizedChatClient.class Hexdump.class 
+compile: NIOServerSASL.class SASLizedChatClient.class Hexdump.class WriteWorker.class ReadWorker.class AuthReadWorker.class
 
-clean: 
+clean:
 	-rm *.class README.html
+
+kill: killchatserver killchatclient
 
 README.html: README.md
 	Markdown.pl README.md > $@
@@ -34,6 +33,10 @@ start_nio_server_sasl_bg: NIOServerSASL.class killchatserver
 killchatserver:
 	echo "killing chat server.."
 	-kill `jps | cut -d' ' -f1,2 | grep NIOServerSASL | cut -d' ' -f1,1`
+
+killchatclient:
+	echo "killing chat client.."
+	-kill `jps | cut -d' ' -f1,2 | grep SASLizedChatClient | cut -d' ' -f1,1`
 
 run_chat_client:  SASLizedChatClient.class KeyboardListener.class
 	java -cp . SASLizedChatClient client.properties 192.168.56.1 6789
