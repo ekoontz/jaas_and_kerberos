@@ -215,7 +215,7 @@ public class SASLizedChatClient {
         KeyboardListener kl = new KeyboardListener(outStream);
         new Thread(kl).start();
 
-        System.out.println("Authenticated. Type away.");
+        System.out.println("Authenticated. Type /help for help, or just type messages to other users.");
         while(true) {
           byte[] serverOutput = new byte[8192];
           int length = inStream.read(serverOutput);
