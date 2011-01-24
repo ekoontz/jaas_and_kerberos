@@ -38,5 +38,5 @@ killchatserver:
 run_chat_client:  SASLizedChatClient.class KeyboardListener.class
 	java -cp . SASLizedChatClient client.properties 192.168.56.1 6789
 
-NIOServerSASL.class: Hexdump.class
+NIOServerSASL.class: Hexdump.class WriteWorker.class NIOServerMultiThread.class NIOServer.class
 
