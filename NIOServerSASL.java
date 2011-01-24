@@ -144,6 +144,7 @@ public class NIOServerSASL extends NIOServerMultiThread {
 
   protected boolean ProcessClientMessage(SelectionKey sk,String clientMessage) {
     boolean result = super.ProcessClientMessage(sk,clientMessage);
+    clientMessage = clientMessage + "         "; // add some whitespace at the end to prevent substring() indexing off the end of the string.
     if (result == false) {
       if (clientMessage.substring(0,7).equals("/status")) {
         
@@ -166,7 +167,7 @@ public class NIOServerSASL extends NIOServerMultiThread {
         return true;
       }
       else {
-        Send("unrecognized command: " + clientMessage,sk);
+        Send("unrecognized command or incorrect syntax: '" + clientMessage + "': try /help",sk);
       }
     }
     return false;

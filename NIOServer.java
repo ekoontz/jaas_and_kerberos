@@ -146,6 +146,8 @@ public class NIOServer {
 
   // return false if a non-recognized command was received; true otherwise.
   protected boolean ProcessClientMessage(SelectionKey sk,String clientMessage) {
+
+    clientMessage = clientMessage + "         "; // add some whitespace at the end to prevent substring() indexing off the end of the string.
     if (clientMessage.substring(0,1).equals("/")) {
       // Client used the "/" prefix to send the server a command: 
       // interpret the command.
