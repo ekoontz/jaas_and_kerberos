@@ -25,13 +25,13 @@ public class NIOServerSASL extends NIOServerMultiThread {
   
   final String HOST_NAME = "ekoontz"; // The hostname that the service (this code) is running on. (might be fully qualified, or not)
   
-  final String SERVICE_PRINCIPAL_NAME = "testserver"; // The service that we're running with this code.
+  final String SERVICE_PRINCIPAL_NAME = "chatserver"; // The service that we're running with this code.
   // There must exist a Kerberos principal called
   // $SERVICE_PRINCIPAL_NAME/$HOSTNAME.
   
   final String SERVICE_SECTION_OF_JAAS_CONF_FILE = "Server"; // The section (of the JAAS configuration file named $JAAS_CONF_FILE_NAME)
   
-  final String KEY_TAB_FILE_NAME = "testserver.keytab"; // The file that holds the service's credentials.
+  final String KEY_TAB_FILE_NAME = "chatserver.keytab"; // The file that holds the service's credentials.
   // </Constants>
 
   public enum ClientState {
