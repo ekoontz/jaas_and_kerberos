@@ -105,6 +105,8 @@ public class NIOServerMultiThread extends NIOServer {
   }
 
   protected boolean ProcessClientMessage(SelectionKey sk,String clientMessage) {
+    // No new client-accessible commands for this level of the class hierarchy (for now).
+    // See NIOServerSASL (subclass of this) that introduces new commands.
     boolean result = super.ProcessClientMessage(sk,clientMessage);
     return result;
   }
