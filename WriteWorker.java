@@ -14,8 +14,13 @@ public class WriteWorker implements Runnable {
       Pair<SelectionKey,String> messageTuple = main.takeFromWriteQueue();
       SelectionKey writeToMe = messageTuple.first;
       String message = messageTuple.second;
-      System.out.println("WriteWorker:run(): writing message: '" + message +"' to " + main.clientNick.get(writeToMe));
-      main.WriteToClientByNetwork(writeToMe,message);
+      if (main.clientNick.get(writeToMe) != null) {
+        System.out.println("WriteWorker:run(): writing message: '" + message +"' to " + main.clientNick.get(writeToMe));
+        main.WriteToClientByNetwork(writeToMe,message);
+      }
+      else {
+        // selection key is null: client has been disconnected; discard this message.
+      }
     }
   }
 }
