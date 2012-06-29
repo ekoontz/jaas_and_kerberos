@@ -58,17 +58,17 @@ Commenting on these official JAAS documentation articles, Java Monkey writes:
 I partially agree with him here. The main problem, from my experience,
 of the Sun Tutorial is that it doesn't actually work: the code they
 supply simply doesn't function as-is. Also, it uses byte arrays with
-an array-length prefix to communicate between the client and sever,
+an array-length prefix to communicate between the client and server,
 which is unnecessarily low-level. I improved this by using standard
 sockets but used `Data`{`Input`/`Output`}`Streams` instead of byte
 arrays.
 
 One disadvantage of NIO compared to traditional sockets is the API
 complexity: compare `KerberizedServer.java` with
-`KerberizedServerNIO.java`: the latter is twice as long. (Although, to
-be fair, `KerberizedServer.java` as written, does not handle more than
+`KerberizedServerNIO.java`: the latter is twice as long. (Although, 
+`KerberizedServer.java` as written, does not handle more than
 one client, whereas `KerberizedServerNIO.java` does, so it's not a
-fair compairison).
+fair comparison).
 
 Another disadvantage of using NIO, however, is that you can't use
 `Data`{`Input`/`Output`}`Streams`, unfortunately, as far as I can
