@@ -1,5 +1,6 @@
 .PHONY: all clean test compile killserver waitforkill start_server_socket start_server_nio start_client run_server test_socket test_nio
-all: compile README.html
+#all: compile README.html
+all: compile
 
 compile: KerberizedServer.class KerberizedServerNio.class Client.class Hexdump.class
 
@@ -39,5 +40,5 @@ start_server_nio: KerberizedServerNio.class
 start_client: Client.class
 	java Client client.properties localhost 9000
 
-README.html: README.md
-	Markdown.pl README.md > $@
+#README.html: README.md
+#	Markdown.pl README.md > $@

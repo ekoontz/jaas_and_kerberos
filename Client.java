@@ -48,13 +48,10 @@ public class Client {
     System.setProperty( "javax.security.auth.useSubjectCredsOnly", "true");
 
     // 2. Authenticate against the KDC using JAAS and return the Subject.
-    String username = props.getProperty( "client.principal.name");
-    String password = props.getProperty( "client.password");
     LoginContext loginCtx = null;
     // "Client" references the corresponding JAAS configuration section in the jaas.conf file.
     try {
-      loginCtx = new LoginContext("Client",
-                                  new LoginCallbackHandler( username, password));
+      loginCtx = new LoginContext("Client");
       loginCtx.login();
     }
     catch ( LoginException e) {
