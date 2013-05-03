@@ -90,7 +90,7 @@ This code was tested with the Sun JDK version 1.6.0_22.
 ## GNU Make
 
 I used GNU Make for development and testing rather than Apache Ant for
-simplicity, but an Ant build.xml or a Mavel pom.xml would be good to have here.
+simplicity, but an Ant build.xml or a Maven pom.xml would be good to have here.
 
 # Setup Kerberos Server Infrastructure
 
